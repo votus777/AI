@@ -7,6 +7,7 @@
 
 
 -> under fitting이 나게 해라! 
+-> overfitting과 trade off 관계이므로 overfitting을 억제해도 된다. 
 충분한 신호 미포함
 
 R2 score :  0.4422005452443175
@@ -26,11 +27,12 @@ import numpy as np
 x = np.array(range(1,11))
 y = np.array(range(1,11))
 
-x_train = x[0:2]
-y_train = y[0:2]
+x_train = x[:1]
+y_train = y[:1]
 
-x_test = x[8:11]
-y_test = y[8:11]
+
+x_test = x[2:4]
+y_test = y[2:4]
 
 
 x_pred = np.array([16, 17, 18]) 
@@ -43,12 +45,12 @@ from keras.models import Sequential
 from keras.layers import Dense 
 model = Sequential()
 
-model.add(Dense(1, input_dim = 1))
+model.add(Dense(2, input_dim = 1))
 model.add(Dense(20))
 model.add(Dense(20))
 model.add(Dense(20))
-model.add(Dense(20))
-model.add(Dense(20))
+model.add(Dense(25))
+model.add(Dense(25))
 model.add(Dense(1))
 
 
