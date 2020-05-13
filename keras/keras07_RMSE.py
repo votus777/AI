@@ -38,26 +38,21 @@ print("loss : ", loss)
 print("mse : ", mse) 
 
 
-
+'''
 y_pred = model.predict(x_pred) 
 print("y_pred : ", y_pred)
-
 '''
 
-loss 값이 최소로 나올 때까지 하이퍼 파라미터 튜닝을 해보자
-
-Dense (500) 보다 Dense(64)가 더 잘나온다 속도도 빠르고 
-layer가 깊다고 항상 좋은건 아닌듯
-
-1.2345e-05 = 0.0000012345 
+y_predict = model.predict(x_test)
+print(y_predict)
 
 
-model.add(Dense(64)) X 4 layer   // epochs = 30  -> min 5.0e-06
-model.add(Dense(64)) X 5 layer   // epochs = 30  -> min 1.0e-07
-model.add(Dense(64)) X 4 layer   // epochs = 50  -> min 3.0e-11
-model.add(Dense(64)) X 3 layer   // epochs = 50  -> min 3.0e-11
-model.add(Dense(32)) X 4 layer   // epochs = 60  -> min 3.0e-12
-model.add(Dense(32)) X 3 layer   // epochs = 100  -> min 2.0e-13
+from sklearn.metrics import mean_squared_error
+def RMSE(y_test ,y_pred) :
+    return np.sqrt(mean_squared_error(y_test, y_predict))
+
+# y_test = 실제값, y_pred = 예측값
+
+print("RMSE : ", RMSE(y_test, y_predict))    
 
 
-'''
