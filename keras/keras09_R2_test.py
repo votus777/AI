@@ -6,19 +6,14 @@
 # 데이터 수정 없음
 
 
--> under fitting이 나게 해라! 
--> overfitting과 trade off 관계이므로 overfitting을 억제해도 된다. 
-충분한 신호 미포함
-
 R2 score :  0.4422005452443175
 나오긴 나오는데 항상 나오진 않더라
 
 대체 왜 이러는걸까?
 
+
+
 '''
-
-
-
 
 # 1. 데이터
 import numpy as np
