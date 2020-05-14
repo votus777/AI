@@ -32,7 +32,11 @@ model.add(Dense(1))
 model.compile(loss='mse', optimizer='adam', metrics=['mse'])
 model.fit(x_train, y_train, epochs=100, batch_size = 1, validation_split= 0.5)
 
+'''
+ validation data (x_val,y_val) 대신에 validation_split 파라미터를 넣어주었다. 
+ 그래서 따로 validarion data를 명시해주지 않아도 된다.
 
+'''
 
 #4. 평가, 예측____________________________________________
 loss,mse = model.evaluate(x_test, y_test, batch_size = 1) 
