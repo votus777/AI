@@ -21,16 +21,6 @@ x_test, x_val, y_test, y_val = train_test_split(
     x_test, y_test, shuffle = False , test_size=0.5
 )  
 
-
-'''
-훈련한 범위 밖의 예측은 틀릴 확률이 매우 높다. 그래서 shuffle 이 default로 있다. 
-
-여기서 shuffle의 조건 
-- X,Y가 서로 섞이지는 않는다. X는 X 안에서, Y는 Y안에서만 섞인다. 
-
-
-
-
 '''
 print(x_test,x_train,x_val)
 print(y_test,y_train,y_val)
@@ -44,7 +34,6 @@ from keras.layers import Dense
 model = Sequential()
 
 model.add(Dense(5, input_dim = 1))
-model.add(Dense(12))
 model.add(Dense(12))
 model.add(Dense(12))
 model.add(Dense(12))
@@ -88,4 +77,3 @@ r2 = r2_score(y_test, y_predict)
 print("R2 score : ", r2)
 # _____________________________________
 
-'''

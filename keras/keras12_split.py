@@ -2,38 +2,32 @@
 # 1. 데이터_________________________________
 import numpy as np
 
-
-
-
 x = np.array(range(1,101)) # 1~100
 y = np.array(range(101,201)) # w = 1, b = 100
 
 
 from sklearn.model_selection import train_test_split
 x_train, x_test, y_train, y_test = train_test_split(
-    # x, y, random_state =99, shuffle= True, 
-    x, y, shuffle = False  
-    ,test_size = 0.4 #train 60% // test 40% 
+    x, y, random_state =99, shuffle= True, test_size = 0.4 #train 60% // test 40% 
 )
 
-#  , random_state => random 난수, 숫자는 랜덤이지만 랜덤 난수66으로 고정된 랜덤이므로 다시 실행해도 숫자는 변하지 않는다 
+# random_state => random 난수, 숫자는 랜덤이지만 랜덤 난수66으로 고정된 랜덤이므로 다시 실행해도 숫자는 변하지 않는다 
 
 x_test, x_val, y_test, y_val = train_test_split(
-    # x_test, y_test, random_state=99, shuffle= True, 
-    x_test, y_test, shuffle = False
-    
-    ,test_size=0.5)  #test 20% 중 -> 50% test // 50% validation 
+    x_test, y_test, random_state=99, shuffle= True, test_size=0.5)  #test 20% 중 -> 50% test // 50% validation 
 
-#  train : validation : test = 6 : 2 : 2
+# train : validation : test = 6 : 2 : 2
 
 '''
-훈련한 범위 밖의 예측은 틀릴 확률이 매우 높다. 그래서 shuffle 이 default로 있다. 
+훈련한 범위 밖의 예측은 틀릴 확률이 매우 높다. 미래 예측이 힘든 이유. 
+그래서 shuffle 이 default로 있다. 그래서 섞어서 최대한 범위를 넓게 잡는다. 
 
 여기서 shuffle의 조건 
 - X,Y가 서로 섞이지는 않는다. X는 X 안에서, Y는 Y안에서만 섞인다. 
 
 
 
+'''
 
 '''
 print(x_test,x_train,x_val)
@@ -48,7 +42,6 @@ from keras.layers import Dense
 model = Sequential()
 
 model.add(Dense(5, input_dim = 1))
-model.add(Dense(12))
 model.add(Dense(12))
 model.add(Dense(12))
 model.add(Dense(12))
@@ -92,4 +85,3 @@ r2 = r2_score(y_test, y_predict)
 print("R2 score : ", r2)
 # _____________________________________
 
-'''
