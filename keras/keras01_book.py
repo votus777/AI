@@ -36,6 +36,15 @@ Non-trainable params: 0
 
 #여기서 +1이란, one weight of connection with bias(절편)
 
+이렇게 되는 이유는 노드의 작동 방식에 그 이유가 있다. 
+
+노드의 출력 값은 정해진 활성화 함수에 들어가서 특정 값 θ를 출력하게 된다.  
+
+b + w1x1 + w2x2 +... =θ   
+이런 식이 된다. 
+
+
+
 '''
 
 
