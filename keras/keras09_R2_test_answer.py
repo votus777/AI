@@ -1,38 +1,26 @@
 '''
-# 과제 : R2를 음수가 아닌 0.5이하로 줄이기   
-# 레이어는 인풋, 아웃풋 포함 5개 이상, 노드는 레이어당 각각 5개 이상
-# batch size = 1
-# epochs = 100 이상 
-# 데이터 수정 없음
+
+* 정답 *
+
+Overfitting이 나게 해라! 
+
+epoch를 컴터지기 직전까지 돌려라 
+단 너무 많이 돌리면 - 값이 나온다.
 
 
--> under fitting이 나게 해라! 
--> overfitting과 trade off 관계이므로 overfitting을 억제해도 된다. 
-충분한 신호 미포함
 
-R2 score :  0.4422005452443175
-나오긴 나오는데 항상 나오진 않더라
-
-대체 왜 이러는걸까?
 
 '''
 
 
 
-
 # 1. 데이터
 import numpy as np
+x_train = np.array([1,2,3,4,5,6,7,8,9,10])
+y_train = np.array([1,2,3,4,5,6,7,8,9,10])
 
-
-x = np.array(range(1,11))
-y = np.array(range(1,11))
-
-x_train = x[:1]
-y_train = y[:1]
-
-
-x_test = x[2:4]
-y_test = y[2:4]
+x_test = np.array([11,12,13,14,15])
+y_test = np.array([11,12,13,14,15])
 
 
 x_pred = np.array([16, 17, 18]) 
@@ -45,17 +33,16 @@ from keras.models import Sequential
 from keras.layers import Dense 
 model = Sequential()
 
-model.add(Dense(2, input_dim = 1))
-model.add(Dense(20))
-model.add(Dense(20))
-model.add(Dense(20))
-model.add(Dense(25))
+model.add(Dense(5, input_dim = 1))
+model.add(Dense(5))
+model.add(Dense(5))
+model.add(Dense(5))
 model.add(Dense(1))
 
 
 # 3. 훈련
 model.compile(loss='mse', optimizer='adam', metrics=['mse'])
-model.fit(x_train, y_train, epochs=100, batch_size = 1)
+model.fit(x_train, y_train, epochs=30000, batch_size = 1)
 
 
 
