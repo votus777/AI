@@ -55,9 +55,9 @@ model.add(Dense(1))                # 반면 output은 1열
 
 # 3. 훈련_______________________________________________________________________________
 model.compile(loss='mse', optimizer='adam', metrics=['mse'])
-model.fit(x_train, y_train, epochs=30000, batch_size = 15, validation_split= 0.5, verbose= 0) 
+model.fit(x_train, y_train, epochs=800, batch_size = 15, validation_split= 0.5, verbose= 0) 
 
-
+#80만번 돌리다가 집에 갈 시간
 
 #4. 평가, 예측____________________________________________
 loss,mse = model.evaluate(x_test, y_test, batch_size = 1) 
