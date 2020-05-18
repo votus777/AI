@@ -49,7 +49,7 @@ model.add(Dense(12))
 model.add(Dense(1))
 
 
-# 3. 훈련_______________________________________________________________________________
+# 3. 훈훈하게 훈련_______________________________________________________________________________
 model.compile(loss='mse', optimizer='adam', metrics=['mse'])
 model.fit(x_train, y_train, epochs=100, batch_size = 1, validation_data=(x_val,y_val))
 

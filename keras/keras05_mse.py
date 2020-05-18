@@ -51,3 +51,13 @@ print("mse : ", mse)
 
 y_pred = model.predict(x_pred) 
 print("y_pred : ", y_pred)
+
+'''
+loss :  0.3184058666229248
+mse :  0.3184058666229248
+y_pred :  
+[11.983281]
+ [13.07    ]
+ [14.156715]
+ 
+ '''

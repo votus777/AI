@@ -34,11 +34,6 @@ x_train, x_test, y_train, y_test = train_test_split(
 )
 
 
-from sklearn.model_selection import train_test_split
-x_train, x_test, y_train, y_test = train_test_split(
-    x, y, random_state =99, shuffle= False, test_size = 0.2 #train 80% // test 20% 
-)
-
 
 
 # 2. 모델 구성____________________________
@@ -91,3 +86,28 @@ r2 = r2_score(y_test, y_predict)
 print("R2 score : ", r2)
 # _____________________________________
 
+'''
+ [790.9997 ]
+ [791.9998 ]
+ [792.99963]
+ [793.99976]
+ [794.99976]
+ [795.9998 ]
+ [796.99976]
+ [797.99963]
+ [798.9997 ]
+ [799.99963]
+ [800.9998 ]
+ [801.9997 ]
+ [802.9996 ]
+ [803.9997 ]
+ [804.99976]
+ [805.9997 ]
+ [806.9998 ]
+ [807.9996 ]
+ [808.9997 ]
+ [809.9997 ]
+
+... 맞나..?
+
+ '''
