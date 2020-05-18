@@ -18,7 +18,7 @@ y = np.array(range(711,811))
 
 
 x = np.transpose(x)
-y = np.transpose(y) 
+
 
 '''
 

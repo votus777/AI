@@ -20,7 +20,7 @@ y = np.array([range(101,201), range(711,811), range(100)]).T
 from sklearn.model_selection import train_test_split
 x_train, x_test, y_train, y_test = train_test_split(
    
-    x, y, shuffle = False  , train_size = 0.8  
+    x, y, shuffle = False  , train_size = 0.5
 )
 
 

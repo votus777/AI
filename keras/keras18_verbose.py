@@ -52,7 +52,7 @@ model.add(Dense(1))                # 반면 output은 1열
 
 # 3. 훈제 훈련_______________________________________________________________________________
 model.compile(loss='mse', optimizer='adam', metrics=['mse'])
-model.fit(x_train, y_train, epochs=100, batch_size = 1, validation_split= 0.5, verbose = 0) #verbose 추가 
+model.fit(x_train, y_train, epochs=100, batch_size = 1, validation_split= 0.5, verbose = 3) #verbose 추가 
 
 '''
 
