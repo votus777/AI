@@ -102,3 +102,5 @@ r2 = r2_score(y_test, y_predict)
 
 print("R2 score : ", r2)
 # _____________________________________
+
+print(y_predict)

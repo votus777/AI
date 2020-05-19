@@ -179,3 +179,4 @@ def R2(y_test, y_predict) :
 print("R2 score : ", (R2(y1_test,y1_predict)+R2(y2_test,y2_predict))/2)
 # _____________________________________
 
+
