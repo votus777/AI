@@ -91,6 +91,9 @@ print(loss)
 
 y1_predict = model.predict([x1_test,x2_test]) # 리스트의 함정에 조심!!!
 
+for i in range(len(y1_predict)) :
+    print(y1_test[i], y1_predict[i])
+
 
 
 
