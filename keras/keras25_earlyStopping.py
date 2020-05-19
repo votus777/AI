@@ -11,9 +11,6 @@ x2 = np.array([range(101,201), range(411,511),range(511,611)])
 y1 = np.array([range(101,201), range(411,511),range(100)]) 
 
 
-###########################################
-##############여기서 부터 수정##############
-###########################################
 x1 = np.transpose(x1)
 x2 = np.transpose(x2)
 
@@ -38,17 +35,17 @@ from keras.layers import Dense, Input
 #model -------- 1
 input1 = Input(shape=(3, ), name= 'input_1') 
 
-dense1_1 = Dense(24, activation= 'relu', name= '1_1') (input1) 
-dense1_2 = Dense(12,activation='relu', name = '1_2')(dense1_1)
-dense1_3 = Dense(24,activation='relu', name = '1_3')(dense1_2)
+dense1_1 = Dense(12, activation= 'relu', name= '1_1') (input1) 
+dense1_2 = Dense(24, activation='relu', name = '1_2')(dense1_1)
+dense1_3 = Dense(12, activation='relu', name = '1_3')(dense1_2)
 
 
 #model -------- 2
 input2 = Input(shape=(3, ), name = 'input_2') 
 
-dense2_1 = Dense(24, activation= 'relu', name = '2_1')(input1) 
-dense2_2 = Dense(12,activation='relu', name = '2_2')(dense2_1)
-dense2_3 = Dense(24,activation='relu', name = '2_3')(dense2_2)
+dense2_1 = Dense(12, activation= 'relu', name = '2_1')(input1) 
+dense2_2 = Dense(24, activation='relu', name = '2_2')(dense2_1)
+dense2_3 = Dense(12, activation='relu', name = '2_3')(dense2_2)
 
  
 
@@ -67,7 +64,7 @@ middle1 = Dense(12)(middle1)
 
 output1 = Dense  (8,name = 'output_1')(middle1)
 output1_2 = Dense (12, name = 'output_1_2')(output1)
-output1_3 = Dense (8, name = 'output_1_3')(output1_2)
+output1_3 = Dense (12, name = 'output_1_3')(output1_2)
 output1_4 = Dense (3, name = 'output_1_4')(output1_3)
 
 
@@ -76,11 +73,27 @@ model = Model (inputs = [input1, input2], outputs= (output1_4))
 
 
 
-# 3. 훈수 두는 훈련_______________________________________________________________________________
+# 3. 민방위 훈련_______________________________________________________________________________
 model.compile(loss='mse', optimizer='adam', metrics=['mse'])
-model.fit([x1_train, x2_train], 
-          y1_train, epochs=50, batch_size = 1, validation_split= 0.25, verbose = 1)  #2개 이상은 모두 []로 묶어준다
 
+from keras.callbacks import EarlyStopping
+ealry_stopping= EarlyStopping(monitor='loss', patience= 10,  mode = 'auto')   
+'''
+
+            #나중에 불러올 수 있게 변수 지정 
+            # 모니터링을 loss로 하겠다  혹은 val_loss, val_acc
+            # mode는 'min'과 'max' 가 있다, ex) min일 경우 여기선 loss가 최저값에서 10번 이상 개선이 없으면 멈추겠다
+
+            #여기서도 verbose 쓸 수 있다
+            # min_delta : 최소변화량, 이 보다 작을 경우 변화가 없다고 판단 
+
+
+'''
+model.fit([x1_train, x2_train], 
+          y1_train, epochs=100, batch_size = 1, validation_split= 0.25, verbose = 1,
+          callbacks = [ealry_stopping])  
+
+            # callbacks => 어떤 함수를 수행 시 그 함수에서 내가 지정한 함수를 호출하는 것
 
 #4. 평가, 예측____________________________________________
 loss = model.evaluate([x1_test,x2_test], y1_test, batch_size = 1 ) # 여기도 역시 묶어준다

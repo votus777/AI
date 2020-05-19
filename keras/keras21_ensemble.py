@@ -156,7 +156,7 @@ print(loss)
 
 
 
-y1_predict, y2_predict = model.predict([x1_test,x2_test])
+y1_predict, y2_predict = model.predict([x1_test,x2_test]) # 리스트의 함정에 조심!!!
 
 
 

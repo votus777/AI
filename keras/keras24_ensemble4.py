@@ -8,18 +8,9 @@ import numpy as np
 
 x1 = np.array([range(1,101), range(301,401)]).T
 
-y1 = np.array([range(711,811), range(711,811)]) 
-y2 = np.array([range(101,201), range(411,511)]) 
+y1 = np.array([range(711,811), range(711,811)]).T 
+y2 = np.array([range(101,201), range(411,511)]).T 
 
-
-
-###########################################
-##############여기서 부터 수정##############
-###########################################
-
-
-y1 = np.transpose(y1)
-y2 = np.transpose(y2)
 
 
 from sklearn.model_selection import train_test_split
@@ -28,7 +19,7 @@ x1_train, x1_test, y1_train, y1_test, y2_train, y2_test = train_test_split(
     x1, y1, y2, shuffle = False  , train_size = 0.8 
 )
 
-
+# print(x1_test.shape)  # (20,2)
 
 
 # 2. 모델 구성____________________________
@@ -47,12 +38,12 @@ dense1_3 = Dense(8,activation='relu', name = '1_3')(dense1_2)
 
 ################# output 모델 구성 ####################
 
-output1 = Dense  (40,name = 'output_1')(dense1_3)
+output1 = Dense  (24,name = 'output_1')(dense1_3)
 output1_2 = Dense (40, name = 'output_1_2')(output1)
 output1_3 = Dense (40, name = 'output_1_3')(output1_2)
 output1_4 = Dense (2, name = 'output_1_4')(output1_3)
 
-output2 = Dense  (40,name = 'output_2')(dense1_3)
+output2 = Dense  (24,name = 'output_2')(dense1_3)
 output2_2 = Dense (40, name = 'output_2_2')(output1)
 output2_3 = Dense (40, name = 'output_2_3')(output1_2)
 output2_4 = Dense (2, name = 'output_2_4')(output1_3)
@@ -63,7 +54,7 @@ model = Model (inputs = input1, outputs= ([output1_4,output2_4]))
 
 
 
-# 3. 훈이의 성실한 훈련_______________________________________________________________________________
+# 3. 예비군 훈련_______________________________________________________________________________
 model.compile(loss='mse', optimizer='adam', metrics=['mse'])
 model.fit(x1_train, 
           [y1_train, y2_train], epochs=70, batch_size = 1, validation_split= 0.25, verbose = 1)  #2개 이상은 모두 []로 묶어준다
@@ -93,8 +84,6 @@ print("RMSE : ", ((RMSE(y1_test, y1_predict)+RMSE(y2_test, y2_predict))/2))
 #________R2 구하기_____________________
 from sklearn.metrics import r2_score
 
-def R2(y_test, y_predict) :
-    return r2_score(y_test, y_predict)
-
-print("R2 score : ", ((R2(y1_test,y1_predict)+R2(y2_test,y2_predict))/2))
+print("R2 score : ", (r2_score(y1_test,y1_predict)+r2_score(y2_test,y2_predict))/2)
 # _____________________________________
+
