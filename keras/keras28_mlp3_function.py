@@ -1,7 +1,13 @@
 #  keras16_mlp3.py 를 Sequential 에서 함수형으로 변경
 #  Early Stopping 적용 
 
+'''
 
+역시나 이리저리 파라미터들을 돌려봐도
+
+값들이 개판이다  
+
+'''
 
 # 1. 데이터_________________________________
 import numpy as np
