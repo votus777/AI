@@ -54,17 +54,17 @@ from keras.layers import Dense, Input # 마찬가지로 input layer를 추가
 #model -------- 1
 input1 = Input(shape=(2, ), name= 'input_1') 
 
-dense1_1 = Dense(4, activation= 'relu', name= '1_1') (input1) 
-dense1_2 = Dense(18,activation='relu', name = '1_2')(dense1_1)
-dense1_3 = Dense(4,activation='relu', name = '1_3')(dense1_2)
+dense1_1 = Dense(10, activation= 'relu', name= '1_1') (input1) 
+dense1_2 = Dense(10,activation='relu', name = '1_2')(dense1_1)
+dense1_3 = Dense(10,activation='relu', name = '1_3')(dense1_2)
 
 
 #model -------- 2
 input2 = Input(shape=(2, ), name = 'input_2') 
 
-dense2_1 = Dense(4, activation= 'relu', name = '2_1')(input1) 
-dense2_2 = Dense(18,activation='relu', name = '2_2')(dense2_1)
-dense2_3 = Dense(4,activation='relu', name = '2_3')(dense2_2)
+dense2_1 = Dense(10, activation= 'relu', name = '2_1')(input1) 
+dense2_2 = Dense(10,activation='relu', name = '2_2')(dense2_1)
+dense2_3 = Dense(10,activation='relu', name = '2_3')(dense2_2)
 
  
 
@@ -73,39 +73,41 @@ dense2_3 = Dense(4,activation='relu', name = '2_3')(dense2_2)
 from keras.layers.merge import concatenate    #concatenate : 사슬 같이 잇다
 merge1 = concatenate([dense1_3, dense2_3], name = 'merge') #파이썬에서 2개 이상은 무조건 list []
 
-middle1 = Dense(8)(merge1)
-middle1 = Dense(12)(middle1)
-middle1 = Dense(8)(middle1)
-middle1 = Dense(4)(middle1)
+middle1 = Dense(10)(merge1)
+middle1 = Dense(10)(middle1)
+middle1 = Dense(10)(middle1)
+middle1 = Dense(10)(middle1)
+middle1 = Dense(10)(middle1)
+middle1 = Dense(10)(middle1)
 
 ################# output 모델 구성 ####################
 
-output1 = Dense  (8,name = 'output_1')(middle1)
-output1_2 = Dense (18, name = 'output_1_2')(output1)
-output1_3 = Dense (8, name = 'output_1_3')(output1_2)
+output1 = Dense  (10,name = 'output_1')(middle1)
+output1_2 = Dense (10, name = 'output_1_2')(output1)
+output1_3 = Dense (10, name = 'output_1_3')(output1_2)
 output1_4 = Dense (2, name = 'output_1_4')(output1_3)
 
 
 
-output2 = Dense  (8,name = 'output_2')(middle1)
-output2_2 = Dense (18,name = 'output_2_2')(output2)
-output2_3 = Dense (4,name = 'output_2_3')(output2_2)
+output2 = Dense  (10,name = 'output_2')(middle1)
+output2_2 = Dense (10,name = 'output_2_2')(output2)
+output2_3 = Dense (10,name = 'output_2_3')(output2_2)
 output2_4 = Dense (2, name = 'output_2_4')(output2_3)
 
-output3 = Dense (8,name = 'output_3')(middle1)
-output3_2 = Dense(18,name = 'output_3_2')(output3)
-output3_3 = Dense(4,name = 'output_3_3')(output3_2)
+output3 = Dense (10,name = 'output_3')(middle1)
+output3_2 = Dense(10,name = 'output_3_2')(output3)
+output3_3 = Dense(10,name = 'output_3_3')(output3_2)
 output3_4 = Dense (2, name = 'output_3_4')(output3_3)
 
 model = Model (inputs = [input1, input2], outputs= ([output1_4, output2_4, output3_4]))
 
 
-
+# model.summary()
 
 # 3. 훈이의 성실한 훈련_______________________________________________________________________________
 model.compile(loss='mse', optimizer='adam', metrics=['mse'])
 model.fit([x1_train, x2_train], 
-          [y1_train, y2_train, y3_train], epochs=100, batch_size = 1, validation_split= 0.25, verbose = 1)  #2개 이상은 모두 []로 묶어준다
+          [y1_train, y2_train, y3_train], epochs=50, batch_size = 1, validation_split= 0.25, verbose = 1)  #2개 이상은 모두 []로 묶어준다
 
 
 #4. 평가, 예측____________________________________________
