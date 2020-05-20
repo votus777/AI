@@ -109,6 +109,7 @@ Non-trainable params: 0
 *과제*  
 왜 LSTM의 파라미터가 이렇게 높게 나오는 것일까? 
 
+ -> wiki 8일차에 작성
 
 '''
 
