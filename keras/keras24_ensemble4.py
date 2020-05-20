@@ -88,3 +88,4 @@ print("R2 score : ", (r2_score(y1_test,y1_predict)+r2_score(y2_test,y2_predict))
 # _____________________________________
 
 print(y1_predict)
+print(y2_predict)
