@@ -11,19 +11,6 @@ b = 2
 c = sum1(a,b)
 print(c)  # 3 
 
-def mul1 (a,b) :
-    return a*b
-
-print(mul1(a,b))   #2
-
-def div1 (a,b):
-    return a%b
-print(div1(a,b)) #1
-
-
-
-def sub1 (a,b) :
-    return a - b 
 print(sub1(a,b)) #-1
 
 def sayYeaaaaah () : 
@@ -43,4 +30,4 @@ c = 3
 
 d = sum2(a,b,c)
 
-print(d)
+print(d)  #6
