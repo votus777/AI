@@ -18,11 +18,6 @@ x_predict = array([50,60,70])
 
 
 
-# print("x.shape : ", x.shape)    # (13,3)
-# print("y1.shape : ", y.shape)  # (13, )    
-
-
-
 x = x.reshape(x.shape[0], x.shape[1], 1)   #x.shape :  (13, 3, 1)
 x_predict = x_predict.reshape(1,3,1)
 
@@ -54,8 +49,8 @@ model.fit(x,y, epochs= 10000, callbacks= [ealry_stopping], verbose= 2)
 
 
 y_predict = model.predict(x_predict)
-print(y_predict)      #[[80.06215]] 잘나왔따
-# print(y_predict.shape)  (1,1)
+print(y_predict)      #[[80.06215]] [[80.45786]] 
+
 
 
 
