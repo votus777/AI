@@ -104,7 +104,10 @@ Total params: 541
 Trainable params: 541
 Non-trainable params: 0
 
-레이어하고 노드를 얼마 넣지도 않았는데 params이 이 모양이다. 괜히 느리다고 하는게 아니다. 
+데이터를 얼마 넣지도 않았는데 params이 이 모양이다. 괜히 느리다고 하는게 아니다. 
+
+나중에 데이터가 커지면 난리나겠지 
+
 
 *과제*  
 왜 LSTM의 파라미터가 이렇게 높게 나오는 것일까? 
@@ -126,11 +129,13 @@ model.fit(x,y, epochs= 10000, callbacks= [ealry_stopping])
 
 
 x_input  = array([5,6,7])  # 평가를 위해 [5,6,7] 대입, 현재 형태는(1,3)
-# print("x_input shape : ",x_input)  # [5,6,7]
+# print("x_input shape : ", x_input.shape) 
+# x_input shape :  (3,)
+
 
 x_input = x_input.reshape(1,3,1) #  x_input를 (1,3,1)로 reshape  
-# print("x_input shape : ",x_input)
-# x_input shape :  [[[5], [6], [7]]]
+# print("x_input shape : ",x_input.shape)
+# x_input shape :  (1, 3, 1)
 
 
 yhat = model.predict(x_input)
@@ -140,7 +145,6 @@ print(yhat.shape)   # (1,1)
 
 '''
 그러나 LSTM을 쓰기에는 너무 작은 데이터 
-
 
 '''
 

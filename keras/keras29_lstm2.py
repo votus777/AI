@@ -15,16 +15,18 @@ print("y1.shape : ", y.shape)  # (4, )
 
 
 
-x = x.reshape(x.shape[0], x.shape[0], 1)   #x.shape :  (4, 3, 1)
+x = x.reshape(x.shape[0], x.shape[1], 1)   #x.shape :  (4, 3, 1)
 '''
-                  행         열      몇 개씩 자르는지         
-x의 shape  = (batch_size, timesteps, feature)
-                덩어리 
+                  행         열      몇 개씩 자르는지         반복X100
+x의 shape  = (batch_size, timesteps, feature)  # 3D 텐서
+               
+input_ shape = (timesteps, feature)
+input_length = timesteps, input_dim = feature
 
 '''
-print("x.shape : ", x.shape)  
+ 
 
-'''
+
 print(x.shape) 
 
 
@@ -47,21 +49,18 @@ ealry_stopping= EarlyStopping(monitor='loss', patience= 50,  mode = 'auto')
 model.compile(optimizer='adam', loss = 'mse')
 model.fit(x,y, epochs= 10000, callbacks= [ealry_stopping])
 
+x_predict = array([5,6,7])
+x_predict = x_predict.reshape(1,3,1,)
+
+print(x_predict) 
+
+
+y_predict = model.predict(x_predict)
+print(y_predict)        
+print(y_predict.shape)   # (1,1)
 
 
 
-x_input  = array([5,6,7])  
-
-x_input = x_input.reshape(1,3,1) 
-
-
-yhat = model.predict(x_input)
-print(yhat)        
-print(yhat.shape)   # (1,1)
-
-
-
-'''
 
 
 
