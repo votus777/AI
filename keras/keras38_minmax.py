@@ -29,8 +29,24 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 scaler1 = MinMaxScaler()
 scaler1.fit(x)
 x = scaler1.transform(x)
+x_predict = x_predict.reshape(-1,3)
+
 x_predict = scaler1.transform(x_predict)
 
+'''
+  뭐지 에러 뜨는데...?
+ValueError: Expected 2D array, got 1D array instead:
+array=[55. 65. 75.].
+Reshape your data either using array.reshape(-1, 1) if your data has a single feature or array.reshape(1, -1) if it contains a single sample.
+
+
+
+나중에 해결하자   와꾸조심 
+
+x_predict = x_predict.reshape(-1,3) 로 바꾸니 해결
+
+
+'''
 print(x_predict)
 
 # scaler2 = StandardScaler()
