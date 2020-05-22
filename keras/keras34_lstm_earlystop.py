@@ -70,10 +70,7 @@ output1_2 = Dense (1)(output1_1)
 
 model = Model(inputs=[input1,input2], outputs = output1_2)
 
-model.summary()
 
-
-'''
 # 3. 실행 
 
 from keras.callbacks import EarlyStopping
@@ -95,4 +92,3 @@ print(y_predict.shape) #(1,1)
 
 
 #  데이터가 워낙 이상해서 값이 이상하게 나온다 
-'''

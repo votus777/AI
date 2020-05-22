@@ -56,7 +56,7 @@ return_sequences=True 에서는 각 유닛들을 거쳐가며 나오는 값들�
 ___________________
 
 
-return_sequences를 안쓰면 lstm은 3차원으로 입력을 받아야하는데 2차원으로 받게되서 error
+return_sequences를 안쓰면( False가 default ) lstm은 3차원으로 입력을 받아야하는데 2차원으로 받게되서 error
 뜻은 원래 있던 차원 형식으로 전달해주겠다.  
 
 
