@@ -112,12 +112,14 @@ x_predict = x_predict.reshape(1,3,1)
 # 2. 모델 구성
 
 model = Sequential()
-model.add(LSTM(15, activation='relu', input_shape = (3,1)))  
+model.add(LSTM(10, activation='relu', input_shape = (3,1)))  
 
 # model.add(LSTM(10, input_length = 3 ,input_shape = 1))
-model.add(Dense(12))
-model.add(Dense(12))
-model.add(Dense(12))
+model.add(Dense(10))
+model.add(Dense(10))
+model.add(Dense(10))
+model.add(Dense(10))
+model.add(Dense(10))
 model.add(Dense(1))
 
 
