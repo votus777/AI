@@ -12,7 +12,7 @@ def split_x (seq, size) :
     aaa = []
     for i in range(len(seq) - size + 1 ) :
         subset = seq[ i: (i + size)]
-        aaa.append([item for item in subset])
+        aaa.append([item for item in subset])   # for i in range -> i가 range 안에 있을때 반복 // for item in subset -> item이 subset 안에 있을 때 반복 무엇을? append([item])
     print(type(aaa))
     return np.array(aaa)
 
@@ -20,10 +20,10 @@ def split_x (seq, size) :
 dataset = split_x(a,size)
 print("=============================")
 print(dataset)
-print(dataset.shape)
+print(dataset.shape) # (7,4)
 '''
 
-size = 5    // 여기서 size는 곧 LSTM에서 tiem_steps이다.  
+size = 5    // 여기서 size는 곧 LSTM에서 time_steps이다.  
 
 <class 'list'>
 =============================
@@ -34,7 +34,7 @@ size = 5    // 여기서 size는 곧 LSTM에서 tiem_steps이다.
  [ 5  6  7  8  9]
  [ 6  7  8  9 10]]
 
-----------------------------------
+------------------------------
 
 
 size = 4

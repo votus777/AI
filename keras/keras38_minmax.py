@@ -29,8 +29,8 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 scaler1 = MinMaxScaler()
 scaler1.fit(x)
 x = scaler1.transform(x)
-x_predict = x_predict.reshape(-1,3)
 
+x_predict = x_predict.reshape(-1,3)  
 x_predict = scaler1.transform(x_predict)
 
 '''
@@ -44,6 +44,13 @@ Reshape your data either using array.reshape(-1, 1) if your data has a single fe
 나중에 해결하자   와꾸조심 
 
 x_predict = x_predict.reshape(-1,3) 로 바꾸니 해결
+
+[[173.52254]]   [[126.8457]]
+
+혹은 train_data = np.reshape(train_data, shape=(-1, num_features)) 를 사용해서 
+각 column에서 스케일링이 진행되게 할 수도 있다. 
+
+물론 모델 들어가기 전에 다시 reshape는 필수 
 
 
 '''
@@ -105,12 +112,12 @@ x_predict = x_predict.reshape(1,3,1)
 # 2. 모델 구성
 
 model = Sequential()
-model.add(LSTM(30, activation='relu', input_shape = (3,1)))  
+model.add(LSTM(15, activation='relu', input_shape = (3,1)))  
 
 # model.add(LSTM(10, input_length = 3 ,input_shape = 1))
-model.add(Dense(5))
-model.add(Dense(8))
-model.add(Dense(10))
+model.add(Dense(12))
+model.add(Dense(12))
+model.add(Dense(12))
 model.add(Dense(1))
 
 
