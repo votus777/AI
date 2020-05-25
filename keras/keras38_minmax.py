@@ -41,7 +41,7 @@ Reshape your data either using array.reshape(-1, 1) if your data has a single fe
 
 
 
-나중에 해결하자   와꾸조심 
+몰라..밥먹고 나중에 해결하자...   와꾸조심 
 
 x_predict = x_predict.reshape(-1,3) 로 바꾸니 해결
 

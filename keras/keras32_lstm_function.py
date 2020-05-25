@@ -25,6 +25,13 @@ input1 = Input(shape=(3,1))
 
 dense = (LSTM(10, activation='relu', input_shape = (3,1)))(input1)  
 
+'''
+
+(행, 열, 잘) => ( batch_size, timestep, feature) 
+                         input_length  input_dim
+
+
+'''
 
 dense1 =(Dense(5))(dense)
 dense1 =(Dense(5))(dense1)

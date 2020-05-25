@@ -29,8 +29,15 @@ x_train, x_test, y_train, y_test = train_test_split(
 
 
 # 2. 모델 구성____________________________
-from keras.models import Sequential, Model  # Model 추가
+from keras.models import Sequential, Model  # Model 추가,    
 from keras.layers import Dense, Input # 마찬가지로 input layer를 추가
+
+'''
+ 텐서플로우 2.0 -> tf.keras.model import Model 
+
+'''
+
+
 '''
 model = Sequential()
 model.add(Dense(5, input_dim = 3))  
