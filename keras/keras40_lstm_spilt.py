@@ -83,7 +83,7 @@ model.add(Dense(10))
 model.add(Dense(10)) 
 model.add(Dense(1)) 
 
-
+#  예측 및 평가 
 
 from keras.callbacks import EarlyStopping 
 early_stopping = EarlyStopping( monitor='loss', patience= 50, mode ='auto')
