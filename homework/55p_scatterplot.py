@@ -19,3 +19,4 @@ plt.title("daily minutes vs number of friends")
 plt.xlabel("#of firends")
 plt.ylabel("daily minutes spent on the site")
 plt.show()
+

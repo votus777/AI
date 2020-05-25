@@ -10,3 +10,5 @@ plt.title("Axes Aren't comparabel")
 plt.xlabel("test 1 grade")
 plt.ylabel("test 2 grade")
 plt.show()
+
+
