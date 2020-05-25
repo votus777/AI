@@ -38,9 +38,9 @@ x_train, x_test, y_train, y_test = train_test_split(
 
 model = Sequential()
 model.add(Dense(10, input_shape=(4,)))
-model.add(Dense(5))
-model.add(Dense(5))
-model.add(Dense(5))
+model.add(Dense(10))
+model.add(Dense(10))
+model.add(Dense(10))
 model.add(Dense(1))
 
 #3. 실행

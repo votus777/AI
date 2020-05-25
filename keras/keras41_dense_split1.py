@@ -32,23 +32,34 @@ print(y)
 #2. 모델구성
 
 model = Sequential()
-model.add(Dense(10, input_shape=(4,)))
-model.add(Dense(5))
-model.add(Dense(1))
+model.add (Dense(10, input_shape = (4,))) 
+model.add(Dense(10))
+model.add(Dense(10)) 
+model.add(Dense(25))
+model.add(Dense(25)) 
+model.add(Dense(10)) 
+model.add(Dense(10)) 
+model.add(Dense(1)) 
 
 #3. 실행
 from keras.callbacks import EarlyStopping
 early_stopping = EarlyStopping(monitor='loss', patience=5, mode='auto')
 
 model.compile(loss = 'mse', optimizer='adam', metrics=['mse'])
-model.fit(x,y, epochs=30, batch_size=1, verbose=1,
+model.fit(x,y, epochs=5000, batch_size=1, verbose=1,
         callbacks=[early_stopping])
 
 
 #4. 평가, 예측
 
 loss, mse = model.evaluate(x,y, batch_size=1)
-y_predict = model.predict(x)
+
+x_predict = np.array ([[11,12,13,14]])
+# x_predict = np.reshape(x_predict, (1,4,1))
+
+y_predict = model.predict(x_predict)  
+
+
 
 print('loss: ', loss)
 print('mse: ', mse)

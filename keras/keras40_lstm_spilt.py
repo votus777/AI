@@ -75,30 +75,36 @@ y = dataset [ :, 4]
 # 모델 구성 
 
 model = Sequential()
-model.add(LSTM(10, activation='relu', input_shape = (4,1)))  
-
-model.add(Dense(5))
-model.add(Dense(10))
-model.add(Dense(10))
-model.add(Dense(5))
-model.add(Dense(1))
-
-
-from keras.callbacks import EarlyStopping  # earlystopping은 쌍피다! 쌍코피 푸슉
-ealry_stopping= EarlyStopping(monitor='loss', patience= 50,  mode = 'auto') 
-
-
-model.compile(optimizer='adam', loss = 'mse')
-model.fit(x,y, epochs= 10000, batch_size = 1, callbacks= [ealry_stopping])
+model.add(LSTM(10, activation= 'relu', input_shape = (4,1)))
+model.add(Dense(12)) 
+model.add(Dense(12)) 
+model.add(Dense(12))
+model.add(Dense(10)) 
+model.add(Dense(10)) 
+model.add(Dense(1)) 
 
 
 
-x_predict  = np.array([11,12,13,14]) 
-x_predict = np.reshape(x_predict,(1,4,1)) 
+from keras.callbacks import EarlyStopping 
+early_stopping = EarlyStopping( monitor='loss', patience= 50, mode ='auto')
 
-y_predict = model.predict(x_predict)
+model.compile(loss = 'mse', optimizer='adam', metrics = ['mse'])
+model.fit(x,y, epochs= 5000, batch_size= 1, callbacks= [early_stopping])
 
 
-print(y_predict)         # [[15.178231]] [[15.00645]]
-#print(y_predict.shape)  #(1,1) 
+loss, mse = model.evaluate(x,y, batch_size=1)
+'''
+#  metrics = ['mse'] 이거 뺴먹으면 
+    'cannot unpack non-iterable float object' error 난다 
+
+'''
+x_predict = np.array ([11,12,13,14])
+x_predict = np.reshape(x_predict, (1,4,1))
+
+y_predict = model.predict(x_predict)  
+
+print(y_predict)
+
+print('loss :', loss)
+print('mse : ', mse)
 

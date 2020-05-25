@@ -60,10 +60,12 @@ tb_hist = TensorBoard(log_dir = 'graph', histogram_freq = 0, write_graph= True, 
 
     graph 파일에 도착하면 tensorboard --logdir=./path/logs/ 입력
 
-    크롬에 해당 주소 입력
+    크롬에 해당 주소 입력 ( http://localhost:6006/)
 
     fin. 
 
+
+    자나깨나 항상 경로 조심! 
 
 '''
 ealry_stopping= EarlyStopping(monitor='loss', patience= 50,  mode = 'auto') 
