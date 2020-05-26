@@ -32,7 +32,27 @@ print(y)
 #2. 모델구성
 
 model = Sequential()
-model.add (Dense(10, input_shape = (4,))) 
+model.add (Dense(10, input_shape = (4,)))  
+
+'''
+
+input_dim (n) = input_shape(n, )
+
+reshape를 힐 떄 전체  shape를 곱한 값이 갔다는 것은  
+
+만약 (8,3,2) - 3차원- 을 2차원 텐서로 변환하면 (8,?) 가 된다
+
+8*3*2 = 8*? 이여야 하므로 ? = 6이 된다. 즉 (8,3,2)를 2차원으로 변환하면 (8,6)이 된다.
+
+마찬가지로 (3,2) 를 한차원 다운 시킨다면 (6,)이 된다. //    
+
+
+
+
+아웃풋, 특히  RNN에서 Y 값도 형변환 시켜줘야 할 때가 있다 
+
+
+'''
 model.add(Dense(10))
 model.add(Dense(10)) 
 model.add(Dense(25))
