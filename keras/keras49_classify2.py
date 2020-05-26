@@ -6,7 +6,9 @@ import numpy as np
 from keras.models import Sequential
 from keras.layers import Dense, LSTM
 
-import keras.utils import np_utils
+import keras.utils 
+
+# from keras.utils import np_utils
 
 # 1. 데이터
 x = np.array(range(1, 11))    # (10,)
@@ -16,13 +18,20 @@ y = np.array([1, 2, 3, 4, 5, 1, 2, 3, 4, 5]) # (10,)
 
 y= keras.utils.to_categorical(y)
 
+y = y[ :, 1:]
+
+
 '''
+
+
+
 # One Hot encoding 
  
  y= keras.utils.to_categorical(y)
 
 데이터를 이차원으로 바꿔줌
 
+필수로 들어간다. 
 
 print(y)
 
@@ -37,11 +46,33 @@ print(y)
  [0. 0. 0. 0. 1. 0.]
  [0. 0. 0. 0. 0. 1.]]
 
+(10,6) 
+
+그런데 이걸 (10,5)로 만들 수 없을까 
+거슬게 앞에 0이 계속 들어간다. 
+
+이건 # 과제
+
+y = y[ :, 1:]
+
+[[1. 0. 0. 0. 0.]
+ [0. 1. 0. 0. 0.]
+ [0. 0. 1. 0. 0.]
+ [0. 0. 0. 1. 0.]
+ [0. 0. 0. 0. 1.]
+ [1. 0. 0. 0. 0.]
+ [0. 1. 0. 0. 0.]
+ [0. 0. 1. 0. 0.]
+ [0. 0. 0. 1. 0.]
+ [0. 0. 0. 0. 1.]]
+
+
+print(y.shape) # (10,5)
+
+
 
 '''
 
-
-# 다섯 개의 모델 
 
 
 
@@ -51,7 +82,7 @@ print(y)
 model = Sequential()
 model.add(Dense(10, activation='relu', input_dim = 1))
 model.add(Dense(50, activation= 'softmax')) 
-model.add(Dense(6, activation= 'softmax')) 
+model.add(Dense(5, activation= 'softmax')) 
 
 
 
@@ -80,6 +111,8 @@ y_predict = model.predict(x_predict)
 print('y_predict : ', np.around(y_predict))  
 print('loss :', loss)
 print('accuracy : ', acc)
+
+
 
 
 '''
@@ -126,5 +159,16 @@ accuracy :  0.6000000238418579
 이렇게 한 번에 깔끔하게 나온다. 
 
 
+아래는  y = y[ :, 1:] 해준 후 결과
+
+y_predict :  
+[[1. 0. 0. 0. 0.]
+ [0. 1. 0. 0. 0.]
+ [0. 0. 1. 0. 0.]
+ [0. 0. 0. 1. 0.]
+ [0. 0. 0. 0. 1.]]
+ 
+loss : 0.03297702865689871
+accuracy :  1.0
 
 '''
