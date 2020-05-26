@@ -72,7 +72,7 @@ loss, acc = model.evaluate(x,y, batch_size=1)
 x_predict = np.array([1,2,3])
 y_predict = model.predict(x_predict)  
 
-print('y_predict : ', y_predict)  
+print('y_predict : ', np.around(y_predict))  
 print('loss :', loss)
 print('accuracy : ', acc)
 
@@ -94,13 +94,16 @@ accuracy :  0.6000000238418579
 
 # 과제 y_predict 값이 0,1 이 나올 수 있도록 
 
+
 // 하이퍼 파라미터 조정
+
+이리저리 돌려보다가 loss 값이 계속 떨어진다 싶으면 epoch 왕창 늘려서 계속 내린다 
 
 y_predict:
 
-[[0.99871945]
- [0.0072667 ]
- [0.9887949 ]]
+[[0.99871945] -> 1
+ [0.0072667 ] -> 0
+ [0.9887949 ]] -> 1
 
 loss : 0.4804049411555752
 accuracy :  0.699999988079071
