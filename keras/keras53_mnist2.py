@@ -38,36 +38,45 @@ x_test  = x_test.reshape(10000,28,28,1).astype('float32')/255.0
 # ____________모델 구성____________________
 
 from keras.models import Sequential
-from keras.layers import Dense, Flatten, Conv2D, MaxPool2D, Dropout
+from keras.layers import Dense, Flatten, Conv2D, MaxPool2D, Dropout, BatchNormalization
 
 model= Sequential()
 
-model.add(Conv2D(64, (2,2), input_shape = (28, 28, 1), padding='same'))   #output ->  (28, 28, 10)
+model.add(Conv2D(32, (2,2), input_shape = (28, 28, 1), padding='same'))   #output ->  (28, 28, 10)
+model.add(BatchNormalization())
+
 model.add(Conv2D(32, (2,2), activation = 'relu', strides= 1, padding='same'))  
+model.add(BatchNormalization())
 model.add(MaxPool2D(pool_size= 2))
 model.add(Dropout(0.25)) 
-
- 
                              
                                
 
-model.add(Conv2D(32, (2,2), padding='same')) 
+model.add(Conv2D(64, (2,2), padding='same')) 
+model.add(BatchNormalization())
+
+model.add(Conv2D(64, (2,2), padding='same')) 
+model.add(BatchNormalization())
 model.add(MaxPool2D(pool_size= 2))
 model.add(Dropout(0.25))
 
+model.add(Conv2D(32, (2,2), activation = 'relu', strides= 1, padding='same'))  
+model.add(BatchNormalization())
 
-model.add(Conv2D(32, (2,2), padding='same')) 
-model.add(MaxPool2D(pool_size= 2))
 model.add(Dropout(0.25))
+model.add(Conv2D(32, (2,2), activation = 'relu', strides= 1, padding='same'))  
+model.add(BatchNormalization())
 
 
 model.add(Flatten())
 
+model.add(BatchNormalization())
 model.add(Dense(256, activation='relu'))
 model.add(Dropout(0.25))
 
 
-# model.add(Dense(10, activation= 'softmax')) 
+ 
+model.add(BatchNormalization())
 model.add(Dense(10, activation= 'softmax')) 
 
 
@@ -83,7 +92,7 @@ early_stopping = EarlyStopping( monitor='loss', patience= 100, mode ='auto')
 
 model.compile(loss = 'categorical_crossentropy', optimizer='rmsprop', metrics = ['acc'])
 
-model.fit(x_train,y_train, epochs= 10, batch_size= 120, validation_split= 0.3 ,callbacks= [early_stopping])
+model.fit(x_train,y_train, epochs= 15, batch_size= 120, validation_split= 0.25 ,callbacks= [early_stopping])
 
 
 # 평가 및 예측 
@@ -102,16 +111,28 @@ accuracy :  0.9736999869346619
 
 좋게 나온것 같지만 케글을 보면 평균 이하의 accuracy...
 
+
+(conv relu conv relu pool) * 3
+
+
 #과제 0.9925 이상 뽑아내기
 
 
+loss : 0.028588482533274805
+accuracy :  0.9908999800682068
 
-loss : 0.06485487866964162                 batch_size = 12  epoch = 10  32-64-32
-accuracy :  0.9879999756813049
+loss : 0.029769239512317983
+accuracy :  0.9927999973297119
 
 
-참고로 세계 최고 기록은 99.79%라고 카더라 
+loss : 0.025018695568875583
+accuracy :  0.9930999875068665
+
+loss : 0.02020222538380057
+accuracy :  0.9939000010490417
 
 여기서 cpu의 한계가 나온다. 겁나 느리다  
+
+gpu로 바꾸니 한결 낫다 그래도 부족하다.. 
 
 '''
