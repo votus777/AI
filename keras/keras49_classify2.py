@@ -27,7 +27,7 @@ y = y[ :, 1:]
 
 # One Hot encoding 
  
- y= keras.utils.to_categorical(y)
+ y= keras.utils.to_categorical(y)   ( 혹은 sklearn 안에 있는 categorical() 을 사용하면 0 없이 잘 나온다. )
 
 데이터를 이차원으로 바꿔줌
 

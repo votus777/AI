@@ -47,7 +47,7 @@ conv2d_1 (Conv2D)            (None, 4, 4, 10)           50
 _________________________________________________________________
 conv2d_2 (Conv2D)            (None, 3, 3, 10)          820
 _________________________________________________________________
-conv2d_3 (Conv2D)            (None, 2, 2, 10)           405  ->  필터의 수 * ( 커널 사이즈 * 채널 수 + 1) 
+conv2d_3 (Conv2D)            (None, 2, 2, 10)           405  ->  필터의 수 * ( 커널 사이즈 * 채널 수 + 1)                   output * (input * kernel * kernel+ bias)
                        
                         output shape가 점점 작아지고 있음 
                         
@@ -113,6 +113,7 @@ model.add(Conv2D(10, (2,2), padding = 'same', input_shape = ( 5, 5, 1)))
                   커널 사이즈
                 = kernel_size=2
                   
+※ channels = input_dim           
 
 ※ stride -> 커널이 한 번에 움직이는 간격 (default = 1)
          1일 떄가 가장 효과적이지만 연산량을 줄이기 위해 1이 아닌 값을 적용하기도 한다. 
