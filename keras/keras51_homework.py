@@ -95,6 +95,8 @@ print(y)
 
 _______________________________
 
+Y_train = to_categorical(Y_train, num_classes = 10)  나중에 이것도 확인해보자 
+
 
 
 np.argmax (a, axis) 

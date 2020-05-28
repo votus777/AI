@@ -42,46 +42,38 @@ from keras.layers import Dense, Flatten, Conv2D, MaxPool2D, Dropout, BatchNormal
 
 model= Sequential()
 
-model.add(Conv2D(32, (2,2), input_shape = (28, 28, 1), padding='same'))   #output ->  (28, 28, 10)
+model.add(Conv2D(64, (3,3), input_shape = (28, 28, 1), padding='same'))   
 model.add(BatchNormalization())
-
-model.add(Conv2D(32, (2,2), activation = 'relu', strides= 1, padding='same'))  
-model.add(BatchNormalization())
-model.add(MaxPool2D(pool_size= 2))
-model.add(Dropout(0.25)) 
-                             
-                               
-
-model.add(Conv2D(64, (2,2), padding='same')) 
-model.add(BatchNormalization())
-
-model.add(Conv2D(64, (2,2), padding='same')) 
+model.add(Conv2D(32, (3,3), activation = 'relu', strides= 1, padding='same'))  
 model.add(BatchNormalization())
 model.add(MaxPool2D(pool_size= 2))
-model.add(Dropout(0.25))
+model.add(Dropout(0.20))
 
-model.add(Conv2D(32, (2,2), activation = 'relu', strides= 1, padding='same'))  
+model.add(Conv2D(64, (3,3), input_shape = (28, 28, 1), padding='same'))   
 model.add(BatchNormalization())
-
-model.add(Dropout(0.25))
-model.add(Conv2D(32, (2,2), activation = 'relu', strides= 1, padding='same'))  
+model.add(Conv2D(64, (2,2), activation = 'relu', strides= 1, padding='same'))  
 model.add(BatchNormalization())
+model.add(MaxPool2D(pool_size= 2))
+model.add(Dropout(0.3))
 
-
-model.add(Flatten())
-
+model.add(Conv2D(128, (3,3), activation = 'relu', strides= 1, padding='same'))  
 model.add(BatchNormalization())
-model.add(Dense(256, activation='relu'))
-model.add(Dropout(0.25))
-
-
- 
+model.add(Conv2D(128, (3,3), activation = 'relu', strides= 1, padding='same'))  
 model.add(BatchNormalization())
+model.add(MaxPool2D(pool_size= 2))
+model.add(BatchNormalization())
+model.add(Dropout(0.4))
+
+model.add(Flatten())                               
+
+
 model.add(Dense(10, activation= 'softmax')) 
 
 
 
 model.summary()
+
+# 딥러닝 텐서플로 케라스 교재 201p 
 
 
 # 훈련 
@@ -103,36 +95,3 @@ loss, acc = model.evaluate(x_test,y_test, batch_size=1)
   
 print('loss :', loss)
 print('accuracy : ', acc)
-
-
-'''
-loss : 0.1388316419814875
-accuracy :  0.9736999869346619
-
-좋게 나온것 같지만 케글을 보면 평균 이하의 accuracy...
-
-
-(conv relu conv relu pool) * 3
-
-
-#과제 0.9925 이상 뽑아내기
-
-
-loss : 0.028588482533274805
-accuracy :  0.9908999800682068
-
-loss : 0.029769239512317983
-accuracy :  0.9927999973297119
-
-
-loss : 0.025018695568875583
-accuracy :  0.9930999875068665
-
-loss : 0.02020222538380057
-accuracy :  0.9939000010490417
-
-여기서 cpu의 한계가 나온다. 겁나 느리다  
-
-gpu로 바꾸니 한결 낫다 그래도 부족하다.. 
-
-'''

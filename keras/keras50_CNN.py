@@ -120,7 +120,7 @@ model.add(Conv2D(10, (2,2), padding = 'same', input_shape = ( 5, 5, 1)))
 
 ※ Maxpooling ->  pool_size ( n, n ) , 특성 중에 가장 중요한 것들만 추출한다 
                   이 레이어는 영상의 작은 변화라던지 사소한 움직임이 특징을 추출할 때 크게 영향을 미치지 않도록  
-             
+                  학습 속도 증가 및 overfitting 방지 
 
 
 

@@ -1,5 +1,5 @@
 
-# keras53_mnist2.py
+# 사실은 keras53_mnist2.py
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -48,22 +48,22 @@ model.add(BatchNormalization())
 model.add(Conv2D(32, (2,2), activation = 'relu', strides= 1, padding='same'))  
 model.add(BatchNormalization())
 model.add(MaxPool2D(pool_size= 2))
-model.add(Dropout(0.25)) 
+model.add(Dropout(0.2)) 
                              
                                
 
-model.add(Conv2D(64, (2,2), padding='same')) 
+model.add(Conv2D(64, (2,2), activation = 'relu', padding='same')) 
 model.add(BatchNormalization())
 
-model.add(Conv2D(64, (2,2), padding='same')) 
+model.add(Conv2D(64, (2,2), activation = 'relu', padding='same')) 
 model.add(BatchNormalization())
 model.add(MaxPool2D(pool_size= 2))
-model.add(Dropout(0.25))
+model.add(Dropout(0.3))
 
 model.add(Conv2D(32, (2,2), activation = 'relu', strides= 1, padding='same'))  
 model.add(BatchNormalization())
 
-model.add(Dropout(0.25))
+model.add(Dropout(0.3))
 model.add(Conv2D(32, (2,2), activation = 'relu', strides= 1, padding='same'))  
 model.add(BatchNormalization())
 
@@ -72,7 +72,7 @@ model.add(Flatten())
 
 model.add(BatchNormalization())
 model.add(Dense(256, activation='relu'))
-model.add(Dropout(0.25))
+model.add(Dropout(0.3))
 
 
  
@@ -92,7 +92,7 @@ early_stopping = EarlyStopping( monitor='loss', patience= 100, mode ='auto')
 
 model.compile(loss = 'categorical_crossentropy', optimizer='rmsprop', metrics = ['acc'])
 
-model.fit(x_train,y_train, epochs= 15, batch_size= 120, validation_split= 0.25 ,callbacks= [early_stopping])
+model.fit(x_train,y_train, epochs= 20, batch_size= 120, validation_split= 0.25 ,callbacks= [early_stopping])
 
 
 # 평가 및 예측 
