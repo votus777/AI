@@ -56,7 +56,7 @@ dense1_2 = Dense (512, activation = 'relu',  name = 'output_1_2')(batch_1)
 batch_2 = BatchNormalization()(dense1_2)
 
 
-dense1_3 = Dense (512, activation = 'relu', name = 'output_1_3')(batch_2)
+dense1_3 = Dense (1024, activation = 'relu', name = 'output_1_3')(batch_2)
 batch_3 = BatchNormalization()(dense1_3)
 dropout = Dropout(0.25)(batch_3)
 
