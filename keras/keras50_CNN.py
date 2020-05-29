@@ -62,7 +62,7 @@ conv2d_3 (Conv2D)            (None, 2, 2, 10)           405  ->  필터의 수 *
 ■ ■ ■ ■ ■
 
   5 * 5           3 * 3          3 * 3
-       (stride = 1) 
+       (stride = 1)                                     ->  N * N 크기의 이미지에 F * F 크기의 필터를 적용시키면  , ((N = F) / stride) + 1 크기의 결과물이 나온다. 
 
 
 Model: "sequential_1"

@@ -1,5 +1,5 @@
 
-# keras59_iris.imshow.py
+# keras59_fashion_imshow.py
 
 # 10가지 컬러 이미지 
 
@@ -26,6 +26,17 @@ plt.imshow(x_train[0])
 plt.show()
 
 
+'''
+
+ 과제 
+
+# keras 64,65,66 파일 squential 형으로 완성하기 
 
 
+# 하단에 주석으로 acc 와 loss 명시 
+
+
+파일 첨부 메일로 제출 
+
+'''
 

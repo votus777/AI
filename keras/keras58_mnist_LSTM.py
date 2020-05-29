@@ -93,7 +93,7 @@ early_stopping = EarlyStopping( monitor='loss', patience= 100, mode ='auto')
 
 model.compile(loss = 'categorical_crossentropy', optimizer='rmsprop', metrics = ['acc'])
 
-model.fit(x_train,y_train, epochs= 30, batch_size= 20, validation_split= 0.25 ,callbacks= [early_stopping])
+model.fit(x_train,y_train, epochs= 10, batch_size= 60, validation_split= 0.25 ,callbacks= [early_stopping])
 
 
 # 평가 및 예측 
