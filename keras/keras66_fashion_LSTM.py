@@ -30,12 +30,12 @@ model.add(LSTM(256, activation = 'relu', input_shape = (28, 28)))
 model.add(BatchNormalization())
 model.add(Dropout(0.4))
 
-model.add(Dense(32,activation = 'relu'))
+model.add(Dense(64,activation = 'relu'))
 model.add(BatchNormalization())
 model.add(Dropout(0.3))
 
 
-model.add(Dense(32,activation = 'relu'))
+model.add(Dense(64,activation = 'relu'))
 model.add(BatchNormalization())
 model.add(Dropout(0.2))
 
@@ -43,6 +43,12 @@ model.add(Dropout(0.2))
 model.add(Dense(256,activation = 'relu'))
 model.add(BatchNormalization())
 model.add(Dropout(0.3))
+
+model.add(Dense(64,activation = 'relu'))
+model.add(BatchNormalization())
+model.add(Dropout(0.2))
+
+
 
 model.add(Dense(10, activation= 'softmax')) 
 
@@ -69,3 +75,10 @@ loss, acc = model.evaluate(x_test,y_test, batch_size=1)
   
 print('loss :', loss)
 print('accuracy : ', acc)
+
+
+'''
+loss : 0.31396880647868236
+accuracy :  0.8934000134468079
+
+'''

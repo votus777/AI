@@ -29,43 +29,36 @@ x_test = x_test.reshape(10000, 28, 28, 1 ).astype('float32')/ 255.0
 
 model= Sequential()
 
-model.add(Conv2D(32, (5,5),activation = 'relu',padding= 'same', input_shape = (28, 28, 1, )))
+model.add(Conv2D(32, (5,5),activation = 'relu',padding= 'same', input_shape = (28, 28, 1 )))
 model.add(BatchNormalization())
 model.add(Dropout(0.2))
 
-model.add(Conv2D(64, (3,3),activation = 'relu', padding= 'same',input_shape = (28, 28, 1, )))
+model.add(Conv2D(64, (3,3),activation = 'relu',input_shape = (28, 28, 1 )))
 model.add(BatchNormalization())
 model.add(Dropout(0.2))
 
 model.add(MaxPool2D(2,2))
 
-model.add(Conv2D(256, (3,3),activation = 'relu',padding= 'same', input_shape = (28, 28, 1, )))
-model.add(BatchNormalization())
-model.add(Dropout(0.4))
-
-model.add(MaxPool2D(2,2))
-
-model.add(Conv2D(64, (3,3),activation = 'relu',padding= 'same', input_shape = (28, 28, 1, )))
+model.add(Conv2D(512, (3,3),activation = 'relu',padding= 'same', input_shape = (28, 28, 1 )))
 model.add(BatchNormalization())
 model.add(Dropout(0.4))
 
 
-model.add(Conv2D(32, (3,3),activation = 'relu',padding= 'same', input_shape = (28, 28, 1, )))
+model.add(Conv2D(32, (3,3),activation = 'relu',padding= 'same', input_shape = (28, 28, 1 )))
 model.add(BatchNormalization())
 model.add(Dropout(0.4))
 
-model.add(Conv2D(128, (2,2),activation = 'relu',padding= 'same', input_shape = (28, 28, 1, )))
+model.add(Conv2D(128, (2,2),activation = 'relu', input_shape = (28, 28, 1 )))
 model.add(BatchNormalization())
 model.add(Dropout(0.4))
 
 model.add(MaxPool2D(2,2))
 
 
-model.add(Conv2D(16, (3,3),activation = 'relu', input_shape = (28, 28, 1, )))
+model.add(Conv2D(16, (3,3),activation = 'relu', input_shape = (28, 28, 1)))
 model.add(BatchNormalization())
 model.add(Dropout(0.3))
 model.add(MaxPool2D(2,2))
-
 
 
 model.add(Flatten())
