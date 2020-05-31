@@ -14,33 +14,67 @@ import numpy as np
 diabets = datasets.load_diabetes()
 
 
-x = diabets.data
-y = diabets.target
+x = np.array(diabets.data)
+y = np.array(diabets.target)
 
 # print(x[0])   # (442, 10)
 # print(y)   # (442, )
 
-# print(np.std(y))     # np.mean(y) = 152,   표준편차 : 77.00574586945044  -> 일단  150 이상이면 1이라 둔다. 깊게는 생각 안함
+# print(np.std(y))     # np.mean(y) = 152,   표준편차 : 77.00574586945044  -> 일단  150 이상이면 1이라 둔다. 깊게는 생각 안함 -> 그냥 회귀분석하자 
 
 
 # 데이터 설명에  data가  이미 표준화 되어있으므로 
 
-transformer_PCA = PCA(n_components=5)  # PCA 차원 축소 
-transformer_PCA.fit(x)
-
-x = transformer_PCA.transform(x)
 
 
-print(x.shape)   # (442,5)
+print(x)   # (442,10)
+print(y)   #(442, )
 
 
-y[y < 150] = 0
-y[y >= 150] = 1
+transformer_Standard = StandardScaler()    
+transformer_Standard.fit(x)
 
-# print(y)   # 1,0 도배 
+x = transformer_Standard.transform(x)
+
+
+x.sort()
+
+
+
+
+# print(x[0]) = [ 0.80050009  1.06548848  1.29708846  0.45983993 -0.92974581 -0.7320646  -0.91245053 -0.05449919  0.41855058 -0.37098854]
+# print(x[0]) , x.sort()  = [-0.92974581 -0.91245053 -0.73206462 -0.37098854 -0.05449919  0.41855058 0.45983993  0.80050009  1.06548848  1.29708846]
+
+x_n = x[ :, :4]   
+x_p = x[ :, 5:]   
+
+
+transformer_PCA = PCA(n_components=4)  # PCA 차원 축소 
+transformer_PCA.fit(x_p)
+
+x_p = transformer_PCA.transform(x_p)
+
+
+
+
+print(x_n[0])      # [-0.92974581 -0.91245053 -0.73206462 -0.37098854]
+print(x_p[0])      # [0.41855058 0.45983993 0.80050009 1.06548848 1.29708846]
+
+print(x_n.shape)  # (442,4)
+print(x_p.shape)  # (442,4)
+
+'''
+from sklearn.model_selection import train_test_split
+x_n_train, x_p_train, x_n_test, x_p_test, y_train, y_test = train_test_split(
+   
+    x_n, x_p, y, shuffle = True  , train_size = 0.8  
+)
+
+'''
 
 
 '''
+
 print(diabets.DESCR)
 
 **Data Set Characteristics:**
@@ -68,50 +102,69 @@ Note: Each of these 10 feature variables have been mean centered and scaled by t
 '''
 
 
-
 # 모델  
 
-model = Sequential()
-model.add(Dense(50, activation='relu', input_dim = 5))
-model.add(Dense(20, activation= 'sigmoid'))
-model.add(Dense(20, activation= 'sigmoid'))
+#model -------- 1
+input1 = Input(shape=(4, ), name= 'input_n') 
+
+dense1_1 = Dense(24, activation= 'relu', name= '1_1') (input1) 
+dense1_2 = Dense(64, name = '1_2')(dense1_1)
+dense1_3 = Dense(256,activation='relu', name = '1_3')(dense1_2)
 
 
-model.add(Dense(1, activation= 'sigmoid'))
+#model -------- 2
+input2 = Input(shape=(4, ), name = 'input_p') 
+
+dense2_1 = Dense(24, activation= 'relu', name = '2_1')(input1) 
+dense2_2 = Dense(64, name = '2_2')(dense2_1)
+dense2_3 = Dense(256,activation='relu', name = '2_3')(dense2_2)
 
 
+#이제 두 개의 모델을 엮어서 명시 
+
+from keras.layers.merge import concatenate    #concatenate : 사슬 같이 잇다
+merge1 = concatenate([dense1_3, dense2_3], name = 'merge') #파이썬에서 2개 이상은 무조건 list []
+
+middle1 = Dense(128, activation= 'relu')(merge1)
+middle1 = Dense(128, activation= 'relu')(merge1)
+middle1 = Dense(128, activation= 'relu')(merge1)
+middle1 = Dense(128, activation= 'relu')(merge1)
+middle1 = Dense(128, activation= 'relu')(merge1)
+middle1 = Dense(128, activation= 'relu')(merge1)
+middle1 = Dense(128, activation= 'relu')(middle1)
+
+
+################# output 모델 구성 ####################
+
+
+output1 = Dense  (256, activation= 'relu',name = 'output_1')(middle1)
+output1_2 = Dense (64, activation= 'relu',name = 'output_1_2')(output1)
+output1_3 = Dense (32, activation= 'relu',name = 'output_1_3')(output1_2)
+output1_4 = Dense (1, name = 'output_1_4')(output1_3)
+
+
+
+model = Model (inputs = [input1, input2], outputs= (output1_4))
 
 
 # 3. 컴파일, 훈련
 
 from keras.callbacks import EarlyStopping 
-early_stopping = EarlyStopping( monitor='loss', patience= 10, mode ='auto')
+early_stopping = EarlyStopping( monitor='loss', patience= 50, mode ='auto')
 
-model.compile(loss = 'binary_crossentropy', optimizer='adam', metrics = ['acc'])
+model.compile(loss='mse', optimizer='adam', metrics=['mse'])
 
-hist = model.fit(x,y, epochs= 10000, batch_size= 1, validation_split= 0.25,  callbacks= [early_stopping])
+hist = model.fit([x_n,x_p],y, epochs= 10000, batch_size= 1, validation_split= 0.2,  callbacks= [early_stopping])
 
 
 
 # 평가 및 예측 
 
 
-loss, acc = model.evaluate(x,y, batch_size=1)
+loss, mse = model.evaluate([x_n,x_p],y, batch_size=1)
 
 
 print('loss :', loss)
-print('accuracy : ', acc)
+print('mse : ', mse)
 
 
-
-
-'''
-
-대충 값은 나온다
-
-loss : 0.4625585946250218
-accuracy :  0.7647058963775635
-
-튜닝은 나중에 
-
-'''

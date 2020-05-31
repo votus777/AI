@@ -17,11 +17,15 @@ breast_cancer = datasets.load_breast_cancer()
 x = breast_cancer.data
 y = breast_cancer.target
 
-print(x.shape)   #(569, 30)
-print(y.shape)   #(569,)
+print(x.shape)   #(569, 30)  # 소수점의 향연 
+print(y.shape)   #(569,)    # 1과 0의 향연
 
-print(x[:10])
-print(y[:100])
+from sklearn.model_selection import train_test_split
+x_train,x_test, y_train, y_test = train_test_split(
+   
+    x, y, shuffle = True  , train_size = 0.8  
+)
+
 
 '''
 
@@ -97,5 +101,41 @@ print(breast_cancer.DESCR)
 '''
 
 
-# 모델 
 
+# 모델  
+
+model = Sequential()
+model.add(Dense(16, activation='relu', input_dim = 30))
+model.add(Dense(16, activation= 'sigmoid'))
+model.add(Dense(32, activation= 'sigmoid'))
+model.add(Dense(32, activation= 'sigmoid'))
+model.add(Dense(32, activation= 'sigmoid'))
+model.add(Dense(16, activation= 'sigmoid'))
+
+
+
+
+model.add(Dense(1, activation= 'sigmoid'))
+
+
+
+
+# 3. 컴파일, 훈련
+
+from keras.callbacks import EarlyStopping 
+early_stopping = EarlyStopping( monitor='loss', patience= 10, mode ='auto')
+
+model.compile(loss = 'binary_crossentropy', optimizer='adam', metrics = ['acc'])
+
+hist = model.fit(x,y, epochs= 10000, batch_size= 1, validation_split= 0.25,  callbacks= [early_stopping])
+
+
+
+# 평가 및 예측 
+
+
+loss, acc = model.evaluate(x_train,y_train, batch_size=1)
+val_loss, val_acc = model.evaluate(x_test, y_test, batch_size= 1)
+  
+print('loss :', loss)
+print('acc : ', acc)

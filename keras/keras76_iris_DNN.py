@@ -20,7 +20,7 @@ iris = datasets.load_iris()
 x = iris.data
 y = iris.target
 
-
+# pylint : disable =E1101
 print(x.shape)  # (150,4)
 print(y.shape)  # (150,)
 
