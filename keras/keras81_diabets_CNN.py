@@ -126,3 +126,10 @@ loss, mse = model.evaluate(x_test,y_test, batch_size=1)
   
 print('loss :', loss)
 print('mse : ', mse)
+
+'''
+
+loss : 0.058078822099151294
+mse :  0.058078814297914505
+
+'''

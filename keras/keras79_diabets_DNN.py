@@ -22,7 +22,7 @@ x, y = diabetes.data, diabetes.target
 # print(y.shape)   # (442, )
 
 
-x = x[:, np.newaxis, 3]
+x = x[:, np.newaxis, 6]
 
 # print(x[0])  # [[0.03807591 0.05068012 0.06169621 0.02187235]]
 # print(x.shape)  # (442, 1, 4)
@@ -30,8 +30,13 @@ x = x[:, np.newaxis, 3]
 print(y[0])
 
 
-x = x.reshape(442,1)*100
-y = y.reshape(442,1)   # Minmax 스케일러에 들어가기 위해서 reshape
+# x = x.reshape(442,1)
+
+'''
+pca = PCA(n_components=1)
+x = pca.fit_transform(x)
+'''
+
 
 #####################################
 standard_scaler = StandardScaler()    
@@ -43,9 +48,13 @@ minmax_scaler = MinMaxScaler()
 
 x = minmax_scaler.fit_transform(x)
 
-y = minmax_scaler.fit_transform(y)
 
 # 겁나 삽질하고 있었는데 알고보니 scaler 적용이 안되고 있었다.. x = , y = 까먹지말자 
+# y는 할 필요가 없댄다 다시 해보자 
+
+
+
+
 
 print(y[0])
 
@@ -137,7 +146,7 @@ Note: Each of these 10 feature variables have been mean centered and scaled by t
 model = Sequential()
 model.add(Dense(16, activation='relu', input_dim = 1))
 model.add(Dense(16, activation= 'relu')) 
-model.add(Dense(32, activation= 'relu' )) 
+model.add(Dense(320, activation= 'relu' )) 
 model.add(Dropout(0.2))
 
 
@@ -176,11 +185,18 @@ print('loss :', loss)
 print('mse : ', mse)
 
 
+
+#________R2 구하기_____________________
+
+
+y_pred = model.predict(x_test)
+
+from sklearn.metrics import r2_score
+r2 = r2_score(y_test,y_pred)
+
+print("R2 score : ", r2)
+
 '''
-
-loss : 0.0402700820624804
-mse :  0.0402700752019882
-
 
 
 '''
