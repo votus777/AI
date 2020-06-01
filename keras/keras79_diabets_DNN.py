@@ -31,7 +31,7 @@ print(y[0])
 
 
 x = x.reshape(442,1)*100
-y = y.reshape(442,1)
+y = y.reshape(442,1)   # Minmax 스케일러에 들어가기 위해서 reshape
 
 #####################################
 standard_scaler = StandardScaler()    
@@ -134,8 +134,6 @@ Note: Each of these 10 feature variables have been mean centered and scaled by t
 
 # 모델  
 
-from keras import regularizers
-
 model = Sequential()
 model.add(Dense(16, activation='relu', input_dim = 1))
 model.add(Dense(16, activation= 'relu')) 
@@ -180,7 +178,8 @@ print('mse : ', mse)
 
 '''
 
-
+loss : 0.0402700820624804
+mse :  0.0402700752019882
 
 
 
