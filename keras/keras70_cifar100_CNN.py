@@ -77,21 +77,27 @@ model = Model (inputs = input0, outputs= (model_output))
 
 model.summary()
 
+model.save('./model/sample/cifar100/model_cifar100.h5') 
+
+
 # 훈련 
 
 
 
 early_stopping = EarlyStopping( monitor='loss', patience= 100, mode ='auto')
 
-modelpath = './model/{epoch:02d}-{val_loss: .4f}.hdf5' # 02d : 두자리 정수,  .4f : 소수점 아래 4자리 까지 float 실수
+modelpath = './model/sample/cifar100{epoch:02d}-{val_loss: .4f}.hdf5' # 02d : 두자리 정수,  .4f : 소수점 아래 4자리 까지 float 실수
 
 checkpoint = ModelCheckpoint(filepath= modelpath, monitor= 'val_loss', save_best_only = True, mode = 'auto')
 
 tb_hist = TensorBoard(log_dir = 'graph', histogram_freq = 0, write_graph= True, write_images= True)
 
 model.compile(loss = 'categorical_crossentropy', optimizer='adam', metrics = ['acc'])
-hist = model.fit(x_train,y_train, epochs= 20, batch_size= 240, validation_split= 0.2 , callbacks= [checkpoint, tb_hist])
 
+hist = model.fit(x_train,y_train, epochs= 20, batch_size= 240, validation_split= 0.2 , callbacks= [checkpoint, tb_hist, checkpoint])
+
+
+model.save_weights('./model/sample/cifar100/weights_cifar100.h5')
 
 
 
@@ -103,6 +109,8 @@ val_loss, val_acc = model.evaluate(x_test, y_test, batch_size= 1)
   
 print('loss :', loss)
 print('accuracy : ', acc)
+
+
 
 # 시각화
 

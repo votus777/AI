@@ -100,16 +100,26 @@ model.add(Dense(1, activation= 'relu'))
 
 model.summary()
 
+model.save('./model/sample/boston/model_boston.h5') 
+
+
 
 # 훈련 
 
 
-from keras.callbacks import EarlyStopping 
+from keras.callbacks import EarlyStopping, ModelCheckpoint
 early_stopping = EarlyStopping( monitor='loss', patience= 50, mode ='auto')
 
 model.compile(loss = 'mse', optimizer='adam', metrics = ['mse'])
 
-hist = model.fit(x_train,y_train, epochs= 500, batch_size= 5, validation_split= 0.1 ,callbacks= [early_stopping])
+modelpath = './model/sample/boston{epoch:02d} - {val_loss: .4f}.hdf5' 
+
+checkpoint = ModelCheckpoint(filepath= modelpath, monitor= 'val_loss', save_best_only = True, save_weights_only= False, verbose=1)
+
+hist = model.fit(x_train,y_train, epochs= 500, batch_size= 5, validation_split= 0.1 ,callbacks= [early_stopping, checkpoint])
+
+
+model.save_weights('./model/sample/boston/weights_boston.h5')
 
 
 

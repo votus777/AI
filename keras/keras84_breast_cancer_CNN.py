@@ -76,7 +76,6 @@ hist = model.fit(x_train,y_train, epochs= 10000, batch_size= 1, validation_split
 
 
 loss, acc = model.evaluate(x_test,y_test, batch_size=1)
-val_loss, val_acc = model.evaluate(x_test, y_test, batch_size= 1)
   
 
 print('loss :', loss)

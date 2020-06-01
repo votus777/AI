@@ -38,10 +38,10 @@ model = Sequential()
 model.add(LSTM(50, activation='relu', input_shape = (1,30)))
 model.add(Dropout(0.2))
 
-model.add(Dense(640, activation= 'relu'))
+model.add(Dense(64, activation= 'relu'))
 model.add(Dropout(0.2))
 
-model.add(Dense(640, activation= 'sigmoid'))
+model.add(Dense(64, activation= 'sigmoid'))
 model.add(Dense(32, activation= 'sigmoid'))
 model.add(Dense(10, activation= 'sigmoid'))
 

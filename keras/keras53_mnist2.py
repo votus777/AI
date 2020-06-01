@@ -76,16 +76,23 @@ model.summary()
 # 딥러닝 텐서플로 케라스 교재 201p 
 
 
+model.save('./model/sample/mnist/model_mnist.h5') 
+
 # 훈련 
 
 
-from keras.callbacks import EarlyStopping 
+from keras.callbacks import EarlyStopping, ModelCheckpoint 
 early_stopping = EarlyStopping( monitor='loss', patience= 100, mode ='auto')
 
 model.compile(loss = 'categorical_crossentropy', optimizer='rmsprop', metrics = ['acc'])
 
-model.fit(x_train,y_train, epochs= 15, batch_size= 120, validation_split= 0.25 ,callbacks= [early_stopping])
+modelpath = './model/sample/mnist{epoch:02d} - {val_loss: .4f}.hdf5' 
+checkpoint = ModelCheckpoint(filepath= modelpath, monitor= 'val_loss', save_best_only = True, save_weights_only= False, verbose=1)
 
+model.fit(x_train,y_train, epochs= 15, batch_size= 120, validation_split= 0.25 ,callbacks= [early_stopping,checkpoint])
+
+
+model.save_weights('./model/sample/mnist/mnist_weight1.h5')
 
 # 평가 및 예측 
 

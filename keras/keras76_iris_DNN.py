@@ -20,7 +20,6 @@ iris = datasets.load_iris()
 x = iris.data
 y = iris.target
 
-# pylint : disable =E1101
 print(x.shape)  # (150,4)
 print(y.shape)  # (150,)
 
@@ -53,18 +52,22 @@ model.add(Dense(10, activation='relu', input_dim = 4))
 model.add(Dense(50, activation= 'softmax')) 
 model.add(Dense(3, activation= 'softmax')) 
 
-
+model.save('./model/sample/iris/model_iris.h5') 
 
 # 3. 컴파일, 훈련
 
-from keras.callbacks import EarlyStopping 
+from keras.callbacks import EarlyStopping, ModelCheckpoint
 early_stopping = EarlyStopping( monitor='loss', patience= 100, mode ='auto')
 
 model.compile(loss = 'categorical_crossentropy', optimizer='rmsprop', metrics = ['acc'])
 
+modelpath = './model/sample/iris{epoch:02d} - {val_loss: .4f}.hdf5' 
+
+checkpoint = ModelCheckpoint(filepath= modelpath, monitor= 'val_loss', save_best_only = True, save_weights_only= False, verbose=1)
+
 hist = model.fit(x,y, epochs= 10000, batch_size= 1, validation_split= 0.25,  callbacks= [early_stopping])
 
-
+model.save_weights('./model/sample/iris/weights_iris.h5')
 
 # 평가 및 예측 
 

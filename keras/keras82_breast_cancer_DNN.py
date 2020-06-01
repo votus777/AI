@@ -121,17 +121,26 @@ model.add(Dense(16, activation= 'sigmoid'))
 
 model.add(Dense(1, activation= 'sigmoid'))
 
+model.save('./model/sample/cancer/model_cancer.h5') 
 
 
 
 # 3. 컴파일, 훈련
 
-from keras.callbacks import EarlyStopping 
+from keras.callbacks import EarlyStopping, ModelCheckpoint
 early_stopping = EarlyStopping( monitor='loss', patience= 50, mode ='auto')
+
+modelpath = './model/sample/cancer{epoch:02d} - {val_loss: .4f}.hdf5' 
+
+checkpoint = ModelCheckpoint(filepath= modelpath, monitor= 'val_loss', save_best_only = True, save_weights_only= False, verbose=1)
+
 
 model.compile(loss = 'binary_crossentropy', optimizer='adam', metrics = ['acc'])
 
-hist = model.fit(x,y, epochs= 10000, batch_size= 1, validation_split= 0.25,  callbacks= [early_stopping])
+hist = model.fit(x,y, epochs= 10000, batch_size= 1, validation_split= 0.25,  callbacks= [early_stopping, checkpoint])
+
+
+model.save_weights('./model/sample/cancer/weights_cancer.h5')
 
 
 

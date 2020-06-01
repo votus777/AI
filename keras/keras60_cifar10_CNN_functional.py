@@ -79,16 +79,25 @@ model = Model (inputs = input0, outputs= (model_output))
 model.summary()
 
 
+model.save('./model/sample/cifar10/model_cifar10.h5') 
+
 # 훈련 
 
 
-from keras.callbacks import EarlyStopping 
+from keras.callbacks import EarlyStopping, ModelCheckpoint
 early_stopping = EarlyStopping( monitor='loss', patience= 100, mode ='auto')
 
 model.compile(loss = 'categorical_crossentropy', optimizer='adam', metrics = ['acc'])
 
-model.fit(x_train,y_train, epochs= 20, batch_size= 120, validation_split= 0.25 ,callbacks= [early_stopping])
 
+modelpath = './model/sample/cifar10{epoch:02d} - {val_loss: .4f}.hdf5' 
+checkpoint = ModelCheckpoint(filepath= modelpath, monitor= 'val_loss', save_best_only = True, save_weights_only= False, verbose=1)
+
+model.fit(x_train,y_train, epochs= 20, batch_size= 120, validation_split= 0.25 ,callbacks= [early_stopping,checkpoint])
+
+
+
+model.save_weights('./model/sample/cifar10/weights_cifar10.h5')
 
 # 평가 및 예측 
 

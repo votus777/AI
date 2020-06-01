@@ -72,19 +72,25 @@ model.add(Dense(10, activation= 'softmax'))
 
 model.summary()
 
+model.save_weights('./model/sample/fashion/model_fashion.h5')
 
 
 # 훈련 
 
 
-from keras.callbacks import EarlyStopping 
+from keras.callbacks import EarlyStopping, ModelCheckpoint
 early_stopping = EarlyStopping( monitor='loss', patience= 100, mode ='auto')
 
 model.compile(loss = 'categorical_crossentropy', optimizer='adam', metrics = ['acc'])
 
-model.fit(x_train,y_train, epochs= 15, batch_size= 120, validation_split= 0.25 ,callbacks= [early_stopping])
+modelpath = './model/sample/fashion{epoch:02d} - {val_loss: .4f}.hdf5'
+
+checkpoint = ModelCheckpoint(filepath= modelpath, monitor= 'val_loss', save_best_only = True, save_weights_only= False, verbose=1)
 
 
+model.fit(x_train,y_train, epochs= 15, batch_size= 120, validation_split= 0.25 ,callbacks= [early_stopping,checkpoint])
+
+model.save_weights('./model/sample/fashion/weights_fashion.h5')
 # 평가 및 예측 
 
 

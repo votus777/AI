@@ -1,79 +1,108 @@
 
+
 from keras.utils import np_utils
 from keras.models import Sequential, Model 
 from keras.layers import Input, Dense , LSTM, Conv2D, Flatten, MaxPool2D, Dropout, BatchNormalization
 from keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard
 
-from sklearn  import datasets
+from sklearn.datasets  import load_diabetes
 from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
 import matplotlib.pyplot as plt 
 import numpy as np
 
-diabets = datasets.load_diabetes()
 
 
-x = np.array(diabets.data)
-y = np.array(diabets.target)
-
-# print(x[0])   # (442, 10)
-# print(y)   # (442, )
-
-# print(np.std(y))     # np.mean(y) = 152,   표준편차 : 77.00574586945044  -> 일단  150 이상이면 1이라 둔다. 깊게는 생각 안함 -> 그냥 회귀분석하자 
+diabetes = load_diabetes()
+x, y = diabetes.data, diabetes.target
 
 
-# 데이터 설명에  data가  이미 표준화 되어있으므로 
+# print(x.shape)   # (442, 10)
+# print(y.shape)   # (442, )
 
 
+x = x[:, np.newaxis, 3]
 
-print(x)   # (442,10)
-print(y)   #(442, )
+# print(x[0])  # [[0.03807591 0.05068012 0.06169621 0.02187235]]
+# print(x.shape)  # (442, 1, 4)
 
-
-transformer_Standard = StandardScaler()    
-transformer_Standard.fit(x)
-
-x = transformer_Standard.transform(x)
+print(y[0])
 
 
-x.sort()
+x = x.reshape(442,1)*100
+y = y.reshape(442,1)
+
+#####################################
+standard_scaler = StandardScaler()    
+
+x = standard_scaler.fit_transform(x)
 
 
+minmax_scaler = MinMaxScaler()
 
+x = minmax_scaler.fit_transform(x)
 
-# print(x[0]) = [ 0.80050009  1.06548848  1.29708846  0.45983993 -0.92974581 -0.7320646  -0.91245053 -0.05449919  0.41855058 -0.37098854]
-# print(x[0]) , x.sort()  = [-0.92974581 -0.91245053 -0.73206462 -0.37098854 -0.05449919  0.41855058 0.45983993  0.80050009  1.06548848  1.29708846]
+y = minmax_scaler.fit_transform(y)
 
-x_n = x[ :, :4]   
-x_p = x[ :, 5:]   
+# 겁나 삽질하고 있었는데 알고보니 scaler 적용이 안되고 있었다.. x = , y = 까먹지말자 
 
+print(y[0])
 
-transformer_PCA = PCA(n_components=4)  # PCA 차원 축소 
-transformer_PCA.fit(x_p)
-
-x_p = transformer_PCA.transform(x_p)
+####################################
 
 
 
 
-print(x_n[0])      # [-0.92974581 -0.91245053 -0.73206462 -0.37098854]
-print(x_p[0])      # [0.41855058 0.45983993 0.80050009 1.06548848 1.29708846]
 
-print(x_n.shape)  # (442,4)
-print(x_p.shape)  # (442,4)
 
 '''
+If there are few data points per dimension, noise in the observations induces high variance:
+
+
+Curse of High dimensions : 
+
+추가된 변수가 실제 Y와 높은 관계가 있는 변수라면 적합에 도움이 되겠지만, 
+추가된 변수가 반응변수Y와 실제 관계가 별로 없는 변수라면 오히려 이를 포함한 모델의 test error는 증가한다. 
+이러한 noise feature들은 차원은 증가시키면서도 overfitting의 위험은 높이는 작용을 하게 된다
+
+https://godongyoung.github.io/%EB%A8%B8%EC%8B%A0%EB%9F%AC%EB%8B%9D/2018/02/07/ISL-Linear-Model-Selection-and-Regularization_ch6.html
+
+
+This is an example of bias/variance tradeoff :  the larger the ridge alpha parameter, the higher the bias and the lower the variance.
+
+Solutions : subset selection, Shrinkage, Dimension Reduction
+
+
+'''
+
+
+
+'''
+transformer_PCA = PCA(n_components=1)  # PCA 차원 축소 
+transformer_PCA.fit(x)
+
+x= transformer_PCA.transform(x)
+'''
+
+
+
+
 from sklearn.model_selection import train_test_split
-x_n_train, x_p_train, x_n_test, x_p_test, y_train, y_test = train_test_split(
+x_train, x_test, y_train, y_test = train_test_split(
    
-    x_n, x_p, y, shuffle = True  , train_size = 0.8  
+    x,y, shuffle = True  , train_size = 0.8  
 )
 
-'''
+
+# print(x_train.shape)  # (353, 10)
+# print(x_test.shape)  # (89, 10)
+
+
 
 
 '''
+
 
 print(diabets.DESCR)
 
@@ -87,7 +116,7 @@ print(diabets.DESCR)
 
   :Attribute Information:
       - Age
-      - Sex
+      - Sex   -> 1 혹은 0 일텐데 값이 왜 소수점이 나오지..
       - Body mass index
       - Average blood pressure
       - S1
@@ -102,69 +131,57 @@ Note: Each of these 10 feature variables have been mean centered and scaled by t
 '''
 
 
+
 # 모델  
 
-#model -------- 1
-input1 = Input(shape=(4, ), name= 'input_n') 
+from keras import regularizers
 
-dense1_1 = Dense(24, activation= 'relu', name= '1_1') (input1) 
-dense1_2 = Dense(64, name = '1_2')(dense1_1)
-dense1_3 = Dense(256,activation='relu', name = '1_3')(dense1_2)
-
-
-#model -------- 2
-input2 = Input(shape=(4, ), name = 'input_p') 
-
-dense2_1 = Dense(24, activation= 'relu', name = '2_1')(input1) 
-dense2_2 = Dense(64, name = '2_2')(dense2_1)
-dense2_3 = Dense(256,activation='relu', name = '2_3')(dense2_2)
+model = Sequential()
+model.add(Dense(16, activation='relu', input_dim = 1))
+model.add(Dense(16, activation= 'relu')) 
+model.add(Dense(32, activation= 'relu' )) 
+model.add(Dropout(0.2))
 
 
-#이제 두 개의 모델을 엮어서 명시 
-
-from keras.layers.merge import concatenate    #concatenate : 사슬 같이 잇다
-merge1 = concatenate([dense1_3, dense2_3], name = 'merge') #파이썬에서 2개 이상은 무조건 list []
-
-middle1 = Dense(128, activation= 'relu')(merge1)
-middle1 = Dense(128, activation= 'relu')(merge1)
-middle1 = Dense(128, activation= 'relu')(merge1)
-middle1 = Dense(128, activation= 'relu')(merge1)
-middle1 = Dense(128, activation= 'relu')(merge1)
-middle1 = Dense(128, activation= 'relu')(merge1)
-middle1 = Dense(128, activation= 'relu')(middle1)
+model.add(Dense(64, activation= 'relu')) 
+model.add(Dense(64, activation= 'relu')) 
+model.add(Dense(64, activation= 'relu')) 
+model.add(Dropout(0.2))
 
 
-################# output 모델 구성 ####################
+model.add(Dense(32, activation= 'relu')) 
+model.add(Dense(16, activation= 'relu')) 
+model.add(Dense(16, activation= 'relu')) 
+model.add(Dropout(0.2))
 
-
-output1 = Dense  (256, activation= 'relu',name = 'output_1')(middle1)
-output1_2 = Dense (64, activation= 'relu',name = 'output_1_2')(output1)
-output1_3 = Dense (32, activation= 'relu',name = 'output_1_3')(output1_2)
-output1_4 = Dense (1, name = 'output_1_4')(output1_3)
-
-
-
-model = Model (inputs = [input1, input2], outputs= (output1_4))
+model.add(Dense(1, activation= 'relu')) 
 
 
 # 3. 컴파일, 훈련
 
 from keras.callbacks import EarlyStopping 
-early_stopping = EarlyStopping( monitor='loss', patience= 50, mode ='auto')
+early_stopping = EarlyStopping( monitor='loss', patience= 10, mode ='auto')
 
 model.compile(loss='mse', optimizer='adam', metrics=['mse'])
 
-hist = model.fit([x_n,x_p],y, epochs= 10000, batch_size= 1, validation_split= 0.2,  callbacks= [early_stopping])
+hist = model.fit(x_train,y_train, epochs= 10000, batch_size= 1, validation_split= 0.2,  callbacks= [early_stopping])
 
 
 
 # 평가 및 예측 
 
 
-loss, mse = model.evaluate([x_n,x_p],y, batch_size=1)
+loss, mse = model.evaluate(x_test,y_test, batch_size=1)
 
 
 print('loss :', loss)
 print('mse : ', mse)
 
 
+'''
+
+
+
+
+
+'''

@@ -5,45 +5,45 @@ from keras.models import Sequential, Model
 from keras.layers import Input, Dense , LSTM, Conv2D, Flatten, MaxPool2D, Dropout, BatchNormalization
 from keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard
 
-from sklearn  import datasets
+from sklearn.datasets  import load_diabetes
 from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
 import matplotlib.pyplot as plt 
 import numpy as np
 
-diabets = datasets.load_diabetes()
+diabets = load_diabetes()
 
 
 x = np.array(diabets.data)
 y = np.array(diabets.target)
 
-# print(x[0])   # (442, 10)
-# print(y)   # (442, )
 
-# print(np.std(y))     # np.mean(y) = 152,   표준편차 : 77.00574586945044  -> 일단  150 이상이면 1이라 둔다. 깊게는 생각 안함 -> 그냥 회귀분석하자 
-
-
-# 데이터 설명에  data가  이미 표준화 되어있으므로 
+print(x.shape)  # (442, 10)
+print(y.shape)  # (442, )
 
 
 
-print(x)   # (442,10)
-print(y)   #(442, )
-
+#########################################################
 
 transformer_Standard = StandardScaler()    
 transformer_Standard.fit(x)
 
 x = transformer_Standard.transform(x)
+# y = transformer_Standard.transform(y)   -> 이거만 하면 에러 뜬다. ValueError: non-broadcastable output operand with shape (442,1) doesn't match the broadcast shape (442,10)
 
+minmax_scaler = MinMaxScaler()
 
-x.sort()
+y = y.reshape(442,1)
 
-transformer_PCA = PCA(n_components=4)  # PCA 차원 축소 
-transformer_PCA.fit(x)
+x = minmax_scaler.fit_transform(x)
+y = minmax_scaler.fit_transform(y)     #  -> 이건 가능하다. 
+
+######################################################
 
 x = x.reshape(442,10,1,1)
+
+
 
 from sklearn.model_selection import train_test_split
 x_train,x_test, y_train, y_test = train_test_split(
@@ -60,33 +60,27 @@ model= Sequential()
 input0 = Input(shape=(10,1,1))
 
 
-model_1 = Conv2D(64, (3,3), activation = 'relu', padding= 'same' )(input0)
-model_b=BatchNormalization()(model_1)
-model_d = Dropout(0.3)(model_b)
-model_2 = Conv2D(64, (3,3), activation = 'relu', padding= 'same' )(model_d)
-model_b=BatchNormalization()(model_2)
-model_d = Dropout(0.3)(model_b)
+model_1 = Conv2D(32, (3,3), activation = 'relu', padding= 'same' )(input0)
+model_d = Dropout(0.3)(model_1)
+model_2 = Conv2D(32, (3,3), activation = 'relu', padding= 'same' )(model_d)
+model_d = Dropout(0.3)(model_2)
 
 
-model_3 = Conv2D(128, (3,3), activation = 'relu', padding= 'same' )(model_d)
-model_b=BatchNormalization()(model_3)
-model_d = Dropout(0.3)(model_b)
+model_3 = Conv2D(16, (3,3), activation = 'relu', padding= 'same' )(model_d)
+model_d = Dropout(0.3)(model_3)
 
 
-model_4 = Conv2D(128, (5,5), activation = 'relu', padding= 'same' )(model_d)
-model_b=BatchNormalization()(model_4)
-model_d = Dropout(0.3)(model_b)
+model_4 = Conv2D(32, (5,5), activation = 'relu', padding= 'same' )(model_d)
+model_d = Dropout(0.3)(model_4)
 
 
-model_5 = Conv2D(64, (3,3), activation = 'relu', padding= 'same')(model_d)
-model_b=BatchNormalization()(model_5)
-model_d = Dropout(0.3)(model_b)
+model_5 = Conv2D(32, (3,3), activation = 'relu', padding= 'same')(model_d)
+model_d = Dropout(0.3)(model_5)
 
 
 
-model_7 = Conv2D(32, (3,3), activation = 'relu', padding= 'same')(model_d)
-model_b=BatchNormalization()(model_7)
-model_d = Dropout(0.3)(model_b)
+model_7 = Conv2D(16, (3,3), activation = 'relu', padding= 'same')(model_d)
+model_d = Dropout(0.3)(model_7)
 
 
 
@@ -96,9 +90,8 @@ model_flatten = Flatten()(model_d)
 model_b=BatchNormalization()(model_flatten)
 
 
-model_dense = Dense(512, activation='relu')(model_b)
-model_b=BatchNormalization()(model_dense)
-model_d = Dropout(0.5)(model_b)
+model_dense = Dense(128, activation='relu')(model_b)
+model_d = Dropout(0.5)(model_dense)
 
 model_output = Dense(1, activation= 'relu')(model_d)
 
@@ -111,7 +104,7 @@ model.summary()
 
 
 
-early_stopping = EarlyStopping( monitor='loss', patience= 50, mode ='auto')
+early_stopping = EarlyStopping( monitor='loss', patience= 10, mode ='auto')
 
 modelpath = './model/{epoch:02d}-{val_loss: .4f}.hdf5' # 02d : 두자리 정수,  .4f : 소수점 아래 4자리 까지 float 실수
 
@@ -128,8 +121,8 @@ hist = model.fit(x_train,y_train, epochs= 10000, batch_size= 5, validation_split
 # 평가 및 예측 
 
 
-loss, acc = model.evaluate(x_train,y_train, batch_size=1)
-val_loss, val_acc = model.evaluate(x_test, y_test, batch_size= 1)
+loss, mse = model.evaluate(x_test,y_test, batch_size=1)
+
   
 print('loss :', loss)
 print('mse : ', mse)
