@@ -37,8 +37,8 @@ print(samsung.shape) # (508, 1)
 
 
 # # 1. 
-# minmax_scaler = MinMaxScaler()   
-# hite = minmax_scaler.fit_transform(hite)
+ minmax_scaler = MinMaxScaler()   
+ hite = minmax_scaler.fit_transform(hite)
 
 
 # 2. 
