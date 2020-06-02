@@ -32,9 +32,11 @@ with open(path, 'rb', encoding='utf-16') as f:
 print(samsung_datasets.shape)
 print(kospi_datasets.shape)
 
+
 for i in range(len(samsung_datasets.index)) :
     for j in range(len(samsung_datasets.iloc[i])):
         samsung_datasets.iloc[i,j] = int (samsung_datasets.iloc[i,j].replace(',',''))
+       
 
 
 for i in range(len(kospi_datasets.index)) :
@@ -46,8 +48,26 @@ samsung_datasets = samsung_datasets.sort_values(['일자'], ascending = [True])
 kospi_datasets = kospi_datasets.sort_values(['일자'], ascending = [True])
 
 
+print(samsung_datasets)
+
 samsung_datasets = samsung_datasets.values
 kospi_datasets = kospi_datasets.values
 
 
 
+
+
+'''
+
+삼성전자 6/3 시가
+
+csv 파일 수정 X 
+
+ensemble 모델 사용 ( 삼성전자 시가, 하이트 진로 전체 가격)
+
+6시 이전 메일 제출  ->" 조한새 : [0602 시험], *****원" , 첨부 파일 : 소스코드(Test0602_CHS), save.h5, npy 파일 
+
+
+
+
+'''

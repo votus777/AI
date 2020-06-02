@@ -146,20 +146,20 @@ Note: Each of these 10 feature variables have been mean centered and scaled by t
 model = Sequential()
 model.add(Dense(16, activation='relu', input_dim = 1))
 model.add(Dense(16, activation= 'relu')) 
-model.add(Dense(320, activation= 'relu' )) 
-model.add(Dropout(0.2))
+model.add(Dense(32, activation= 'relu' )) 
+model.add(Dropout(0.3))
 
 
 model.add(Dense(64, activation= 'relu')) 
 model.add(Dense(64, activation= 'relu')) 
 model.add(Dense(64, activation= 'relu')) 
-model.add(Dropout(0.2))
+model.add(Dropout(0.3))
 
 
 model.add(Dense(32, activation= 'relu')) 
 model.add(Dense(16, activation= 'relu')) 
 model.add(Dense(16, activation= 'relu')) 
-model.add(Dropout(0.2))
+model.add(Dropout(0.3))
 
 model.add(Dense(1, activation= 'relu')) 
 
