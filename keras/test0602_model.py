@@ -37,8 +37,13 @@ print(samsung.shape) # (508, 1)
 
 
 # # 1. 
-# minmax_scaler = MinMaxScaler()   
-# hite = minmax_scaler.fit_transform(hite)
+minmax_scaler = MinMaxScaler()   
+hite[ : ,:4] = minmax_scaler.fit_transform(hite[ : , : 4])
+
+robustScaler = RobustScaler()
+hite[ : , -1 :] = robustScaler.fit_transform(hite[ : , -1 :])
+
+hite[ : , -1 :] = minmax_scaler.fit_transform(hite[ : , -1 :])
 
 
 # 2. 
@@ -54,7 +59,7 @@ def split_x (seq, size) :
 
 dataset_x = split_x(hite,5)
 print("=============================")
-# print(dataset_x)   # 
+print(dataset_x)    
 # print(dataset_x.shape) # (504, 5, 5)
 
 '''
@@ -139,23 +144,24 @@ x_train,x_test, y_train, y_test = train_test_split(
 
 
 input1 = Input(shape=(5,5))
-dense1 = LSTM(16, activation='relu',input_shape =(5,5))(input1)
-dense1 = Dense(16, activation='relu')(dense1)
-dense1 = Dense(16, activation='relu')(dense1)
-output1 = Dense(5)(dense1)
+dense1 = LSTM(32, activation='relu',input_shape =(5,5))(input1)
+dense1 = Dense(4, activation='relu')(dense1)
+dense1 = Dense(4, activation='relu')(dense1)
+
+output1 = Dense(4, activation='relu')(dense1)
 
 
 input2 = Input(shape=(5,5))
-dense2 = LSTM(16, activation='relu',input_shape =(5,5))(input2)
-dense2 = Dense(16, activation='relu')(dense2)
-dense2 = Dense(16, activation='relu')(dense2)
-output2 = Dense(5)(dense2)
+dense2 = LSTM(32, activation='relu',input_shape =(5,5))(input2)
+dense2 = Dense(4, activation='relu')(dense2)
+dense1 = Dense(4, activation='relu')(dense2)
+output2 = Dense(4, activation='relu')(dense2)
 
 
 from keras.layers.merge import concatenate   
 merge1 = concatenate([output1, output2], name = 'merge') 
 
-middle1_1 = Dense(10)(merge1)
+middle1_1 = Dense(5,activation='relu')(merge1)
 middle1_2 = Dense(5)(middle1_1)
 
 
@@ -167,13 +173,17 @@ model = Model(inputs=[input1,input2], outputs = [middle1_2])
 
 # 훈련 
 
-early_stopping = EarlyStopping(patience=10)
+early_stopping = EarlyStopping(monitor='loss', patience= 10, mode ='auto')
 modelpath = './model/{epoch:02d} - {val_loss: .4f}.hdf5' 
 checkpoint = ModelCheckpoint(filepath= modelpath, monitor= 'val_loss', save_best_only = True, save_weights_only= False, verbose=1)
 
 
 model.compile(loss='mse', optimizer='adam', metrics=['mse'])
-model.fit([x_train,x_train] ,y_train, validation_split=0.2, verbose=1, batch_size=1, epochs=1, callbacks=[early_stopping])
+hist = model.fit([x_train,x_train] ,y_train, validation_split=0.5, verbose=1, batch_size=1, epochs=10, callbacks=[early_stopping])
+
+
+# model.save('./model/model_0602test.h5') 
+# model.save_weights('./model/test_weight1.h5')
 
 
 #4. 평가, 예측____________________________________________
@@ -191,22 +201,35 @@ for i in range(5):
 
 
 t = x[-1]
+print(t)
 
 t = t.reshape(1,5,5)
 
 y_0603 = model.predict([t,t])
 print('6월 3일 삼성 주가 : ',y_0603[ :,3])
 
-
-# 튜닝은 거른다 
-'''
-
-테스트 종가 :  [56000.] /테스트 예측가 :  [118960.17]
-테스트 종가 :  [54900.] /테스트 예측가 :  [88396.766]
-테스트 종가 :  [55700.] /테스트 예측가 :  [48443.043]
-테스트 종가 :  [56200.] /테스트 예측가 :  [43859.516]
-테스트 종가 :  [58400.] /테스트 예측가 :  [43802.336]
-6월 3일 삼성 주가 :  [65403.773]
-
+# 튜닝은 아직 하지 않았다 
 
 '''
+테스트 종가 :  [56000.] /테스트 예측가 :  [49251.9]
+테스트 종가 :  [54900.] /테스트 예측가 :  [49371.46]
+테스트 종가 :  [55700.] /테스트 예측가 :  [49322.797]
+테스트 종가 :  [56200.] /테스트 예측가 :  [49288.48]
+테스트 종가 :  [58400.] /테스트 예측가 :  [49028.195]
+6월 3일 삼성 주가 :  [51591.668]
+'''
+
+plt.figure(figsize= (10,6))
+
+
+plt.subplot(2, 1, 1)    # 2행 1열의 첫번쨰 그림을 사용하겠다. 인덱스는 0부터 시작하는데, 이건 아니다.
+
+plt.plot(hist.history['loss'] , marker = '.', c = 'red', label = 'loss')  # plot 추가 =  선 추가 
+plt.plot(hist.history['val_loss'], marker = '.', c = 'blue', label = 'val_loss')  
+plt.grid()
+plt.title('loss')
+plt.xlabel('epoch')
+plt.ylabel('loss')
+plt.legend(['loss', 'val_loss'])   # 1st legend : 1st plot,  2nd legend : 2nd plot 
+# plt.legend(loc='upper right')
+plt.show()
