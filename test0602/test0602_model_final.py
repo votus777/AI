@@ -120,14 +120,16 @@ samsung_predict = samsung_predict.reshape(1,5,1)
 # 모델________________________________________________ 
 
 input1 = Input(shape=(5,1))
-x1 = LSTM(8, activation='relu',input_shape=(5,1))(input1)
+x1 = LSTM(12, activation='relu',input_shape=(5,1))(input1)
+x1 = Dense(4, activation='relu')(x1)
 x1 = Dense(8, activation='relu')(x1)
 x1 = Dense(4, activation='relu')(x1)
 x1 = Dense(4, activation='relu')(x1)
 
 
 input2 = Input(shape=(5,1))
-x2 = LSTM(8, activation='relu',input_shape=(5,1))(input2)
+x2 = LSTM(12, activation='relu',input_shape=(5,1))(input2)
+x2 = Dense(4, activation='relu')(x2)
 x2 = Dense(8, activation='relu')(x2)
 x2 = Dense(4, activation='relu')(x2)
 x2 = Dense(4, activation='relu')(x2)
@@ -148,9 +150,10 @@ early_stopping = EarlyStopping(monitor='loss', patience= 10, mode ='auto')
 modelpath = './model/{epoch:02d} - {val_loss: .4f}.hdf5' 
 checkpoint = ModelCheckpoint(filepath= modelpath, monitor= 'val_loss', save_best_only = True, save_weights_only= False, verbose=1)
 
+# model.load_weights('./model/03 -  0.8877.hdf5') 
 
 model.compile(optimizer='adam', loss = 'mse', metrics=['mse'])
-model.fit([x_sam,hite_train], y_sam,  verbose=1, batch_size=1, validation_split=0.2, epochs= 5,  callbacks=[early_stopping])
+hist = model.fit([x_sam,hite_train], y_sam,  verbose=1, batch_size=1, validation_split=0.2, epochs= 10,  callbacks=[early_stopping])
 
 
 #4. 평가, 예측_____________________________________________________________________
@@ -169,9 +172,25 @@ print("y_predict : ", y_predict)
 
 '''
 
-loss :  0.9509480553382067
-mse :  0.9509480595588684
-[[0.55842614]]
+loss :  0.9956450301682102
+mse :  0.9956450462341309
+y_predict :  [[684.90643]]
 
 
 '''
+
+# 히스토리______________________________________ 
+
+
+plt.figure(figsize= (10,6))
+
+
+plt.subplot(2, 1, 1)    
+plt.plot(hist.history['loss'] , marker = '.', c = 'red', label = 'loss')  
+plt.plot(hist.history['val_loss'], marker = '.', c = 'blue', label = 'val_loss')  
+plt.grid()
+plt.title('loss')
+plt.xlabel('epoch')
+plt.ylabel('loss')
+plt.legend(['loss', 'val_loss'])   
+plt.show()
