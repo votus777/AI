@@ -1,17 +1,18 @@
 
-
 import numpy as np
 import matplotlib.pyplot as plt
 
 from keras.utils import np_utils
 
-from keras.datasets import mnist
-
 from keras.models import Sequential, Model
-from keras.layers import Dense, Flatten, Conv2D, MaxPool2D, Dropout, BatchNormalization, Input, LSTM, Concatenate
+from keras.layers import Dense, Dropout, Input, LSTM, Concatenate    #    merge1 = concatenate([output1, output2], name = 'merge') 
+from keras.layers.merge import                        concatenate    #     Concatenate()([x1, x2])
 from keras.callbacks import EarlyStopping, ModelCheckpoint
     
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
+from sklearn.model_selection import train_test_split
+from sklearn.decomposition import PCA
+
 
 ################ 데이터 불러오기 #####################
 
@@ -37,18 +38,18 @@ print(samsung.shape) # (508, 1)
 
 
 # # 1. 
-<<<<<<< HEAD
-minmax_scaler = MinMaxScaler()   
-hite[ : ,:4] = minmax_scaler.fit_transform(hite[ : , : 4])
+minMaxScaler = MinMaxScaler()
+hite[ : ,:4] = minMaxScaler.fit_transform(hite[ : , : 4])
+
+# standard_scaler = StandardScaler()   
+# hite[ : ,:4] = standard_scaler.fit_transform(hite[ : , : 4])
+
+
 
 robustScaler = RobustScaler()
 hite[ : , -1 :] = robustScaler.fit_transform(hite[ : , -1 :])
 
-hite[ : , -1 :] = minmax_scaler.fit_transform(hite[ : , -1 :])
-=======
- minmax_scaler = MinMaxScaler()   
- hite = minmax_scaler.fit_transform(hite)
->>>>>>> 1dc595afc844f76bb154800320641cddb03e6d84
+# hite[ : , -1 :] = standard_scaler.fit_transform(hite[ : , -1 :])
 
 
 # 2. 
@@ -68,20 +69,15 @@ print(dataset_x)
 # print(dataset_x.shape) # (504, 5, 5)
 
 '''
-
 [0.28037383 0.25917927 0.29567308 0.26652452 0.02363458]  ->  2018-05-04
 [0.28271028 0.25701944 0.27884615 0.24520256 0.08661248]  ->  2018-05-08
 [0.26401869 0.24190065 0.27644231 0.24733475 0.04427675]  ->  2018-05-09
 [0.26869159 0.24406048 0.27403846 0.24307036 0.06914481]  ->  2018-05-10
 [0.26168224 0.25701944 0.27884615 0.26012793 0.0763874 ]  ->  2018-05-11
-
-
-
 dataset_y = split_x(samsung,5)
 print("=============================")
 print(dataset_y)
 print(dataset_y.shape)  
-
 [53000.]  ->  2018-05-04
 [52600.]  ->  2018-05-08
 [52600.]  ->  2018-05-09
@@ -91,7 +87,6 @@ print(dataset_y.shape)
 여기서 spilt_x 함수를 개조해보자 
 전날 5일치 데이터로 다음날 주가를 예측할 수 있도록 
 아니면 이틀 뒤까지 
-
 '''
 def split_y (samsung, size) :
     aaa = []
@@ -113,20 +108,16 @@ dataset_y = split_y (samsung,5)
 [52600.]  ->  2018-05-09
 [51700.]  ->  2018-05-10
 [52000.]  ->  2018-05-11
-
-
 [52600.]   -> 2018-05-08
 [52600.]   -> 2018-05-09
 [51700.]   -> 2018-05-10
 [52000.]   -> 2018-05-11          
 [51000.]]  -> 2018-05-14    -> return np.array(aaa[1:])  // 하루 뒤 예측 
-
 [52600.]
 [51700.]
 [52000.]
 [51000.]   -> 2018-05-14
 [50200.]   -> 2018-05-15    -> return np.array(aaa[2:])  // 이틀 뒤 예측 
-
 3일 뒤 예측이니 6월 3일을 위해서는 마지막 한 덩이 넣음 되겠다
 '''
 
@@ -149,25 +140,21 @@ x_train,x_test, y_train, y_test = train_test_split(
 
 
 input1 = Input(shape=(5,5))
-dense1 = LSTM(32, activation='relu',input_shape =(5,5))(input1)
-dense1 = Dense(4, activation='relu')(dense1)
-dense1 = Dense(4, activation='relu')(dense1)
-
-output1 = Dense(4, activation='relu')(dense1)
+dense1 = Dense(18, activation='relu',input_shape =(5,5))(input1)
+dense1 = Dense(8, activation='relu')(dense1)
+output1 = Dense(8, activation='relu')(dense1)
 
 
 input2 = Input(shape=(5,5))
-dense2 = LSTM(32, activation='relu',input_shape =(5,5))(input2)
-dense2 = Dense(4, activation='relu')(dense2)
-dense1 = Dense(4, activation='relu')(dense2)
-output2 = Dense(4, activation='relu')(dense2)
+dense2 = Dense(18, activation='relu',input_shape =(5,5))(input2)
+dense2 = Dense(8, activation='relu')(dense2)
+output2 = Dense(8, activation='relu')(dense2)
 
 
 from keras.layers.merge import concatenate   
 merge1 = concatenate([output1, output2], name = 'merge') 
 
-middle1_1 = Dense(5,activation='relu')(merge1)
-middle1_2 = Dense(5)(middle1_1)
+middle1_2 = Dense(5,activation='relu')(merge1)
 
 
 
@@ -184,7 +171,7 @@ checkpoint = ModelCheckpoint(filepath= modelpath, monitor= 'val_loss', save_best
 
 
 model.compile(loss='mse', optimizer='adam', metrics=['mse'])
-hist = model.fit([x_train,x_train] ,y_train, validation_split=0.5, verbose=1, batch_size=1, epochs=10, callbacks=[early_stopping])
+hist = model.fit([x_train,x_train] ,y_train, validation_split=0.2, verbose=1, batch_size=1, epochs=20, callbacks=[early_stopping])
 
 
 # model.save('./model/model_0602test.h5') 
@@ -229,7 +216,7 @@ plt.figure(figsize= (10,6))
 
 plt.subplot(2, 1, 1)    # 2행 1열의 첫번쨰 그림을 사용하겠다. 인덱스는 0부터 시작하는데, 이건 아니다.
 
-<<<<<<< HEAD
+
 plt.plot(hist.history['loss'] , marker = '.', c = 'red', label = 'loss')  # plot 추가 =  선 추가 
 plt.plot(hist.history['val_loss'], marker = '.', c = 'blue', label = 'val_loss')  
 plt.grid()
@@ -239,6 +226,4 @@ plt.ylabel('loss')
 plt.legend(['loss', 'val_loss'])   # 1st legend : 1st plot,  2nd legend : 2nd plot 
 # plt.legend(loc='upper right')
 plt.show()
-=======
-'''
->>>>>>> 1dc595afc844f76bb154800320641cddb03e6d84
+
