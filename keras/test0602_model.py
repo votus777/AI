@@ -37,6 +37,7 @@ print(samsung.shape) # (508, 1)
 
 
 # # 1. 
+<<<<<<< HEAD
 minmax_scaler = MinMaxScaler()   
 hite[ : ,:4] = minmax_scaler.fit_transform(hite[ : , : 4])
 
@@ -44,6 +45,10 @@ robustScaler = RobustScaler()
 hite[ : , -1 :] = robustScaler.fit_transform(hite[ : , -1 :])
 
 hite[ : , -1 :] = minmax_scaler.fit_transform(hite[ : , -1 :])
+=======
+ minmax_scaler = MinMaxScaler()   
+ hite = minmax_scaler.fit_transform(hite)
+>>>>>>> 1dc595afc844f76bb154800320641cddb03e6d84
 
 
 # 2. 
@@ -224,6 +229,7 @@ plt.figure(figsize= (10,6))
 
 plt.subplot(2, 1, 1)    # 2행 1열의 첫번쨰 그림을 사용하겠다. 인덱스는 0부터 시작하는데, 이건 아니다.
 
+<<<<<<< HEAD
 plt.plot(hist.history['loss'] , marker = '.', c = 'red', label = 'loss')  # plot 추가 =  선 추가 
 plt.plot(hist.history['val_loss'], marker = '.', c = 'blue', label = 'val_loss')  
 plt.grid()
@@ -233,3 +239,6 @@ plt.ylabel('loss')
 plt.legend(['loss', 'val_loss'])   # 1st legend : 1st plot,  2nd legend : 2nd plot 
 # plt.legend(loc='upper right')
 plt.show()
+=======
+'''
+>>>>>>> 1dc595afc844f76bb154800320641cddb03e6d84
