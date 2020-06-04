@@ -1,4 +1,3 @@
-
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -121,18 +120,25 @@ samsung_predict = samsung_predict.reshape(1,5,1)
 
 input1 = Input(shape=(5,1))
 x1 = LSTM(12, activation='relu',input_shape=(5,1))(input1)
-x1 = Dense(4, activation='relu')(x1)
+x1 = Dropout(0.4)(x1)
+
 x1 = Dense(8, activation='relu')(x1)
-x1 = Dense(4, activation='relu')(x1)
-x1 = Dense(4, activation='relu')(x1)
+x1 = Dropout(0.4)(x1)
+
+x1 = Dense(8, activation='relu')(x1)
+x1 = Dropout(0.4)(x1)
 
 
 input2 = Input(shape=(5,1))
 x2 = LSTM(12, activation='relu',input_shape=(5,1))(input2)
+x2 = Dropout(0.4)(x2)
+
 x2 = Dense(4, activation='relu')(x2)
+x2 = Dropout(0.4)(x2)
+
 x2 = Dense(8, activation='relu')(x2)
-x2 = Dense(4, activation='relu')(x2)
-x2 = Dense(4, activation='relu')(x2)
+x2 = Dropout(0.4)(x2)
+
 
 merge = concatenate([x1,x2])
 
@@ -153,7 +159,7 @@ checkpoint = ModelCheckpoint(filepath= modelpath, monitor= 'val_loss', save_best
 # model.load_weights('./model/03 -  0.8877.hdf5') 
 
 model.compile(optimizer='adam', loss = 'mse', metrics=['mse'])
-hist = model.fit([x_sam,hite_train], y_sam,  verbose=1, batch_size=1, validation_split=0.2, epochs= 10,  callbacks=[early_stopping])
+hist = model.fit([x_sam,hite_train], y_sam,  verbose=1, batch_size=1, validation_split=0.25, epochs= 100  callbacks=[early_stopping])
 
 
 #4. 평가, 예측_____________________________________________________________________
@@ -165,19 +171,6 @@ print('mse : ', mse)
 y_predict = model.predict([hite_predict,samsung_predict])
 
 print("y_predict : ", y_predict)
-
-# print(hite_predict)
-# print(samsung_predict)
-
-
-'''
-
-loss :  0.9956450301682102
-mse :  0.9956450462341309
-y_predict :  [[684.90643]]
-
-
-'''
 
 # 히스토리______________________________________ 
 
