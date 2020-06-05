@@ -6,7 +6,7 @@ y = np.array(range(1,46))
 
 from sklearn.model_selection import train_test_split
 x_train, x_test, y_train, y_test = train_test_split(
-    x, y, shuffle= True, test_size = 0.13, random_state = 158432
+    x, y, shuffle= True, test_size = 0.13, random_state = 3
 )
 
 # 2. 모델 구성____________________________
@@ -36,4 +36,4 @@ print("mse : ", mse)
 
 
 y_predict = model.predict(x_test)
-print(np.around(y_predict))
+print((np.around(y_predict)))

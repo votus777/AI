@@ -60,8 +60,8 @@ samgsung_test = standard_scaler.transform(samgsung_test)
 
 pca = PCA(n_components=1)
 hite_train = pca.fit_transform(hite_train)
-hite_test = pca.fit_transform(hite_test)
-hite_predict = pca.fit_transform(hite_predict)
+hite_test = pca.transform(hite_test)
+hite_predict = pca.transform(hite_predict)
 
 # 데이터 스플릿___________________________________________________
 
@@ -133,7 +133,7 @@ input2 = Input(shape=(5,1))
 x2 = LSTM(12, activation='relu',input_shape=(5,1))(input2)
 x2 = Dropout(0.4)(x2)
 
-x2 = Dense(4, activation='relu')(x2)
+x2 = Dense(8, activation='relu')(x2)
 x2 = Dropout(0.4)(x2)
 
 x2 = Dense(8, activation='relu')(x2)
