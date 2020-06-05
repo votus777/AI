@@ -52,8 +52,8 @@ standard_scaler = StandardScaler()
 hite_train = standard_scaler.fit_transform(hite_train)
 samsung_train = standard_scaler.fit_transform(samsung_train)
 
-hite_test = standard_scaler.fit_transform(hite_test)
-samgsung_test = standard_scaler.fit_transform(samgsung_test)
+hite_test = standard_scaler.transform(hite_test)
+samgsung_test = standard_scaler.transform(samgsung_test)
 
 
 # 차원 축소______________________________________________________
@@ -159,7 +159,7 @@ checkpoint = ModelCheckpoint(filepath= modelpath, monitor= 'val_loss', save_best
 # model.load_weights('./model/03 -  0.8877.hdf5') 
 
 model.compile(optimizer='adam', loss = 'mse', metrics=['mse'])
-hist = model.fit([x_sam,hite_train], y_sam,  verbose=1, batch_size=1, validation_split=0.25, epochs= 100  callbacks=[early_stopping])
+hist = model.fit([x_sam,hite_train], y_sam,  verbose=1, batch_size=1, validation_split=0.25, epochs= 100 , callbacks=[early_stopping])
 
 
 #4. 평가, 예측_____________________________________________________________________
