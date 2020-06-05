@@ -34,10 +34,10 @@ model= Sequential()
 input0 = Input(shape=(32,32,3))
 
 
-model_1 = Conv2D(64, (3,3), activation = 'relu', padding= 'same' )(input0)
+model_1 = Conv2D(64, (3,3), activation = 'relu', padding= 'same',strides= 1 )(input0)
 model_b=BatchNormalization()(model_1)
 model_d = Dropout(0.3)(model_b)
-model_2 = Conv2D(64, (3,3), activation = 'relu', padding= 'same' )(model_d)
+model_2 = Conv2D(64, (3,3), activation = 'relu', padding= 'same',strides= 1 )(model_d)
 model_b=BatchNormalization()(model_2)
 model_d = Dropout(0.3)(model_b)
 model_m = MaxPool2D(2,2)(model_d)
