@@ -10,7 +10,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 
 # 데이터 
-cancer = load_breast_cancer()
+cancer = load_breast_cancer()  #이진분류
 
 x = cancer.data
 y = cancer.target

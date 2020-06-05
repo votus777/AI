@@ -20,7 +20,7 @@ x_train,x_test, y_train, y_test = train_test_split(
     x, y, shuffle = True  , train_size = 0.8 )
 
 
-minmax_scaler =MinMaxScaler()
+minmax_scaler = MinMaxScaler()
 x_train = minmax_scaler.fit_transform(x_train)
 x_test = minmax_scaler.fit_transform(x_test)
 
@@ -31,8 +31,10 @@ model = SVC()      # score :  0.9333333333333333
 # model =KNeighborsClassifier()   # score :  1.0
 # model = RandomForestClassifier()  # score :  0.9333333333333333
                       
-# model = RandomForestRegressor(n_estimators=1)  # acc :  0.8666666666666667                score :  0.8324022346368716
+# model = RandomForestRegressor(n_estimators=1)  # acc :  0.8666666666666667                score :  0.8324022346368716  
 # model = KNeighborsRegressor(n_neighbors=1)  # 나오긴 나온다 acc :  0.8666666666666667    score (여기서는 R2) :  0.752577319587629           
+#                                                -> It just tries to "extrapolate" the values you give (in this case only 0 and 1)
+
 
 
 # 훈련
@@ -45,8 +47,9 @@ model.fit(x_train, y_train)
 y_predict = model.predict(x_test)
 
 acc = accuracy_score(y_test,y_predict)  
-score = model.score(x_test,y_test)
+score = model.score(x_test,y_test) # model.score = model.evaluate
 
 print("acc : ", acc)
 print("score : ", score)
 
+# Nan 값을 다 빼면서 이걸 x_predict로 두고 빈 공간을 다시 채워야함 

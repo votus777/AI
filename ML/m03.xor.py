@@ -1,7 +1,6 @@
 
 from sklearn.svm import LinearSVC
 from sklearn.metrics import accuracy_score
-from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
 
 # from m02_and.py
 
@@ -12,7 +11,7 @@ y_data = [ 0, 1, 1, 0]
 
 # 2. 모델 
 
-model = KNeighborsClassifier(n_neighbors=1)
+model = LinearSVC()
 
 
 # 3. 훈련 

@@ -6,6 +6,7 @@ from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.decomposition import PCA
 
+from sklearn import LDA
 
 from sklearn.datasets  import load_boston
 

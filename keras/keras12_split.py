@@ -12,6 +12,7 @@ x_train, x_test, y_train, y_test = train_test_split(
 )
 
 # random_state => random 난수, 숫자는 랜덤이지만 랜덤 난수66으로 고정된 랜덤이므로 다시 실행해도 숫자는 변하지 않는다 
+# 여담으로 sklearn 사이트에 따르면 가장 인기있는   random_state 숫자는 0 과 42라고 한다.  42...어디서 많이 들어본 숫자인데..( 영화 '은하수를 여행하는 히치하이커를 위한 안내서' 참고)
 
 x_test, x_val, y_test, y_val = train_test_split(
     x_test, y_test, random_state=99, shuffle= True, test_size=0.5)  #test 20% 중 -> 50% test // 50% validation 
