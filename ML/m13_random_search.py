@@ -48,23 +48,13 @@ y_pred = model.predict(x_test)
 
 print("최종 정답률 : ", model.score(x_test,y_pred))
 
-
-
-
-
-
-
 '''
 
-최종 정답률 :  0.9824561403508771
+최종 정답률 :  1.0
 
 '''
-
-
 print( " 최적의 매게변수 : ", model.best_params_)
-
-
 '''
- 최적의 매게변수 :  {'n_estimators': 100, 'min_samples_split': 0.1, 'max_features': 30, 'max_depth': 10}
+ 최적의 매게변수 :  {'n_estimators': 100, 'min_samples_split': 0.1, 'max_features': 1, 'max_depth': 50}
 
 '''
