@@ -48,6 +48,36 @@ print(arr[arr % 3 == 1])  # [4,7]
 # np.setfiffd(x,y) -> 배열 x에서 y를 뺀 차집합을 정렬해서 반환
 
 
+# 207p axis
+arr = np.array([[1,2,3],[4,5,6]])
+
+print(arr.sum())  #21
+print(arr.sum(axis=0)) # [5 7 9]  세로  열
+print(arr.sum(axis=1)) # [ 6 15]  가로  행
+
+
+#211p 정렬
+arr = np.array([15, 30, 5])
+print(arr.argsort())  # [2 0 1]   ->??
+
+
+# 214p 통계 함수
+
+#  arr.mean(axis=0) - 각 열의 평균
+#  arr.sum(axis =1) - 각 행의 합계
+#  arr.min()        -> arr의 최소값
+#  arr.argmax(axis=o))   - arr의 각 열으 ㅣ최댓값의 인덱스 번호 출력 
+
+#217p 브로드캐스팅
+
+x = np.arange(6).reshape(2,3)
+print(x + 1)
+
+# [[1 2 3] [4 5 6]]
+
+
+
+
 
 
 
