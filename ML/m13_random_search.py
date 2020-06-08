@@ -54,7 +54,10 @@ print("최종 정답률 : ", model.score(x_test,y_pred))
 
 '''
 print( " 최적의 매게변수 : ", model.best_params_)
+
 '''
  최적의 매게변수 :  {'n_estimators': 100, 'min_samples_split': 0.1, 'max_features': 1, 'max_depth': 50}
 
 '''
+
+
