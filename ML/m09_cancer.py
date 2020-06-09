@@ -9,6 +9,8 @@ from sklearn.datasets import load_breast_cancer
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 
+from lightgbm import plot_importance, LGBMRegressor,LGBMClassifier
+
 # 데이터 
 cancer = load_breast_cancer()  #이진분류
 
@@ -44,11 +46,12 @@ x_test = pca.fit_transform(x_test)
 
 # 모델 
 
-model = SVC()       # score : 0.9210526315789473
+# model = SVC()       # score : 0.9210526315789473
 # model = LinearSVC()  # score : 0.7807017543859649
 # model =KNeighborsClassifier()   # score : 0.8421052631578947
 # model = RandomForestClassifier()  # score : 0.8771929824561403
-                      
+model = LGBMClassifier(n_estimators=800) # acc :  0.9473684210526315
+
 # model = RandomForestRegressor()  # error
 # model = KNeighborsRegressor()  # error               
 
