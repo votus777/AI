@@ -23,22 +23,29 @@ x_train, x_test, y_train, y_test = train_test_split(x,y, test_size = 0.2, shuffl
 
 # GridSearch/RandomSearch에서 사용할 매게 변수 
 parameters =  [
-    {"svm__C" : [1,10,100,1000], "svm__kernel" : ['linear']},
-    {"svm__C" : [1,10,100,1000], "svm__kernel" : ['rbf'], 'svm__gamma': [0.001, 0.0001]},
-    {"svm__C" : [1,10,100,1000], "svm__kernel" : ['sigmoid'], 'svm__gamma' : [0.001, 0.0001]}
+    {'svc__C' : [1,10,100,1000], 'svc__kernel' : ['linear']},
+    {'svc__C' : [1,10,100,1000], 'svc__kernel' : ['rbf'], 'svc__gamma': [0.001, 0.0001]},
+    {'svc__C' : [1,10,100,1000], 'svc__kernel' : ['sigmoid'], 'svc__gamma' : [0.001, 0.0001]}
 ]
 
+# parameters =  [
+#     {"C" : [1,10,100,1000], "kernel" : ['linear']},
+#     {"C" : [1,10,100,1000], "kernel" : ['rbf'], 'gamma': [0.001, 0.0001]},
+#     {"C" : [1,10,100,1000], "kernel" : ['sigmoid'], 'gamma' : [0.001, 0.0001]}
+# ]
 
+#
 # 0.22.1
 # 모델
 
 # model = SVC()
 
-from sklearn.pipeline import Pipeline
+from sklearn.pipeline import Pipeline, make_pipeline
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
-pipe = Pipeline([(("scaler"), MinMaxScaler()), (('svm'),SVC())])  # model 과 전처리 방법을 선택  
-# pipe = make_pipeline (MinmaxScaler(), SVC() )  -> 만약 안되면 이 라인으로 시도
+# pipe = Pipeline([('scaler', MinMaxScaler()), ('svm', SVC())])  # model 과 전처리 방법을 선택  
+pipe = make_pipeline (MinMaxScaler(), SVC() )  #-> 만약 안되면 이 라인으로 시도, 전처리기와 모델 이름을 파라미터 이름에 똑같이 넣어주어야 한다  'svc__C'
+
 
 model = RandomizedSearchCV(pipe, parameters, cv=5)
 
