@@ -23,8 +23,12 @@ train = pd.read_csv('./data/dacon/comp1/train.csv', header = 0, index_col = 0)
 test = pd.read_csv('./data/dacon/comp1/test.csv', header = 0, index_col = 0)
 submission = pd.read_csv('./data/dacon/comp1/sample_submission.csv', header = 0, index_col = 0)
 
-train = train.interpolate(method='values') 
-test = test.interpolate(method='values') 
+train.dropna(how='any')
+test.dropna(how='any')
+
+# train = train.interpolate(method='values') 
+# test = test.interpolate(method='values') 
+
 
 src_columns = [k for k in train.columns if 'src' in k]
 dst_columns = [k for k in train.columns if 'dst' in k]
@@ -63,10 +67,11 @@ test[src_columns] = test_src.fillna(test_src.mean())
 
 
 
-
 train_x_dst = train.loc[:, '650_dst':'990_dst']
 train_x_src = train.loc[:, '650_src' : '990_src']
 y = train.loc[:, 'hhb':'na']
+
+
 print(train_x_dst.shape)  # (10000, 35)
 print(y.shape)  # (10000, 4)
 
@@ -80,21 +85,37 @@ x_train_dst, x_test_dst,x_train_src, x_test_src, y_train, y_test = train_test_sp
 
 from sklearn.preprocessing import StandardScaler, MinMaxScaler 
 
-standard_scaler = StandardScaler()
-x_train_dst = standard_scaler.fit_transform(x_train_dst)
-x_test_dst = standard_scaler.transform(x_test_dst)
 
-x_train_src = standard_scaler.fit_transform(x_train_src)
-x_test_src = standard_scaler.transform(x_test_src)
+x_train_dst_log = x_train_dst.apply(lambda x: np.log(x+1))
+x_test_dst_log = x_test_dst.apply(lambda x: np.log(x+1))
 
-test_dst = standard_scaler.transform(x_test_dst)
-test_src = standard_scaler.transform(test_src)
+x_train_src_log = x_train_src.apply(lambda x: np.log(x+1))
+x_test_src_log = x_test_src.apply(lambda x: np.log(x+1))
+
+test_dst_log = test_dst.apply(lambda x: np.log(x+1))
+tset_src_log = test_src.apply(lambda x: np.log(x+1))
+
+# standard_scaler = StandardScaler()
+# x_train_dst = standard_scaler.fit_transform(x_train_dst)
+# x_test_dst = standard_scaler.transform(x_test_dst)
+
+# x_train_src = standard_scaler.fit_transform(x_train_src)
+# x_test_src = standard_scaler.transform(x_test_src)
+
+# test_dst = standard_scaler.transform(x_test_dst)
+# test_src = standard_scaler.transform(test_src)
+
+
+
+
+
+
 
 # 차원 축소
 
 from sklearn.decomposition import PCA
 from keras.metrics import mae
-pca = PCA(n_components=30)
+pca = PCA(n_components=20)
 x_train_dst = pca.fit_transform(x_train_dst)
 x_train_src = pca.fit_transform(x_train_src)
 
@@ -108,7 +129,7 @@ test_src = pca.transform(test_src)
 
 
 #model -------- 1
-input1 = Input(shape=(30, ), name= 'input_1') 
+input1 = Input(shape=(20, ), name= 'input_1') 
 
 x1 = Dense(32, activation= 'relu', name= '1_1') (input1) 
 x1 = Dropout(0.4)(x1)
@@ -118,7 +139,7 @@ x1 = Dropout(0.2)(x1)
 
 
 #model -------- 2
-input2 = Input(shape=(30, ), name = 'input_2') 
+input2 = Input(shape=(20, ), name = 'input_2') 
 
 x2 = Dense(32, activation= 'relu', name = '2_1')(input2) 
 x2 = Dropout(0.4)(x2)
@@ -132,10 +153,10 @@ x2 = Dropout(0.2)(x2)
 from keras.layers.merge import concatenate    
 merge1 = concatenate([x1, x2], name = 'merge') 
 
-middle1 = Dense(24, activation='relu')(merge1)
+middle1 = Dense(32, activation='relu')(merge1)
 middle1 = Dropout(0.3)(middle1)
-middle1 = Dense(24, activation='relu')(middle1)
-middle1 = Dropout(0.3)(middle1)
+middle1 = Dense(16, activation='relu')(merge1)
+middle1 = Dropout(0.2)(middle1)
 
 
 

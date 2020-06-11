@@ -26,8 +26,8 @@ submission = pd.read_csv('./data/dacon/comp1/sample_submission.csv', header = 0,
 # print(type(train))         # <class 'pandas.core.frame.DataFrame'>
 
 
-train = train.interpolate()  # 보간법  // 선형보간 
-test = test.interpolate() 
+train = train.interpolate(method = 'linear')  # 보간법  // 선형보간 
+test = test.interpolate(method = 'linear') 
 # print(train.isnull().sum())  
 # print(test.isnull().sum())  
 
@@ -62,7 +62,7 @@ test = standard_scaler.transform(test)
 
 from sklearn.decomposition import PCA
 from keras.metrics import mae
-pca = PCA(n_components=40)
+pca = PCA(n_components=10)
 x_train = pca.fit_transform(x_train)
 x_test = pca.transform(x_test)
 test = pca.transform(test)
@@ -72,19 +72,19 @@ test = pca.transform(test)
 
 model = Sequential()
 
-model.add(Dense(10,input_dim =40, activation='relu'))
-model.add(Dense(80, activation= 'relu'))
+model.add(Dense(20,input_dim =10, activation='relu'))
+model.add(Dense(20, activation= 'relu'))
 model.add(Dropout(0.4))
-# model.add(Dense(40, activation= 'relu'))
-# model.add(Dropout(0.3))
-# model.add(Dense(20, activation= 'relu'))
-# model.add(Dropout(0.25))
+model.add(Dense(42, activation= 'relu'))
+model.add(Dropout(0.4))
+model.add(Dense(10, activation= 'relu'))
+model.add(Dropout(0.25))
 model.add(Dense(4, activation='relu'))
 
 
 
 # 훈련
-early_stopping = EarlyStopping(monitor='loss', patience= 50, mode ='auto')
+early_stopping = EarlyStopping(monitor='loss', patience= 20, mode ='auto')
 kfold = KFold(n_splits=10, shuffle=True) 
 
 model.compile (optimizer='adam', loss = 'mae', metrics=['mae'])
