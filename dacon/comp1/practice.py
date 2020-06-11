@@ -18,6 +18,7 @@ from sklearn.multioutput import MultiOutputRegressor
 from pandas.plotting import scatter_matrix
 
 from sklearn.model_selection import KFold, cross_val_score
+
 # 데이터 
 
 train = pd.read_csv('./data/dacon/comp1/train.csv', header = 0, index_col = 0)
@@ -61,7 +62,7 @@ x_train, x_test, y_train, y_test = train_test_split(
 
 
 
-from sklearn.preprocessing import StandardScaler, MinMaxScaler 
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
 stand = StandardScaler()
 x_train = stand.fit_transform(x_train)

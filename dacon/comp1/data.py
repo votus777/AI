@@ -20,9 +20,12 @@ submission = pd.read_csv('./data/dacon/comp1/sample_submission.csv', header = 0,
 
 print(train.shape)
 
-train = train.drop('840_dst', axis=1)
+train = train.values
 
-print(train.shape)
+dst = train[ : , 1]
+src = train[ : , 36]
+print(dst)
+print(src)
 
 
 
