@@ -61,8 +61,8 @@ print(y_test[0])
 
 model = Sequential()
 
-model.add(LSTM(20, input_shape= (3,1), activation = 'relu', return_sequences ='False' ))
-model.add(LSTM(20, activation = 'relu'))
+model.add(LSTM(50, input_shape= (3,1), activation = 'relu', return_sequences ='False' ))
+model.add(LSTM(50, activation = 'relu'))
 model.add(Dense(10, activation = 'relu'))
 model.add(Dense(5, activation = 'relu'))
 model.add(Dense(1))
@@ -84,7 +84,7 @@ model.fit(x_train,y_train, epochs=10000, callbacks= [ealry_stopping], batch_size
 
 # loss, mse = model.evaluate(x_test, y_test, batch_size=5)
 
-x_predict = np.array([28.48, 26.32, 25.75])
+x_predict = np.array([25.55,26.09,25.9])
 
 x_predict = x_predict.reshape(1,3,1)
 
