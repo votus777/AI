@@ -1,12 +1,12 @@
 import numpy as np
 import pandas as pd
 
-from keras.models import Sequential, Model 
-from keras.layers import Input, Dense , LSTM, Dropout, BatchNormalization
+from keras.models import Sequential, Model, Input
+from keras.layers import Input, Dense , LSTM, Dropout, BatchNormalization, BatchNormalization
 from keras.callbacks import EarlyStopping
 import matplotlib.pyplot as plt
 
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
 
 # 데이터 
 
@@ -18,6 +18,9 @@ highway_traffic = pd.read_csv('./mini_project/data/용인서울고속도로 교�
 highway_velocity = pd.read_csv('./mini_project/data/용인서울고속도로 평균속도.csv', header = 0, index_col = 0)
 
 
+
+
+
 print(gangnam_traffic.shape)  # (272, 4)
 print(gangnam_velocity.shape) # (272, 4)
 print(hun_traffic.shape)      # (272, 4)
@@ -26,34 +29,61 @@ print(highway_traffic.shape)  # (272, 4)
 print(highway_velocity.shape) # (272, 4)
 
 gangnam_velocity = gangnam_velocity.values
-
-
 print(type(gangnam_velocity))
 
-gang_vel_x = gangnam_velocity[ :271 , :3]
-gang_vel_y = gangnam_velocity[ 1: , 3]
-
-print(gang_vel_x.shape)
-print(gang_vel_y.shape)
-
-gang_vel_x = gang_vel_x.reshape(271, 3, 1)
+# scaler = RobustScaler()
+# gangnam_velocity = scaler.fit_transform(gangnam_velocity)
 
 
+def split_xy (seq, time_steps, y_col) :
+    x,y = list(), list()
+    for i in range(len(gangnam_velocity)) :
+        x_end_numder = i + time_steps
+        y_end_numder = x_end_numder + y_col
+
+        if y_end_numder > len(gangnam_velocity):
+            break
+    
+        tmp_x = gangnam_velocity[i:x_end_numder, :]
+        tmp_y = gangnam_velocity[x_end_numder:y_end_numder, :]
+        x.append(tmp_x)
+        y.append(tmp_y)
+    
+    return np.array(x),np.array(y)
+
+x,y = split_xy(gangnam_velocity,3,1)
+        
+
+
+print("=============================")
+print(x)
+print(y)
+print(x.shape)
+print(y.shape) 
 
 from sklearn.model_selection import train_test_split
 x_train, x_test, y_train, y_test = train_test_split(
    
-    gang_vel_x, gang_vel_y, shuffle = False  , train_size = 0.8  
+    x, y, shuffle = False  , train_size = 0.8  
 )
 
-print(x_train.shape) 
-print(x_test.shape) 
-print(y_test.shape)
-print(type(x_test))
+print(x_train.shape)  # (215, 3, 4)
+print(y_train.shape)  # (215, 1, 4)
+ 
+print(x_test.shape)
 
-print(x_test[0])
-print(y_test[0])
+x_train = x_train.reshape(215,12)
+x_test = x_test.reshape(54,12)
 
+scaler = StandardScaler()
+x_train = scaler.fit_transform(x_train)
+x_test = scaler.transform(x_test)
+
+x_train = x_train.reshape(215,3,4)
+x_test = x_test.reshape(54,3,4)
+
+y_train = y_train.reshape(215,4)
+y_test = y_test.reshape(54,4)
 
 
 
@@ -61,40 +91,76 @@ print(y_test[0])
 
 model = Sequential()
 
-model.add(LSTM(50, input_shape= (3,1), activation = 'relu', return_sequences ='False' ))
-model.add(LSTM(50, activation = 'relu'))
-model.add(Dense(10, activation = 'relu'))
-model.add(Dense(5, activation = 'relu'))
-model.add(Dense(1))
+model.add(LSTM(24, activation='relu', input_shape = (3,4) ))
+model.add(BatchNormalization())
 
-model.summary()
+model.add(Dense(16, activation='relu'))
+model.add(BatchNormalization())
+
+model.add(Dense(32, activation='relu'))
+model.add(BatchNormalization())
+
+model.add(Dense(32, activation='relu'))
+model.add(BatchNormalization())
+
+model.add(Dense(12, activation='relu'))
+model.add(BatchNormalization())
+
+model.add(Dense(6, activation='relu'))
+model.add(BatchNormalization())
+
+
+
+model.add(Dense(4))
+
 
 # 훈련 
 
 from keras.callbacks import EarlyStopping
-ealry_stopping= EarlyStopping(monitor='loss', patience= 20,  mode = 'auto') 
+ealry_stopping= EarlyStopping(monitor='loss', patience=5,  mode = 'auto') 
 
 
-model.compile(optimizer='adam', loss = 'mse')
-model.fit(x_train,y_train, epochs=10000, callbacks= [ealry_stopping], batch_size=5)
+model.compile(optimizer='adam', loss = 'mse', metrics=['mse'])
+model.fit( x_train, y_train, epochs=10000, callbacks= [ealry_stopping], batch_size=1, validation_split=0.2)
 
 # 평가 및 예측
 
 
 
-# loss, mse = model.evaluate(x_test, y_test, batch_size=5)
+loss, mse = model.evaluate(x_test, y_test, batch_size=1)
 
-x_predict = np.array([25.55,26.09,25.9])
+x_predict = np.array([[[28.65,24.03,25.7,22.43],
+                      [24.28,25.94,23.67,19.95],
+                      [25.55,26.09,25.9,20.76]],
+                      [[25.09,23.12,19.5,21.56],
+                      [28.65,24.03,25.7,22.43],
+                      [24.28,25.94,23.67,19.95]]])
 
-x_predict = x_predict.reshape(1,3,1)
 
 y_predict = model.predict(x_predict)
+y_real = [[30.42, 23.52, 25.74, 28.62],[25.55,26.09,25.9,20.76]]
 
 
+print("loss : ", loss)
+print("mse : ", mse)
+print("y_predict : ",y_predict)
+print("y_real : ", y_real )
 
-# print("loss : ", loss)
-# print("mse : ", mse)
+from sklearn.metrics import r2_score
+r2 = r2_score(y_real, y_predict)
 
-print("y_predict : ", y_predict)
+print("R2 score : ", r2)
 
-y_predict :  [[23.73917]]
+
+test_predictions = model.predict(x_train).flatten()
+
+plt.scatter(y_train, test_predictions)
+plt.xlabel('True Values')
+plt.ylabel('Predictions')
+plt.axis('equal')
+plt.axis('square')
+plt.xlim([0,plt.xlim()[1]])
+plt.ylim([0,plt.ylim()[1]])
+_ = plt.plot([-10, 10], [-10, 10])
+
+plt.show()

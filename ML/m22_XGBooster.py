@@ -12,6 +12,7 @@ x_train,x_test ,y_train, y_test = train_test_split(
     cancer.data, cancer.target, shuffle = True, train_size = 0.8, random_state = 31
 )
 
+print(x_train.shape)
 
 # model = DecisionTreeClassifier(max_depth=4)
 # model = GradientBoostingClassifier(max_depth=4)
