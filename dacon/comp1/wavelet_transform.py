@@ -5,25 +5,24 @@ import pywt
 import math
 import matplotlib.pyplot as plt
 import seaborn as sns
+
+
 from keras import regularizers
-
 from keras.metrics import mae
-
 from keras.models import Sequential, Model
 from keras.layers import Dense, Dropout, MaxoutDense, LSTM, LeakyReLU, Input, Flatten
 from keras.utils import np_utils
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
-from sklearn.model_selection import KFold, cross_validate
 
-from xgboost import XGBRegressor, XGBModel
-
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler 
 from sklearn.multioutput import MultiOutputRegressor
-from pandas.plotting import scatter_matrix
-
 from sklearn.model_selection import KFold, cross_val_score
 from sklearn.metrics import mean_absolute_error
+from sklearn.model_selection import KFold, cross_validate
 
+from pandas.plotting import scatter_matrix
 
+from xgboost import XGBRegressor, XGBModel
 # 데이터 
 
 train = pd.read_csv('./data/dacon/comp1/train.csv', header = 0, index_col = 0)
@@ -41,6 +40,27 @@ train = train.fillna(method = 'bfill')
 test = test.fillna(method = 'bfill') 
 
 
+rho_10 = train[train['rho'].isin(['10'])]
+rho_15 = train[train['rho'].isin(['15'])]
+rho_20 = train[train['rho'].isin(['20'])]
+rho_25 = train[train['rho'].isin(['25'])]
+
+
+scaler = MinMaxScaler()
+train.iloc[ : , 36:71] = scaler.fit_transform(train.iloc[ : , 36:71])
+
+plt.scatter(train['650_src'],train['650_dst'], c = "k", cmap="Blues")
+plt.xlabel('True Values')
+plt.ylabel('Predictions')
+plt.axis('equal')
+plt.axis('square')
+plt.xlim([0,plt.xlim()[1]])
+plt.ylim([0,plt.ylim()[1]])
+_ = plt.plot([-10, 10], [-10, 10])
+
+plt.show()
+
+'''
 
 bx = np.array(train.iloc[ : , 1 :36])   # src
 (ca, cd) = pywt.dwt(bx, "haar")
@@ -72,11 +92,11 @@ y = np.array(train.iloc[ : , 71: ])
 from sklearn.model_selection import train_test_split
 x_train, x_test, y_train, y_test = train_test_split(
    
-    x,y, shuffle = True  , train_size = 0.8  
+    x,y, shuffle = True  , train_size = 0.8
 )
 
 # 표준화
-from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler 
+
 
 scaler = StandardScaler()
 x_train = scaler.fit_transform(x_train)
@@ -97,12 +117,12 @@ tx = pca.transform(tx)
 # 모델
 
 
-model = MultiOutputRegressor(XGBRegressor(learning_rate = 0.05, max_depth = 1, n_estimators = 500,  objective='reg:tweedie'))
+model = MultiOutputRegressor(XGBRegressor(learning_rate = 0.05, max_depth = 1, n_estimators = 500,  objective='reg:gamma', gamma=1))
 
 
 # 훈련
 early_stopping = EarlyStopping(monitor='loss', patience= 20, mode ='auto')
-kfold = KFold(n_splits=10, shuffle=True) 
+kfold = KFold(n_splits=5, shuffle=True) 
 
 model.fit(x_train,y_train)
 
@@ -111,7 +131,7 @@ model.fit(x_train,y_train)
 # 평가 및 예측
 
 # loss, mse = model.evaluate(x_test,y_test, batch_size=1)
-score = model.score(x_test,y_test)
+score = cross_val_score(model,x_test,y_test, cv = kfold)
 # print('loss : ', loss)
 # print('mae : ', mae )
 
@@ -137,3 +157,5 @@ predict.to_csv('./data/dacon/comp1/predict.csv', index_label='id')
 # _ = plt.plot([-10, 10], [-10, 10])
 
 # plt.show()
+
+'''
