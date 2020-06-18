@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 from keras.models import Sequential, Model, Input
-from keras.layers import Input, Dense , LSTM, Dropout, BatchNormalization, BatchNormalization
+from keras.layers import Input, Dense , LSTM, Dropout, BatchNormalization, BatchNormalization, Conv1D, Flatten
 from keras.callbacks import EarlyStopping
 import matplotlib.pyplot as plt
 
@@ -91,8 +91,10 @@ y_test = y_test.reshape(54,4)
 
 model = Sequential()
 
-model.add(LSTM(24, activation='relu', input_shape = (3,4) ))
+model.add(Conv1D(24,2, activation='relu', input_shape = (3,4) ))
 model.add(BatchNormalization())
+
+model.add(Flatten())
 
 model.add(Dense(16, activation='relu'))
 model.add(BatchNormalization())
