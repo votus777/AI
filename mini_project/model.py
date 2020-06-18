@@ -91,30 +91,17 @@ y_test = y_test.reshape(54,4)
 
 model = Sequential()
 
-model.add(Conv1D(24,2, activation='relu', input_shape = (3,4) ))
-model.add(BatchNormalization())
+model.add(Conv1D(64,1, activation='relu', input_shape = (3,4) ))
+model.add(Dropout(0.4))
 
 model.add(Flatten())
 
-model.add(Dense(16, activation='relu'))
-model.add(BatchNormalization())
-
-model.add(Dense(32, activation='relu'))
-model.add(BatchNormalization())
-
-model.add(Dense(32, activation='relu'))
-model.add(BatchNormalization())
-
-model.add(Dense(12, activation='relu'))
-model.add(BatchNormalization())
-
-model.add(Dense(6, activation='relu'))
-model.add(BatchNormalization())
-
-
+model.add(Dense(128, activation='relu'))
+model.add(Dropout(0.4))
 
 model.add(Dense(4))
 
+model.summary()
 
 # 훈련 
 
