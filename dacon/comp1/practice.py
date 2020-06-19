@@ -33,33 +33,69 @@ submission = pd.read_csv('./data/dacon/comp1/sample_submission.csv', header = 0,
 
 # pd.concat()
 
-src = train.iloc[ :, 1]
+src = train.iloc[ : , 1]
 dst = train.iloc[ : , 36]
 
 print(src.shape)
 print(dst.shape)
 
-concat = pd.concat([src,dst], axis=1)   # 650_src & 650_Dst 합쳐줌
+concat_base = pd.concat([src,dst], axis=1)   # 650_src & 650_Dst 합쳐줌
 
-concat = concat.dropna(axis=0)  #결측치 있는 값 제거 
+concat = concat_base.dropna(axis=0)  #결측치 있는 값 제거 
+
 print(concat.shape)
+
+print(concat.head(10))
 
 x = concat.iloc[ : , 0]
 y = concat.iloc[ : , 1]
 
-print(x.head())
-print(y.head())
+y = y.replace(0,0.001)
+
+print(y.head(10))
+
+x = x.values
+y = y.values
+
+x = x.reshape(8052,1)
+
+
+
+from sklearn.model_selection import train_test_split 
+x_train,x_test, y_train, y_test = train_test_split(x, y, train_size = 0.8, shuffle = 'Ture', random_state = 18)
+
+
+scaler = RobustScaler()
+x_train = scaler.fit_transform(x_train)
+x_test = scaler.transform(x_test)
+
 
 
 kfold = KFold(n_splits=5, shuffle=True)
 
-model = XGBRegressor( n_estimators=300, cv=5, n_jobs=6 )
+n_estimators = 1000
+learning_rate = 0.1  
+
+colsample_bytree = 0.9
+colsample_bylevel = 0.9  
+
+max_depth = 5
+n_jobs = -1 
+
+model = XGBRegressor(max_depth=max_depth, learning_rate= learning_rate, 
+                            n_estimators=n_estimators, n_jobs = n_jobs, 
+                            colsample_bylevel= colsample_bylevel)
+
+
+
+
+model.fit(x_train,y_train)
 
 scores = cross_val_score(model, x, y, cv= kfold)
 
-
-
 # predict = concat[concat['650_dst'].isin([''])]
-# score = model.score(y_test, y_pred)
+score = model.score(x_test, y_test)
 
-# print(predict.shape)
+print(score)
+
+concat.to_csv('./data/dacon/comp1/concat.csv', index_label='id')
