@@ -49,7 +49,7 @@ print(concat.shape)
 x = concat.iloc[ : , 0]
 y = concat.iloc[ : , 1]
 
-# x = x.replace(0,-1)
+x = x.replace(0,-1)
 y = y.replace(0,-0.001)
 
 x = x.values
@@ -68,21 +68,21 @@ x_train = scaler.fit_transform(x_train)
 x_test = scaler.transform(x_test)
 
 
-
 kfold = KFold(n_splits=5, shuffle=True)
 
 n_estimators = 1000
-learning_rate = 0.9
+learning_rate = 0.001
 
-colsample_bytree = 0.7
-colsample_bylevel = 0.7 
+colsample_bytree = 0.9
+colsample_bylevel = 0.9 
 
 max_depth = 5
 n_jobs = -1 
 
-model = XGBRegressor(max_depth=max_depth, learning_rate= learning_rate, 
+model = LGBMRegressor(max_depth=max_depth, learning_rate= learning_rate, 
                             n_estimators=n_estimators, n_jobs = n_jobs, 
-                            colsample_bylevel= colsample_bylevel)
+                            colsample_bylevel= colsample_bylevel, num_leaves=90, 
+                            )
 
 
 
