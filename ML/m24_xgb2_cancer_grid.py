@@ -16,16 +16,6 @@ print(y.shape)
 x_train,x_test, y_train, y_test = train_test_split(x, y, train_size = 0.96, shuffle = 'True', random_state = 18)
 
 
-
-n_estimators = 10000
-learning_rate = 0.001
-
-colsample_bytree = 0.4 # ( 보통 0.6 ~ 0.9 사이 ) 개별 의사결정나무 모형에 사용될 변수갯수를 지정
-colsample_bylevel = 0.4  # ( 이하동문)  
-
-max_depth = 5
-n_jobs = -1 
-
 parameters = [ {"n_estimators" : [ 100, 200, 300], "learning_rate" : [ 0.001, 0.01, 0.1], "max_depth" : [4,5,6]},
                
                {"n_estimators" : [ 50, 200, 300], "learning_rate" : [ 0.001, 0.01, 0.1], 
@@ -38,7 +28,6 @@ parameters = [ {"n_estimators" : [ 100, 200, 300], "learning_rate" : [ 0.001, 0.
               ]
 
 xgb = XGBRegressor()
-
 
 model = GridSearchCV(xgb, parameters, cv =5, n_jobs= -1 )
 
