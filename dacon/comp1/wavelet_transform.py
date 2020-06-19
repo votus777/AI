@@ -23,6 +23,7 @@ from sklearn.model_selection import KFold, cross_validate
 from pandas.plotting import scatter_matrix
 
 from xgboost import XGBRegressor, XGBModel
+
 # 데이터 
 
 train = pd.read_csv('./data/dacon/comp1/train.csv', header = 0, index_col = 0)

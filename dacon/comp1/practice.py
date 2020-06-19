@@ -1,23 +1,29 @@
 
 import numpy as np
 import pandas as pd
+import pywt
 import math
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from keras.metrics import mae
 
+from keras import regularizers
+from keras.metrics import mae
 from keras.models import Sequential, Model
-from keras.layers import Dense, Dropout, MaxoutDense, LSTM, LeakyReLU
+from keras.layers import Dense, Dropout, MaxoutDense, LSTM, LeakyReLU, Input, Flatten
 from keras.utils import np_utils
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
-from sklearn.model_selection import KFold, cross_validate
-from xgboost import XGBRegressor, XGBModel
 
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler 
 from sklearn.multioutput import MultiOutputRegressor
+from sklearn.model_selection import KFold, cross_val_score
+from sklearn.metrics import mean_absolute_error
+from sklearn.model_selection import KFold, cross_validate
+
 from pandas.plotting import scatter_matrix
 
-from sklearn.model_selection import KFold, cross_val_score
+from xgboost import XGBRegressor, XGBModel
+from lightgbm import LGBMRegressor
 
 # 데이터 
 
@@ -25,94 +31,35 @@ train = pd.read_csv('./data/dacon/comp1/train.csv', header = 0, index_col = 0)
 test = pd.read_csv('./data/dacon/comp1/test.csv', header = 0, index_col = 0)
 submission = pd.read_csv('./data/dacon/comp1/sample_submission.csv', header = 0, index_col = 0)
 
+# pd.concat()
 
-train = train.interpolate(method='values') 
-test = test.interpolate(method='values') 
+src = train.iloc[ :, 1]
+dst = train.iloc[ : , 36]
 
-train = train.fillna(method = 'bfill') 
+print(src.shape)
+print(dst.shape)
 
-rho = train.sort_values(by =['rho'], axis=0)
+concat = pd.concat([src,dst], axis=1)   # 650_src & 650_Dst 합쳐줌
 
+concat = concat.dropna(axis=0)  #결측치 있는 값 제거 
+print(concat.shape)
 
-x = rho[["680_src","750_src","850_src","900_src"]]
-test =  rho[["680_src","750_src","850_src","900_src"]]
+x = concat.iloc[ : , 0]
+y = concat.iloc[ : , 1]
 
-x = x.iloc[ : , :71]
-y = rho.iloc [ :, 71: ]
-
-test = test.iloc[ : , :71]
-
-x = x.values
-test = test.values
-
-x1 = x[ :2457, :] * 10
-x2 = x[ 2457 : 4966, :] * 15
-x3 = x[ 4966 : 7444, : ] * 20
-x4 = x[ 7444 : 10001, : ] * 25
-
-x = np.concatenate((x1,x2,x3,x4), axis=0)
+print(x.head())
+print(y.head())
 
 
+kfold = KFold(n_splits=5, shuffle=True)
 
-from sklearn.model_selection import train_test_split
-x_train, x_test, y_train, y_test = train_test_split(
-   
-    x,y, shuffle = True  , train_size = 0.8  
-)
+model = XGBRegressor( n_estimators=300, cv=5, n_jobs=6 )
+
+scores = cross_val_score(model, x, y, cv= kfold)
 
 
 
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
+# predict = concat[concat['650_dst'].isin([''])]
+# score = model.score(y_test, y_pred)
 
-stand = StandardScaler()
-x_train = stand.fit_transform(x_train)
-x_test = stand.transform(x_test)
-test = stand.transform(test)
-
-
-# 모델
-
-model = Sequential()
-
-model.add(Dense(10,input_dim =4, activation='relu'))
-model.add(Dense(80, activation= 'relu'))
-model.add(Dropout(0.4))
-# model.add(Dense(40, activation= 'relu'))
-# model.add(Dropout(0.3))
-# model.add(Dense(20, activation= 'relu'))
-# model.add(Dropout(0.25))
-model.add(Dense(4, activation='relu'))
-
-
-
-# 훈련
-early_stopping = EarlyStopping(monitor='loss', patience= 50, mode ='auto')
-kfold = KFold(n_splits=10, shuffle=True) 
-
-model.compile (optimizer='adam', loss = 'mae', metrics=['mae'])
-hist = model.fit(x_train,y_train, verbose=1, batch_size=10,  epochs= 1000, callbacks=[early_stopping], use_multiprocessing=True, validation_split=0.25)
-
-
-# 평가 및 예측
-
-loss, mse = model.evaluate(x_test,y_test, batch_size=1)
-print('loss : ', loss)
-print('mae : ', mae )
-
-
-
-
-
-
-
-y_predict = model.predict(test)
-print(y_predict)
-
-'''
-# summit file 생성
-# y_predict = y_predict.to_csv('./data/dacon/comp1/predict.csv', columns=['hhb','hbo2','ca','na'])
-predict = pd.DataFrame(y_predict, columns=['hhb','hbo2','ca','na'])
-predict.index = np.arange(10000,20000)
-predict.to_csv('./data/dacon/comp1/predict.csv', index_label='id')
-
-'''
+# print(predict.shape)
