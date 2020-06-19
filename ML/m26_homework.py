@@ -78,6 +78,18 @@ for thresh in thresholds :
     
     print("Thresh=%.3f, n=%d, R2: %.2f%%" %(thresh, select_x_train.shape[1], score*100.0))
     
+'''
+
+참고로  이와 비슷한 방식으로
+
+select = RFE(RandomForestClassifier(n_estimators=100, random_state=42), n_features_to_select=40)
+
+RFE라는 걸 쓸 수도 있다고 한다. 
+
+
+'''
+
+
 
 '''
 XGBRegressor(base_score=0.5, booster='gbtree', colsample_bylevel=0.6,
