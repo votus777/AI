@@ -45,14 +45,12 @@ concat = concat_base.dropna(axis=0)  #결측치 있는 값 제거
 
 print(concat.shape)
 
-print(concat.head(10))
 
 x = concat.iloc[ : , 0]
 y = concat.iloc[ : , 1]
 
-y = y.replace(0,0.001)
-
-print(y.head(10))
+# x = x.replace(0,-1)
+y = y.replace(0,-0.001)
 
 x = x.values
 y = y.values
@@ -62,10 +60,10 @@ x = x.reshape(8052,1)
 
 
 from sklearn.model_selection import train_test_split 
-x_train,x_test, y_train, y_test = train_test_split(x, y, train_size = 0.8, shuffle = 'Ture', random_state = 18)
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size = 0.8, shuffle = 'True', random_state = 18)
 
 
-scaler = RobustScaler()
+scaler = StandardScaler()
 x_train = scaler.fit_transform(x_train)
 x_test = scaler.transform(x_test)
 
@@ -74,10 +72,10 @@ x_test = scaler.transform(x_test)
 kfold = KFold(n_splits=5, shuffle=True)
 
 n_estimators = 1000
-learning_rate = 0.1  
+learning_rate = 0.9
 
-colsample_bytree = 0.9
-colsample_bylevel = 0.9  
+colsample_bytree = 0.7
+colsample_bylevel = 0.7 
 
 max_depth = 5
 n_jobs = -1 
@@ -99,3 +97,14 @@ score = model.score(x_test, y_test)
 print(score)
 
 concat.to_csv('./data/dacon/comp1/concat.csv', index_label='id')
+
+# plt.scatter(x_test, y_test)
+# plt.xlabel('True Values')
+# plt.ylabel('Predictions')
+# plt.axis('equal')
+# plt.axis('square')
+# plt.xlim([0,plt.xlim()[1]])
+# plt.ylim([0,plt.ylim()[1]])
+# _ = plt.plot([-10, 10], [-10, 10])
+
+# plt.show()

@@ -1,13 +1,9 @@
 
-
 '''
-
 과적합 방지 
-
 1. 훈련 데이터량을 늘린다. 
 2. 피쳐 수를 줄인다.     -> 이걸 여기서 해보자   # feature engineering
 3. regularization 
-
 '''
 
 
@@ -55,7 +51,5 @@ print(model.feature_importances_)
 # plt.show()
 
 '''
-
 점수 :  0.9627799562644529
-
 '''
