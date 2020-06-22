@@ -78,6 +78,7 @@ for thresh in thresholds :
     
     print("Thresh=%.3f, n=%d, R2: %.2f%%" %(thresh, select_x_train.shape[1], score*100.0))
     
+    
 '''
 
 참고로  이와 비슷한 방식으로

@@ -7,8 +7,10 @@ import matplotlib.pyplot as plt
 
 dataset = load_iris()
 
-x = dataset.data
-y = dataset.target 
+# x = dataset.data
+# y = dataset.target 
+
+x, y = load_iris(return_X_y=True)
 
 print(x.shape)  # (150, 4)
 print(y.shape)  # (150,)

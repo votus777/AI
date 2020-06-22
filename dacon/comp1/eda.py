@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-
+import pywt
 import seaborn as sns
 import matplotlib.pyplot as plt
 
@@ -18,6 +18,7 @@ from sklearn.ensemble import RandomForestRegressor
 import warnings ; warnings.filterwarnings('ignore')
 import time
 from sklearn.metrics import f1_score, roc_auc_score, classification_report
+from sklearn.metrics import mean_absolute_error
 
 
 train=pd.read_csv('./data/dacon/comp1/train.csv', index_col='id')
@@ -25,11 +26,25 @@ test=pd.read_csv( './data/dacon/comp1/test.csv', index_col='id')
 submission=pd.read_csv('./data/dacon/comp1/sample_submission.csv', index_col='id')
 
 
+
+
 feature_names=list(test)
 target_names=list(submission)
 
 Xtrain = train[feature_names]
 Xtest = test[feature_names]
+
+bx = np.array(Xtrain)   # src
+(ca, cd) = pywt.dwt(bx, "haar")
+cat = pywt.threshold(ca, np.std(ca), mode="hard")
+cdt = pywt.threshold(cd, np.std(cd), mode="hard")
+x = pywt.idwt(cat, cdt, "haar")
+
+bt = np.array(Xtest)   # test
+(ca, cd) = pywt.dwt(bt, "haar")
+cat = pywt.threshold(ca, np.std(ca), mode="hard")
+cdt = pywt.threshold(cd, np.std(cd), mode="hard")
+tx = pywt.idwt(cat, cdt, "haar")
 
 Ytrain=train[target_names]
 Ytrain1=Ytrain['hhb']
@@ -44,12 +59,12 @@ base_params={"n_estimators" : 500, "learning_rate" :  0.1,
                          
                                
 
-base_model= xg(n_estimators = 500, learning_rate=  0.1,
-                 max_depth= 4, colsample_bytree=0.6, colsample_bylevel=0.6,gamma= 0.1, n_jobs= -1,
-                 objective='reg:squarederror', random_state=1)
+base_model= xg(n_estimators = 1200, learning_rate=  0.1,
+                 max_depth= 4, colsample_bytree=0.8, colsample_bylevel=0.8,gamma= 0.1, n_jobs= -1,
+                 objective='reg:squarederror', random_state=31)
 
 multi_model=MultiOutputRegressor(base_model)
-
+  
 
 def model_scoring_cv(model, x, y, cv=5):
     start=time.time()
@@ -80,7 +95,6 @@ for i in tqdm(Xtrain.index):
     
 for i in tqdm(Xtest.index):
     beta.loc[i] = beta.loc[i].interpolate()
-
 
 alpha.loc[alpha['900_dst'].isnull(),'900_dst']=alpha.loc[alpha['900_dst'].isnull(),'910_dst']
 alpha.loc[alpha['910_dst'].isnull(),'910_dst']=alpha.loc[alpha['910_dst'].isnull(),'920_dst']
@@ -161,13 +175,13 @@ beta.loc[beta['670_dst'].isnull(),'670_dst']=beta.loc[beta['670_dst'].isnull(),'
 beta.loc[beta['660_dst'].isnull(),'660_dst']=beta.loc[beta['660_dst'].isnull(),'670_dst']
 beta.loc[beta['650_dst'].isnull(),'650_dst']=beta.loc[beta['650_dst'].isnull(),'660_dst']
 
-
 Xtrain[dst_list] = np.array(alpha)
 Xtest[dst_list] = np.array(beta)
 
-for col in dst_list:
+for col in dst_list:  # 주파수는 거리 제곱에 비례 
     Xtrain[col] = Xtrain[col] * (Xtrain['rho'] ** 2)
-    Xtest[col] = Xtest[col] * (Xtest['rho']**2)
+    Xtest[col] = Xtest[col] * (Xtest['rho'] ** 2)
+    
     
 
 gap_feature_names=[]
@@ -244,11 +258,14 @@ model_scoring_cv(multi_model, Xtrain, Ytrain)
 multi_model.fit(Xtrain, Ytrain)
 preds=multi_model.predict(Xtest)
 
+
 preds=pd.DataFrame(data=preds, columns=submission.columns, index=submission.index)
 preds.head()
 print(preds)
 
+predict2=pd.read_csv('./data/dacon/comp1/predict.csv', index_col='id')
+print("mae : ", mean_absolute_error(preds,predict2))
 
 predict = pd.DataFrame(preds, columns=['hhb','hbo2','ca','na'])
 predict.index = np.arange(10000,20000)
-predict.to_csv('./data/dacon/comp1/predict.csv', index_label='id')
+predict.to_csv('./data/dacon/comp1/predict2.csv', index_label='id')
