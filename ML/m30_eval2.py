@@ -61,3 +61,33 @@ plt.title('XGBoost error')
 
 plt.show()
 
+'''
+[1]     validation_0-error:0.02747      validation_1-error:0.08696
+[2]     validation_0-error:0.01832      validation_1-error:0.04348
+[3]     validation_0-error:0.01282      validation_1-error:0.08696
+[4]     validation_0-error:0.01099      validation_1-error:0.00000
+[5]     validation_0-error:0.01099      validation_1-error:0.00000
+[6]     validation_0-error:0.01099      validation_1-error:0.00000
+[7]     validation_0-error:0.01099      validation_1-error:0.00000
+[8]     validation_0-error:0.00916      validation_1-error:0.00000
+[9]     validation_0-error:0.01099      validation_1-error:0.00000
+[10]    validation_0-error:0.00916      validation_1-error:0.00000
+[11]    validation_0-error:0.00916      validation_1-error:0.00000
+[12]    validation_0-error:0.00916      validation_1-error:0.00000
+[13]    validation_0-error:0.00916      validation_1-error:0.00000
+[14]    validation_0-error:0.00916      validation_1-error:0.00000
+[15]    validation_0-error:0.00549      validation_1-error:0.00000
+[16]    validation_0-error:0.00549      validation_1-error:0.00000
+[17]    validation_0-error:0.00549      validation_1-error:0.00000
+[18]    validation_0-error:0.00549      validation_1-error:0.00000
+[19]    validation_0-error:0.00549      validation_1-error:0.00000
+[20]    validation_0-error:0.00549      validation_1-error:0.00000
+[21]    validation_0-error:0.00549      validation_1-error:0.00000
+[22]    validation_0-error:0.00549      validation_1-error:0.00000
+[23]    validation_0-error:0.00549      validation_1-error:0.00000
+[24]    validation_0-error:0.00549      validation_1-error:0.00000
+Stopping. Best iteration:
+[4]     validation_0-error:0.01099      validation_1-error:0.00000
+
+Acc score : 100.00f%
+'''

@@ -74,6 +74,9 @@ x_train, x_test, y_train, y_test = train_test_split(
     x,y, shuffle = True  , train_size = 0.8
 )
 
+kfold = KFold(n_splits=5, shuffle=True)  # 5개로 나누고,  검증이 5번 일어난다 
+
+
 # 표준화
 
 scaler = StandardScaler()
@@ -86,14 +89,14 @@ x_test = scaler.transform(x_test)
 
 
 base_params =  {"n_estimators" : [500,1000 ], "learning_rate" : [ 0.001, 0.01, 0.1],
-                 "max_depth" : [4,5,6], "colsample_bytree":[0.6, 0.9, 1], "colsample_bylevel" : [0.6, 0.7, 0.9],"gamma" : [0.1, 0.5, 0.9], "n_jobs" : [-1],
+                 "max_depth" : [4,6], "colsample_bytree":[0.6, 0.9], "colsample_bylevel" : [0.6, 0.9],"gamma" : [0.1, 0.9], "n_jobs" : [-1],
                  "objective":['reg:squarederror',  'reg:squaredlogerror'],"random_state":[1],
-                 "subsample" : [ 0.7, 0.8, 0.9], "reg_alpha" : [5,6,7]} 
+                 "subsample" : [ 0.7, 0.9], "reg_alpha" : [5,7]} 
                          
 
 xgb = xg()             
     
-grid = GridSearchCV(xgb, base_params, cv =5, n_jobs= -1 ) 
+grid = GridSearchCV(xgb, base_params, cv =kfold, n_jobs= -1 ) 
     
         
 grid.fit(x_train, y_train)   
@@ -115,6 +118,7 @@ print('========================')
 # thresholds = np.sort(model.feature_importances_)
 
 # print(thresholds)
+
 '''
 # Select from Model 
 for thresh in thresholds :     

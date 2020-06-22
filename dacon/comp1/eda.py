@@ -36,14 +36,14 @@ Xtest = test[feature_names]
 
 bx = np.array(Xtrain)   # src
 (ca, cd) = pywt.dwt(bx, "haar")
-cat = pywt.threshold(ca, np.std(ca), mode="hard")
-cdt = pywt.threshold(cd, np.std(cd), mode="hard")
+cat = pywt.threshold(ca, np.std(ca), mode="soft")
+cdt = pywt.threshold(cd, np.std(cd), mode="soft")
 x = pywt.idwt(cat, cdt, "haar")
 
 bt = np.array(Xtest)   # test
 (ca, cd) = pywt.dwt(bt, "haar")
-cat = pywt.threshold(ca, np.std(ca), mode="hard")
-cdt = pywt.threshold(cd, np.std(cd), mode="hard")
+cat = pywt.threshold(ca, np.std(ca), mode="soft")
+cdt = pywt.threshold(cd, np.std(cd), mode="soft")
 tx = pywt.idwt(cat, cdt, "haar")
 
 Ytrain=train[target_names]
@@ -208,6 +208,8 @@ for dst_col, src_col in zip(dst_list, src_list):
     delta_ratio = dst_val / src_val
     Xtest[dst_col + '_' + src_col + '_ratio'] = delta_ratio
     
+ # 이산 푸리에 변환    
+ 
 alpha_real=Xtrain[dst_list]
 alpha_imag=Xtrain[dst_list]
 
