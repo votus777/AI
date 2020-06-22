@@ -11,7 +11,7 @@ dataset = load_breast_cancer()
 # x = dataset.data
 # y = dataset.target 
 
-x, y = load_iris(return_X_y=True)
+x, y = load_breast_cancer(return_X_y=True)
 
 print(x.shape)  
 print(y.shape) 

@@ -30,8 +30,7 @@ import matplotlib.pyplot as plt
 
 dataset = load_boston()
 
-x = dataset.data
-y = dataset.target 
+x, y = load_boston(return_X_y=True)
 
 print(x.shape)  
 print(y.shape) 
