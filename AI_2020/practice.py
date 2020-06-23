@@ -1,7 +1,8 @@
 import numpy as np
 import pandas as pd
 
-
+from keras import Sequential
+from keras.layers import LSTM, Dense, Dropout
 # train = pd.read_csv('/tf/notebooks/train.csv', header = 0, index_col = 0)
 # val = pd.read_csv('/tf/notebooks/validate.csv', header = 0, index_col = 0)
 # test = pd.read_csv('/tf/notebooks/test.csv', header = 0, index_col = 0)
