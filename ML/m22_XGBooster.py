@@ -16,7 +16,7 @@ print(x_train.shape)
 
 # model = DecisionTreeClassifier(max_depth=4)
 # model = GradientBoostingClassifier(max_depth=4)
-model = XGBClassifier(max_depth = 4)
+model = XGBClassifier(max_depth = 4, gpu_id=0, tree_method='gpu_hist')  # GPU 버전 XGboost 
 
 model.fit(x_train,y_train)
 

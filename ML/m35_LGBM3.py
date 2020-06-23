@@ -31,7 +31,7 @@ for thres in threshold:
     select_x_train = selection.transform(x_train)
     select_x_test = selection.transform(x_test)
 
-    selection_model = LGBMClassifier(objective='multiclass', n_estimators = 100, learning_rate = 0.05, n_jobs = -1) 
+    selection_model = LGBMClassifier(objective='multi:softmax', n_estimators = 100, learning_rate = 0.05, n_jobs = -1) 
 
     selection_model.fit(select_x_train, y_train, verbose= False, eval_metric= ['multi_logloss', 'multi_error'],
                                         eval_set= [(select_x_train, y_train), (select_x_test, y_test)],
@@ -45,7 +45,7 @@ for thres in threshold:
     # result = selection_model.evals_result()
     # print("eval's result : ", result)
     
-    model.save_model("./model/sample/iris/iris_rmse=%.3f-r2=%.2f.model"%(thres, acc))
+    # model.save_model("./model/sample/iris/iris_rmse=%.3f-r2=%.2f.model"%(thres, acc))
 
 end = time.time() - start
 print(" 걸린 시간 :", end)
