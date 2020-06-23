@@ -78,3 +78,5 @@ print(b3)
 #             b    77.0
 # Name: 0.75, dtype: float64
 # (array([0, 3], dtype=int64), array([1, 0], dtype=int64))
+
+# from JAJA's
