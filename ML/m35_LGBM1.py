@@ -7,6 +7,7 @@ from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import r2_score, mean_squared_error
 import matplotlib.pyplot as plt
 import numpy as np
+from sklearn.externals import joblib
 
 # 회귀 모델
 x, y = load_boston(return_X_y=True)
