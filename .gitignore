@@ -1,0 +1,12 @@
+AI_2020/task19/test_data/test_EPM.csv
+AI_2020/task19/test_data/test_proton.csv
+AI_2020/task19/test_data/test_SWE.csv
+AI_2020/task19/test_data/test_xray.csv
+AI_2020/task19/train_data/train_EPM.csv
+AI_2020/task19/train_data/train_proton.csv
+AI_2020/task19/train_data/train_SWE.csv
+AI_2020/task19/train_data/train_xray.csv
+AI_2020/task19/val_data/val_EPM.csv
+AI_2020/task19/val_data/val_proton.csv
+AI_2020/task19/val_data/val_SWE.csv
+AI_2020/task19/val_data/val_xray.csv
