@@ -18,6 +18,7 @@ train = pd.read_csv('./AI_2020/train.csv', header = 1, index_col = [0,1])
 val = pd.read_csv('./AI_2020/val.csv', header = 1, index_col = [0,1])
 test = pd.read_csv('./AI_2020/test.csv', header = 1, index_col = [0,1])
 
+
 train.index.freq = 'MS'
 ax = train['경부선'].plot(figsize = (180,50))
 ax.set(xlabel='Dates', ylabel='Total');
