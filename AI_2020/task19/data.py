@@ -20,10 +20,9 @@ swe = pd.read_csv('AI_2020\\task19\\train_data\\train_SWE.csv', header = 0, inde
 xray = pd.read_csv('AI_2020\\task19\\train_data\\train_xray.csv', header = 0, index_col = 0)
 proton = pd.read_csv('AI_2020\\task19\\train_data\\train_proton.csv', header = 0, index_col = 0)
 
-print(epm.iloc[1])
-print(swe.iloc[1])
-print(xray.iloc[1])
-print(proton.iloc[1])
+print(swe.iloc[10000])
+
+print(proton.iloc[10000])
 
 
 
@@ -74,8 +73,8 @@ swe.info()
 Data columns (total 2 columns):
  #   Column           Dtype
 ---  ------           -----
- 0   H_DENSITY_#/cc   float64
- 1   SW_H_SPEED_km/s  float64
+ 0   H_DENSITY_#/cc   float64            H_DENSITY_#/cc       5.7107   cm3
+ 1   SW_H_SPEED_km/s  float64            SW_H_SPEED_km/s    441.6400
  
 dtypes: float64(2)
 memory usage: 85.8+ MB
@@ -111,9 +110,9 @@ Proton : 지구 정지궤도에 있는 미국 GOES 위성에서 관측된 10MeV 
 Data columns (total 1 columns):
  #   Column  Non-Null Count   Dtype
 ---  ------  --------------   -----
- 0   proton  799488 non-null  float64
-dtypes: float64(1)
-memory usage: 12.2+ MB
+ 0   proton  799488 non-null  float64          proton    0.17
+dtypes: float64(1) 
+memory usage: 12.2+ MB 
 
 ===============================================================
 
