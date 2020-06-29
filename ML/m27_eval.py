@@ -39,7 +39,7 @@ acc = accuracy_score(y_pred, y_test)
 print("Acc score : %.2ff%%" %(acc*100.0))
 
 
-epochs = len(results['validation_0']['mlogloss'])
+epochs = len(results['validation_0']['logloss'])
 x_axis = range(0, epochs)
 
 

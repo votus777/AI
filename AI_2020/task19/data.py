@@ -1,30 +1,178 @@
+
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import pickle
-from sklearn.metrics import r2_score
-from sklearn.model_selection import train_test_split
-import joblib
-
-from statsmodels.tsa.arima_model import ARIMA
-
-from keras.models import Sequential 
-from keras.layers import LSTM, Dense, Dropout, Conv1D, Flatten 
-
-from xgboost import XGBRegressor, plot_importance
-from lightgbm import LGBMRegressor, LGBMClassifier 
 
 
-epm = pd.read_csv( 'AI_2020\\task19\\train_data\\train_EPM.csv', header = 0, index_col = 0)
-swe = pd.read_csv('AI_2020\\task19\\train_data\\train_SWE.csv', header = 0, index_col = 0)
-xray = pd.read_csv('AI_2020\\task19\\train_data\\train_xray.csv', header = 0, index_col = 0)
-proton = pd.read_csv('AI_2020\\task19\\train_data\\train_proton.csv', header = 0, index_col = 0)
+epm_train = pd.read_csv( 'AI_2020\\task19\\train_data\\train_EPM.csv', header = 0, index_col = 0)
+swe_train = pd.read_csv('AI_2020\\task19\\train_data\\train_SWE.csv', index_col='time_tag', parse_dates=True)
+xray_train = pd.read_csv('AI_2020\\task19\\train_data\\train_xray.csv',index_col='time_tag', parse_dates=True)
+proton_train = pd.read_csv('AI_2020\\task19\\train_data\\train_proton.csv', header = 0, index_col = 0)
 
-print(swe.iloc[10000])
+epm_val = pd.read_csv('AI_2020\\task19\\val_data\\val_EPM.csv', header = 0, index_col = 0)
+swe_val = pd.read_csv('AI_2020\\task19\\val_data\\val_SWE.csv', index_col='time_tag', parse_dates=True)
+xray_val = pd.read_csv('AI_2020\\task19\\val_data\\val_xray.csv', index_col='time_tag', parse_dates=True)
+proton_val = pd.read_csv('AI_2020\\task19\\val_data\\val_proton.csv', header = 0, index_col = 0)
 
-print(proton.iloc[10000])
+epm_test = pd.read_csv('AI_2020\\task19\\test_data\\test_EPM.csv', header = 0, index_col = 0)
+swe_test = pd.read_csv('AI_2020\\task19\\test_data\\test_SWE.csv', index_col='time_tag', parse_dates=True)
+xray_test = pd.read_csv('AI_2020\\task19\\test_data\\test_xray.csv', index_col='time_tag', parse_dates=True)
+proton_test = pd.read_csv('AI_2020\\task19\\test_data\\test_proton.csv', header = 0, index_col = 0)
+ 
+
+# print(epm_train.shape)       # (782974, 8)
+# print(swe_train.shape)       # (3747609, 2)                               
+# print(xray_train.shape)      # (3997440, 2)                               
+# print(proton_train.shape)    # (799488, 1)                              
+  
+print(epm_val.shape)       # (782974, 8)
+print(swe_val.shape)       # (3747609, 2)                               
+print(xray_val.shape)      # (3997440, 2)                               
+print(proton_val.shape)    # (799488, 1)      
+                                 
+# print(epm_test.shape)     #  (564540, 8)
+# print(swe_test.shape)     # (2698655, 2)
+# print(xray_test.shape)    # (2875680, 2)
+# print(proton_test.shape)   # (575136, 1)
 
 
+
+
+
+# 결측치 '-100'을 nan으로 바꾸기
+epm_train = epm_train.replace(-100 , float("nan"))
+swe_train = swe_train.replace(-100 , float("nan"))
+xray_train = xray_train.replace(-100 , float("nan"))
+proton_train = proton_train.replace(-100 , float("nan"))
+
+epm_val = epm_val.replace(-100 , float("nan"))
+swe_val = swe_val.replace(-100 , float("nan"))
+xray_val = xray_val.replace(-100 , float("nan"))
+proton_val = proton_val.replace(-100 , float("nan"))
+
+epm_test = epm_test.replace(-100 , float("nan"))
+swe_test = swe_test.replace(-100 , float("nan"))
+xray_test = xray_test.replace(-100 , float("nan"))
+proton_test = proton_test.replace(-100 , float("nan"))
+
+
+# 결측치 보간 
+epm_train = epm_train.interpolate(method = 'linear') 
+swe_train = swe_train.interpolate(method = 'linear') 
+xray_train = xray_train.interpolate(method = 'linear') 
+proton_train = proton_train.interpolate(method = 'linear') 
+
+
+
+epm_val = epm_val.interpolate(method = 'linear') 
+swe_val = swe_val.interpolate(method = 'linear') 
+xray_val = xray_val.interpolate(method = 'linear') 
+proton_val = proton_val.interpolate(method = 'linear') 
+
+
+epm_test = epm_test.interpolate(method = 'linear') 
+swe_test = swe_test.interpolate(method = 'linear') 
+xray_test = xray_test.interpolate(method = 'linear') 
+proton_test = proton_test.interpolate(method = 'linear') 
+
+epm_train = epm_train.fillna(0)
+swe_train = swe_train.fillna(0)
+xray_train = xray_train.fillna(0)
+proton_train = proton_train.fillna(0)
+
+epm_val = epm_val.fillna(0)
+swe_val = swe_val.fillna(0)
+xray_val = xray_val.fillna(0)
+proton_val = proton_val.fillna(0)
+
+epm_test = epm_test.fillna(0)
+swe_test = swe_test.fillna(0)
+xray_test = xray_test.fillna(0)
+proton_test = proton_test.fillna(0)
+
+# 다운 샘플링 
+swe_train = swe_train.resample('5min').mean()
+xray_train = xray_train.resample('5min').mean()
+
+swe_val = swe_val.resample('5min').mean()
+xray_val = xray_val.resample('5min').mean()
+
+
+swe_test = swe_test.resample('5min').mean()
+xray_test = xray_test.resample('5min').mean()
+
+
+# Numpy array 변형
+epm_train = epm_train.values
+swe_train = swe_train.values
+xray_train = xray_train.values
+proton_train = proton_train.values
+
+epm_val = epm_val.values
+swe_val = swe_val.values
+xray_val = xray_val.values
+proton_val = proton_val.values
+
+epm_test = epm_test.values
+swe_test = swe_test.values
+xray_test = xray_test.values
+proton_test = proton_test.values
+
+
+
+# 제로 패딩 
+epm_train = np.pad(epm_train, ((16514, 0),(0,0)), 'constant', constant_values = 0)
+epm_val = np.pad(epm_val, ((22594, 0),(0,0)), 'constant', constant_values = 0)
+epm_test = np.pad(epm_test, ((11172, 0),(0,0)), 'constant', constant_values = 0)
+
+epm_val = epm_val[ : -288, : ]
+swe_val = swe_val[ : -288, : ]
+xray_val = xray_val[ : -288, : ]
+
+
+epm_test = epm_test[ : -576, : ]
+swe_test = swe_test[ : -576, : ]
+xray_test = xray_test[ : -576, : ]
+
+print('=======================')   
+
+print(epm_train.shape)       # (799488, 8)
+print(swe_train.shape)       # (799488, 2)                             
+print(xray_train.shape)      # (799488, 2)                              
+print(proton_train.shape)    # (799488, 1)                              
+   
+print('=======================')   
+                                 
+print(epm_val.shape)         # (718560, 8)
+print(swe_val.shape)         # (718560, 2)
+print(xray_val.shape)        # (718560, 2)
+print(proton_val.shape)      # (718560, 1)
+
+print('=======================')   
+
+print(epm_test.shape)        # (575136, 8)
+print(swe_test.shape)        # (575136, 2)
+print(xray_test.shape)       # (575136, 2)
+print(proton_test.shape)     # (575136, 1)
+
+# feature 병합 
+
+x_train = np.concatenate((epm_train, swe_train, xray_train), axis = 1) 
+x_val   = np.concatenate((epm_val, swe_val, xray_val), axis = 1) 
+x_test  = np.concatenate((epm_test ,swe_test, xray_test), axis = 1) 
+
+
+print(x_train.shape)         # (799488, 12)
+print(x_val.shape)           # (718560, 12)
+print(x_test.shape)          # (575136, 12)
+
+print('x_train_front :', x_train[ :10])
+print('x_val_front :', x_val[ : 10])
+print('x_test_front : ', x_test[ :10])
+
+
+print('x_train_back :', x_train[ -10 : ])
+print('x_val_back :', x_val[ -10 : ])
+print('x_test_back : ', x_test[ -10 : ])
 
 
 '''
@@ -95,6 +243,12 @@ Data columns (total 2 columns):
  
 dtypes: float64(2)
 memory usage: 91.5+ MB
+
+
+
+
+
+
 
 ==========================================================
 proton.info()
