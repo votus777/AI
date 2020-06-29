@@ -62,7 +62,6 @@ xray_train = xray_train.interpolate(method = 'linear')
 proton_train = proton_train.interpolate(method = 'linear') 
 
 
-
 epm_val = epm_val.interpolate(method = 'linear') 
 swe_val = swe_val.interpolate(method = 'linear') 
 xray_val = xray_val.interpolate(method = 'linear') 
