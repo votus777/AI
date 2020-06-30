@@ -119,9 +119,16 @@ proton_test = proton_test.values
 
 
 # 제로 패딩 
-epm_train = np.pad(epm_train, ((16514, 0),(0,0)), 'constant', constant_values = 0)
-epm_val = np.pad(epm_val, ((22594, 0),(0,0)), 'constant', constant_values = 0)
-epm_test = np.pad(epm_test, ((11172, 0),(0,0)), 'constant', constant_values = 0)
+# epm_train = np.pad(epm_train, ((16514, 0),(0,0)), 'constant', constant_values = 0)
+# epm_val = np.pad(epm_val, ((22594, 0),(0,0)), 'constant', constant_values = 0)
+# epm_test = np.pad(epm_test, ((11172, 0),(0,0)), 'constant', constant_values = 0)
+
+from keras.preprocessing import sequence
+
+epm_train = sequence.pad_sequences(epm_train, padding='pre', value=0,)
+print('===================')
+print(epm_train.shape)
+print(epm_train)
 
 epm_val = epm_val[ : -288, : ]
 swe_val = swe_val[ : -288, : ]

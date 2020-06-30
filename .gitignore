@@ -12,3 +12,10 @@ AI_2020/task19/val_data/val_SWE.csv
 AI_2020/task19/val_data/val_xray.csv
 AI_2020/task20/predict_1.csv
 AI_2020/task20/predict_lgbm2.csv
+submit.csv
+dacon/comp_jeju/submission.csv
+data/dacon/comp3/train_features.csv
+data/dacon/comp3/train_features.csv
+data/dacon/comp_jeju/submission.csv
+data/dacon/comp_jeju/train.csv
+

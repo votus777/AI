@@ -37,7 +37,7 @@ n_jobs = -1
 model = XGBRegressor(max_depth=max_depth, learning_rate= learning_rate, 
                             n_estimators=n_estimators, n_jobs = n_jobs, 
                             corsample_bytree = colsample_bytree,    
-                            colsample_bylevel= colsample_bylevel)
+                            colsample_bylevel= colsample_bylevel, gpu_id=0, tree_method='gpu_hist')
 
 model.fit(x_train,y_train)
 
