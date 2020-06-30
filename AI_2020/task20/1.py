@@ -90,7 +90,7 @@ def col_out(x,y):
 
         model = LGBMRegressor(learning_rate= 0.01, n_estimators=900, 
                         colsample_bytree = 0.6, n_jobs = -1, objective = 'regression', boosting_type='gbdt',
-                         metrics = 'rmse', random_state=42).fit(x,y_col)
+                         metrics = 'rmse', random_state=42 ).fit(x,y_col)
 
 
         scores = cross_val_score(model,x,y_col, cv=kfold, verbose= 2)

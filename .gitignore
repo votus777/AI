@@ -10,3 +10,5 @@ AI_2020/task19/val_data/val_EPM.csv
 AI_2020/task19/val_data/val_proton.csv
 AI_2020/task19/val_data/val_SWE.csv
 AI_2020/task19/val_data/val_xray.csv
+AI_2020/task20/predict_1.csv
+AI_2020/task20/predict_lgbm2.csv
