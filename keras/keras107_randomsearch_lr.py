@@ -66,15 +66,15 @@ def create_hyperparameters() :
     optimizers = [ 'rmsprop', 'adam', 'adadelta', 'nadam']
     learning_rate = [ 0.1, 0.05, 0.01, 0.005, 0.001, 0.0001]  # keras107 -> learning rate parameter 추가 
     dropout = [ 0.1, 0.2, 0.3, 0.4, 0.5]    # start ~ end 사이의 값을 개수만큼 생성하여 배열로 반환합니다.
-    epoch = [ 200,400,800,1000]
+    epoch = [ 200,400,800, 1000]
     # epoch, node 개수, activation, etc..
     return{"batch_size" :  batches, "optimizer": optimizers, "learning_rate" : learning_rate, "drop" : dropout, 'epoch' : epoch }  # girdsearch 가 dictionary 형태로 값을 받기 때문에 return도 dict형태로 맞춰준다 
 
 
 from keras.wrappers.scikit_learn import KerasClassifier, KerasRegressor  
-# keras.wrappers.scikit_learn.py의 래퍼를 통해 Sequential 케라스 모델을 (단일 인풋에 한정하여) Scikit-Learn 작업의 일부로 사용할 수 있습니다.
 
-model = KerasClassifier(build_fn=bulid_model, verbose = 2)   # 지금 여기에 다른 parameter 넣으면 오류난다. 위에 hyperparameter에 넣어준다 
+
+model = KerasClassifier(build_fn=bulid_model, verbose = 2) 
 
 hyperparameters = create_hyperparameters()
 
