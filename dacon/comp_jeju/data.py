@@ -31,6 +31,9 @@ sample = sample.drop(['CARD_CCG_NM','HOM_CCG_NM'], axis=1)
 sample.to_csv('data\\dacon\\comp_jeju\\sample.csv', encoding='utf-8-sig')
 
 
+
+
+
 '''
 
 data.info()

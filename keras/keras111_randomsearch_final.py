@@ -42,16 +42,16 @@ print(y_test.shape)  # (10000, 9)
 # 모델 
 
 
-def bulid_model(drop=0.5, optimizer = 'adam', learning_rate = 0.08, epochs = 50) :  # 여기에도 learning_rate,epoch 변수 추가 해준다 
+def bulid_model(drop, optimizer, learning_rate, epochs, activation) :  # 여기에도 learning_rate,epoch 변수 추가 해준다 
 
     inputs = Input(shape=(784, ), name= 'inputs')  
-    x = Dense(64, activation=tf.math.sin, name= 'hidden1', )(inputs)
+    x = Dense(64, activation=activation, name= 'hidden1', )(inputs)
     x = Dropout(drop)(x)
-    x = Dense(256, activation=tf.math.sin, name = 'hidden2')(x)
+    x = Dense(256, activation=activation, name = 'hidden2')(x)
     x = Dropout(drop)(x)
-    x = Dense(256, activation=tf.math.sin, name = 'hidden3')(x)
+    x = Dense(256, activation=activation, name = 'hidden3')(x)
     x = Dropout(drop)(x)
-    x = Dense(128, activation=tf.math.sin, name = 'hidden4')(x)
+    x = Dense(128, activation=activation, name = 'hidden4')(x)
     x = Dropout(drop)(x)
     outputs = Dense(9, activation='softmax', name= 'outputs')(x)
 
@@ -64,13 +64,12 @@ def create_hyperparameters() :
     optimizers = [ 'rmsprop', 'adam', 'adadelta', 'nadam']
     learning_rate = [ 0.1, 0.05, 0.01, 0.005, 0.001, 0.0001]  # keras107 -> learning rate parameter 추가 
     dropout = [ 0.1, 0.2, 0.3, 0.4, 0.5]    # start ~ end 사이의 값을 개수만큼 생성하여 배열로 반환합니다.
-    epochs = [ 100]
+    epochs = [ 20,80]
+    activation = [ 'relu', 'elu', 'tanh', 'selu']
     # epoch, node 개수, activation, etc..
-    return{"batch_size" :  batches, "optimizer": optimizers, "learning_rate" : learning_rate, "drop" : dropout, 'epochs' : epochs }  # girdsearch 가 dictionary 형태로 값을 받기 때문에 return도 dict형태로 맞춰준다 
-
+    return{"batch_size" :  batches, "optimizer": optimizers, "learning_rate" : learning_rate, "drop" : dropout, 'epochs' : epochs, 'activation' : activation }  # girdsearch 가 dictionary 형태로 값을 받기 때문에 return도 dict형태로 맞춰준다 
 
 from keras.wrappers.scikit_learn import KerasClassifier, KerasRegressor  
-
 
 model = KerasClassifier(build_fn=bulid_model, verbose = 2) 
 
@@ -91,15 +90,12 @@ print("val_scores : " ,val_scores)
 print( "acc : ", acc)
 
 
+
 '''
- - 1s - loss: 2.6658 - acc: 0.2784
-{'optimizer': 'rmsprop', 'learning_rate': 0.005, 'epoch': 40, 'drop': 0.5, 'batch_size': 300}
-val_scores :  [0.40281942 0.55625564 0.4938494 ]
-acc :  0.20409999787807465
 
-
-activation을 relu 에서 sin으로 바꾸었을 뿐인데..
-{'optimizer': 'adam', 'learning_rate': 0.01, 'epoch': 400, 'drop': 0.2, 'batch_size': 50}
-val_scores :  [0.74685061 0.77287728 0.78127813]
-acc :  0.8402000069618225
+activation function 추가 
+{'optimizer': 'adam', 'learning_rate': 0.01, 'epochs': 20, 'drop': 0.1, 'batch_size': 300, 'activation': 'tanh'}
+val_scores :  [nan nan nan]
+acc :  0.875
+3.68
 '''
