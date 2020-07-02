@@ -34,7 +34,7 @@ test = pd.read_csv('./AI_2020/task20/test.csv', header = 1, index_col = [0,1])
 
 # train = pd.DataFrame(np.insert(train.values, 2125, row, axis=0 )) # 3월 30일을 4월 6일 0 ~ 23값으로 치환 
 
-train = train.drop([2150], axis=0)  
+# train = train.drop([2150], axis=0)  
                  
 
 x = train.iloc[ :,  [ 1, 5, 6, 7, 19, 24, 25, 29, 31]]
@@ -58,13 +58,14 @@ x,y, train_size = 0.8, shuffle=True, random_state = 39)
 print(x_train.shape)  # (2334, 10)
 print(y_train.shape)  # (2334, 25)
 
-model = MultiOutputRegressor(LGBMRegressor(learning_rate= 0.01, n_estimators=1500, 
-                        colsample_bytree = 0.8, n_jobs = -1,  
-                        max_bin =100, boosting_type='gbdt' ) ).fit(x_train, y_train)
+model = MultiOutputRegressor(XGBRegressor(learning_rate= 0.01, n_estimators=1500, 
+                        colsample_bytree = 0.8, n_jobs = -1,   objective = 'reg:squarederror', 
+                        max_bin =100, boosting_type='gbdt', metrics = 'rmsle') ).fit(x_train, y_train)
+
 
 
 y_pred = model.predict(x_pred)
 
 predict = pd.DataFrame(y_pred)
 predict = predict.iloc[360: ]
-predict.to_csv('.\AI_2020\task20\predict_lgbm.csv', header=0, index=0)
+# predict.to_csv('.\AI_2020\task20\predict_lgbm.csv', header=0, index=0)

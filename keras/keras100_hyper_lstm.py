@@ -1,4 +1,5 @@
 import numpy as np
+import tensorflow as tf
 
 from keras.datasets import mnist
 from keras.utils import np_utils
@@ -43,11 +44,11 @@ print(y_test.shape)  # (10000, 9)
 def bulid_model(drop=0.5, optimizer = 'adam') :
 
     inputs = Input(shape=(28,28 ), name= 'inputs')  # (786,)
-    x = LSTM(64, activation='relu', name= 'hidden1', )(inputs)
+    x = LSTM(64, activation=tf.math.sin, name= 'hidden1', )(inputs)
     x = Dropout(drop)(x)
-    x = Dense(256, activation='relu', name = 'hidden2')(x)
+    x = Dense(256, activation=tf.math.sin, name = 'hidden2')(x)
     x = Dropout(drop)(x)
-    x = Dense(128, activation='relu', name = 'hidden3')(x)
+    x = Dense(128, activation=tf.math.sin, name = 'hidden3')(x)
     x = Dropout(drop)(x)
     outputs = Dense(9, activation='softmax', name= 'outputs')(x)
 
@@ -58,7 +59,7 @@ def bulid_model(drop=0.5, optimizer = 'adam') :
 def create_hyperparameters() : 
     batches = [100, 200, 300, 400, 500]
     optimizers = [ 'rmsprop', 'adam', 'adadelta']
-    dropout = np.linspace(0.1, 0.5, 5)    # start ~ end 사이의 값을 개수만큼 생성하여 배열로 반환합니다.
+    dropout = [ 0.1, 0.2, 0.3, 0.4, 0.5]     # start ~ end 사이의 값을 개수만큼 생성하여 배열로 반환합니다.
     # epoch, node 개수, activation, etc..
     return{"batch_size" :  batches, "optimizer": optimizers, "drop" : dropout }  # girdsearch 가 dictionary 형태로 값을 받기 때문에 return도 dict형태로 맞춰준다 
 
@@ -89,5 +90,10 @@ print( "acc : ", acc)
 {'optimizer': 'adam', 'drop': 0.4, 'batch_size': 500}
 val_scores :  [0.13077384 0.10441044 0.10891089]
 acc :  0.0957999974489212
+
+역시 sine로 바꾸니 달라진다 
+{'optimizer': 'adam', 'drop': 0.1, 'batch_size': 100}
+val_scores :  [0.62207556 0.64536452 0.58865887]
+acc :  0.843999981880188
 
 '''

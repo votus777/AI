@@ -1,4 +1,4 @@
-
+import os     
 
 import pandas as pd
 import numpy as np
@@ -7,6 +7,10 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import LabelEncoder
 
 from lightgbm import LGBMRegressor, LGBMClassifier 
+
+
+
+from catboost import  CatBoostRegressor
 
 
 def grap_year(data):
@@ -47,21 +51,8 @@ for column in encoders.keys():
     encoder = encoders[column]
     df_num[column] = encoder.transform(df[column])
     
-    
-    
-# feature, target 설정
 train_num = df_num.sample(frac=1, random_state=0)
 train_features = train_num.drop(['CSTMR_CNT','AMT', 'CNT'], axis=1)
-train_target = np.log1p(train_num['AMT'])
-
-# 훈련
-model = LGBMRegressor(learning_rate= 0.9, n_estimators=10000, 
-                        colsample_bytree = 0.9, n_jobs = -1, 
-                        objective = 'regression', boosting_type='dart',
-                        random_state=42 )
-
-model.fit(train_features, train_target)
-
 
 # 예측 템플릿 만들기
 CARD_SIDO_NMs = df_num['CARD_SIDO_NM'].unique()
@@ -84,7 +75,25 @@ for CARD_SIDO_NM in CARD_SIDO_NMs:
                             for month in months:
                                 temp.append([CARD_SIDO_NM, STD_CLSS_NM, HOM_SIDO_NM, AGE, SEX_CTGO_CD, FLC, year, month])
 temp = np.array(temp)
-temp = pd.DataFrame(data=temp, columns=train_features.columns)
+temp = pd.DataFrame(data=temp, columns=train_features.columns)    
+    
+# feature, target 설정
+train_num = df_num.sample(frac=1, random_state=0)
+train_features = train_num.drop(['CSTMR_CNT','AMT', 'CNT'], axis=1)
+train_target = np.log1p(train_num['AMT'])
+
+train_labels = train_num['AMT'] 
+
+train_pool = Pool(train_num, train_labels )
+test_pool =  Pool(temp) 
+
+# 훈련
+model = catboost()
+
+model.fit(train_features, train_target)
+
+
+
 
 # 예측
 pred = model.predict(temp)

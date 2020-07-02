@@ -69,7 +69,7 @@ y = np.array(y)
 
 
 
-kfold = KFold(n_splits=10, shuffle=False)  
+kfold = KFold(n_splits=5, shuffle=False)  
 
 # print(x_train.shape)  # (2316, 10)
 # print(y_train.shape)  # (2316, 25)
@@ -88,9 +88,9 @@ def col_out(x,y):
         y_col = y[ : , i]
 
 
-        model = LGBMRegressor(learning_rate= 0.01, n_estimators=900, 
-                        colsample_bytree = 0.6, n_jobs = -1, objective = 'regression', boosting_type='gbdt',
-                         metrics = 'rmse', random_state=42 ).fit(x,y_col)
+        model = XGBRegressor(learning_rate= 0.01, n_estimators=900, 
+                        colsample_bytree = 0.6, n_jobs = -1, objective = 'reg:squarederror', boosting_type='gbdt',
+                         metrics = 'rmsle', random_state=42).fit(x,y_col)
 
 
         scores = cross_val_score(model,x,y_col, cv=kfold, verbose= 2)

@@ -3,13 +3,18 @@ import numpy as np
 import pandas as pd
 
 import matplotlib.pyplot as plt
-
+import pandas_profiling
 
 # 데이터 
 
-train = pd.read_csv('./data/dacon/comp3/train_features.csv', header = 0, index_col = 0)
-target = pd.read_csv('./data/dacon/comp3/train_target.csv', header = 0, index_col = 0)
-test = pd.read_csv('./data/dacon/comp3/test_features.csv', header = 0, index_col = 0)
+train = pd.read_csv('./data/dacon_data/comp3/train_features.csv', header = 0, index_col = 0)
+target = pd.read_csv('./data/dacon_data/comp3/train_target.csv', header = 0, index_col = 0)
+test = pd.read_csv('./data/dacon_data/comp3/test_features.csv', header = 0, index_col = 0)
+
+profile = train.profile_report()
+print(profile)
+
+print('finish')
 
 # print(list(train.columns)) ['Time', 'S1', 'S2', 'S3', 'S4']
 

@@ -65,60 +65,38 @@ print(x_train.shape)  # (2316, 10)
 print(y_train.shape)  # (2316, 25)
 
 
-x_train = x_train.reshape(2316,10,1)
-x_test = x_test.reshape (579,10,1)
-x_val = x_val.reshape(720,10,1)
-x_pred = x_pred.reshape(720,10,1)
-
 start = time.time()
 
 
-model= Sequential()
+model = XGBRegressor(learning_rate= 0.01, 
+                      n_estimators=900, n_jobs = -1, 
+                    gpu_id=0, tree_method='gpu_hist', metrics = 'rmsle', objective='reg:squarederror')
 
-model.add(LSTM(1600, activation = 'relu', input_shape = (10,1)))
-
-model.add(Dense(3200,activation = 'relu'))
-model.add(BatchNormalization())
-
-model.add(Dense(1600,activation = 'relu'))
-model.add(BatchNormalization())
-
-model.add(Dense(3200,activation = 'relu'))
-model.add(BatchNormalization())
-
-model.add(Dense(6400,activation = 'relu'))
-model.add(BatchNormalization())
-
-model.add(Dense(6400,activation = 'relu'))
-model.add(BatchNormalization())
-
-model.add(Dense(1600,activation = 'relu'))
-model.add(BatchNormalization())
-
-model.add(Dense(800,activation = 'relu'))
-model.add(BatchNormalization())
-
-model.add(Dense(400,activation = 'relu'))
-model.add(BatchNormalization())
-
-
-model.add(Dense(25, activation= 'relu')) 
+model.fit(x_train,y_train)
 
 
 
-from keras.callbacks import EarlyStopping, ModelCheckpoint
-early_stopping = EarlyStopping( monitor='loss', patience= 10, mode ='auto')
 
-model.compile(loss = 'mse', optimizer='adam', metrics = ['mse'])
+# from keras.callbacks import EarlyStopping, ModelCheckpoint
+# early_stopping = EarlyStopping( monitor='loss', patience= 10, mode ='auto')
 
-hist = model.fit(x_train,y_train, epochs= 1000, batch_size= 20, validation_data=[x_val,y_val] ,callbacks= [early_stopping])
+# model.compile(loss = 'mse', optimizer='adam', metrics = ['mse'])
 
+# hist = model.fit(x_train,y_train, epochs= 1000, batch_size= 20, validation_data=[x_val,y_val] ,callbacks= [early_stopping])
 
-
-loss, mse = model.evaluate(x_test,y_test, batch_size=100)
+# loss, mse = model.evaluate(x_test,y_test, batch_size=100)
 
 
 end = time.time() - start
+
+valiation = model.predict(x_val)
+
+
+score = model.score(valiation,y_val)
+print('점수 : ', score)
+print('========================')
+print(model.feature_importances_)
+
 
 
 y_pred = model.predict(x_pred)
