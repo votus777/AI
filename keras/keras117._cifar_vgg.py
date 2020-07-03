@@ -12,7 +12,7 @@ from keras.optimizers import Adam
 (x_train, y_train),(x_test,y_test) = cifar10.load_data()
 
 
-vgg16 = VGG16(input_shape = (32, 32, 3), include_top = False)   # 현재 default input =   (None, 224, 224, 3)  
+# vgg16 = VGG16(input_shape = (32, 32, 3), include_top = False)   # 현재 default input =   (None, 224, 224, 3)  
 
 
 x_train  = x_train.reshape(50000,32,32,3).astype('float32')/255.0  
@@ -20,12 +20,12 @@ x_test  = x_test.reshape(10000,32,32,3).astype('float32')/255.0
 
 
 
-vgg16 = VGG16()
+vgg16 = VGG16(weights = 'imagenet', include_top = False, input_shape =  (32, 32, 3))
 
 
 model = Sequential()
 model.add(vgg16)
-# model.add(Flatten())
+model.add(Flatten())
 model.add(Dense(256))
 model.add(BatchNormalization())
 model.add(Activation('relu'))
@@ -54,3 +54,9 @@ print('accuracy : ', acc)
 print('val_loss :', loss)
 print('val_accuracy : ', acc)
 
+'''
+loss : 0.14341992903770412
+accuracy :  0.968559980392456
+val_loss : 0.14341992903770412
+val_accuracy :  0.968559980392456
+'''
