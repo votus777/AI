@@ -7,7 +7,7 @@ from keras.utils import np_utils
 from keras.models import Model 
 from keras.layers import Input, Conv2D, Dropout, Flatten, Dense, MaxPool2D, LSTM
 
-
+sin = tf.math.sin
 # RandomizedSearchCV 
 
 # 데이터 
@@ -60,11 +60,11 @@ def bulid_model(drop, optimizer, learning_rate, epochs, activation) :  # 여기�
     return model
 
 def create_hyperparameters() : 
-    batches = [50, 100, 200, 300, 500]
+    batches = np.linspace(100,1000,10).tolist()
     optimizers = [ 'rmsprop', 'adam', 'adadelta', 'nadam']
     learning_rate = [ 0.1, 0.05, 0.01, 0.005, 0.001, 0.0001]  # keras107 -> learning rate parameter 추가 
-    dropout = [ 0.1, 0.2, 0.3, 0.4, 0.5]    # start ~ end 사이의 값을 개수만큼 생성하여 배열로 반환합니다.
-    epochs = [ 20,80]
+    dropout = np.linspace(0.1,0.8,8).tolist()    # start ~ end 사이의 값을 개수만큼 생성하여 배열로 반환합니다.
+    epochs = np.linspace(100,1000,10).tolist()
     activation = [ 'relu', 'elu', 'tanh', 'selu']
     # epoch, node 개수, activation, etc..
     return{"batch_size" :  batches, "optimizer": optimizers, "learning_rate" : learning_rate, "drop" : dropout, 'epochs' : epochs, 'activation' : activation }  # girdsearch 가 dictionary 형태로 값을 받기 때문에 return도 dict형태로 맞춰준다 
