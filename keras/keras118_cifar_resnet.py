@@ -54,3 +54,9 @@ print('accuracy : ', acc)
 print('val_loss :', loss)
 print('val_accuracy : ', acc)
 
+'''
+loss : 0.14341992903770412
+accuracy :  0.968559980392456
+val_loss : 0.14341992903770412
+val_accuracy :  0.968559980392456
+'''
