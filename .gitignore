@@ -47,3 +47,7 @@ catboost_info/learn/events.out.tfevents
 best_m.hdf5
 jupyter/Untitled.ipynb
 jupyter/.ipynb_checkpoints/Untitled-checkpoint.ipynb
+
+
+catboost
+catboost_info

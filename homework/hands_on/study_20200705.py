@@ -14,7 +14,7 @@ model.compile(loss = ['mse','mse'], loss_weights = [0.9,0.1], optimizer='sgd')
 
 # 389p
 
-subclassing API 
+# subclassing API 
 
 class DeepModel (keras.model) :
   def __init__(self,units = 30, activation = 'relu', **kwargs):
@@ -61,7 +61,7 @@ history = model.fit(X_train, y_train, epochs= 30, validation_data = (X_vaild, y_
 
 # 이론적으로는 layer 하나로도 학습이 가능하다, 하지만 효율이 떨어질 것이다
 # 이전 레이어가 계산한 것을 받아먹기만 하면 되니까 여러 개층으로 나뉘어진다면 훨씬 효율적으로 학습할 수 있다. 
-# 그래서 다르 모델에서 기본적으로 학습한 것을 땡겨오는 transfer learning 방식이 있다. 
+# 그래서 다른 모델에서 기본적으로 학습한 것을 땡겨오는 transfer learning 방식이 있다. 
 # 예를 들어 이미지 쪽에서 저수준 구조, 점, 방향, 선 등은 또 다시 학습하기에는 비효율적이니까 
 
 # 스트레치 팬츠 - > 처음부터 맞는 사이즈를 찾는 것보다 일단 큰 옷을 입어보고 사이즈를 줄여나가자 
@@ -75,7 +75,7 @@ history = model.fit(X_train, y_train, epochs= 30, validation_data = (X_vaild, y_
 
 # vanishing gradient  ->  입력층의 분산보다 츌력층의 분산이 커서 마지막 층에는 거의 아무것도 도달하지 않는 현상 
 # 이를 방지하기 위해 각 층의 가중치들 중에서 랜덤으로 초기화시켜버린다. 
-# 이런 초기화 전략으로 글로럿,He(Relu), 르쿤(SELU) 등등이 있다
+# 이런 초기화 전략으로 글로럿, He(Relu), 르쿤(SELU) 등등이 있다
 # keras default 는 글로럿 초기화 
 
 keras.layers.Dense(10, activation = 'relu', kernel_initializer = 'he_normal') # 혹은 kernel_initializer = 'he_uniform' 으로 He 초기화를 사용할 수 있다 
@@ -85,7 +85,7 @@ keras.layers.Dense(10, activation = 'relu', kernel_initializer = 'he_normal') # 
 he_avg_init = keras.initializers.VarianceScailing(scale =2., mode= 'fan_avg', distribution= 'uniform')
 keras.layers.Dense(10, activation= 'sigmoid', kernel_initializer = he_avg_init)
 
-# relu를 많이 쓰지만 모든 샘플에 대한 입력의 가중치 압이 음수가 되면 뉴런이 죽게 되는 문제가 있다. 
+# relu를 많이 쓰지만 모든 샘플에 대한 입력의 가중치 합이 음수가 되면 뉴런이 죽게 되는 문제가 있다. 
 # 그래서 LeakyRelu 를 써서 < 0 일 상황일 때도 뉴런이 죽지 않게 한다 
 # RRelu, PRelu 도 있다고 한다 
 # ELU 는 다른 모든 Relu변종들의 성능을 앞질렀다고 한다 다만 지수함수를 사용하기 때문에 계산이 느리다, 훈련하는 동안에는 수렴하기 때문에 상관없지만 테스트 때에는 느릴 것이다. 
