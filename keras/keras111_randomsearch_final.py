@@ -6,6 +6,7 @@ from keras.datasets import mnist
 from keras.utils import np_utils
 from keras.models import Model 
 from keras.layers import Input, Conv2D, Dropout, Flatten, Dense, MaxPool2D, LSTM
+from keras.optimizers import Adadelta, Adam, Adamax, Nadam, rmsprop
 
 sin = tf.math.sin
 # RandomizedSearchCV 
