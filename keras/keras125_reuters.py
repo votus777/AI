@@ -94,18 +94,10 @@ from keras.optimizers import Nadam
 
 model = Sequential()
 
-model.add(Embedding(10000, 500, input_length = 300))   
-model.add(LSTM(128, activation = sin, kernel_regularizer= l1(0.001),return_sequences = True))
+model.add(Embedding(1000, 500, input_length = 300))   
+model.add(LSTM(128, activation = sin, kernel_regularizer= l1(0.001)))
 model.add(BatchNormalization())
 model.add(Dropout(0.4))
-
-model.add(LSTM(64, activation = sin,kernel_regularizer= l1(0.001)))
-model.add(BatchNormalization())
-model.add(Dropout(0.4))
-
-model.add(Dense(64, activation=sin,kernel_regularizer= l1(0.001)))
-model.add(BatchNormalization())
-model.add(Dropout(0.3))
 
 model.add(Dense(46, activation='softmax'))
 
