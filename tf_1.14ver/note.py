@@ -41,6 +41,7 @@ conda remove wrapt 로 삭제해주고 설치
 base 버전에 맞춰서 재설치 
 
 1.17 이상이면 이상한 FutureWarning들이 잔뜩 뜨는데 1.16 아래로 설치하면 사라진다 
+tensorflow 1 버전과 numpy 최신버전이 안맞아서 뜨는 오류인듯 
 
 '''
 
