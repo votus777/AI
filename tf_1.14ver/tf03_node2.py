@@ -27,3 +27,18 @@ mul :  12.0
 div :  2.0
 
 '''
+
+# 텐서플로 덧셈
+# tf.add_n?
+# 많은 양의 텐서를 한 번에 처리할 때 사용
+# tf.add_n은 텐서들을 반드시 대괄호 안에 넣어줘야 한다(그렇지 않으면 TypeError 발생)
+# and, tf.add(node1, variable2) 처럼 constant 텐서와 variable 텐서 간의 연산도 가능하다는 점 참고!
+
+# 텐서플로 곱셈
+# tf.multiply vs tf.matmul
+# tf.multiply는 원소들의 곱 -> 우리가 알고 있는 행렬의 곱셈 방식이 아님
+# tf.matmul은 행렬의 곱셈 . 함수를 통해 구현한다
+
+# tf.divide vs tf.mod
+# tf.divide : ~를 ~로 나누면?
+# tf.mod : ~를 ~로 나눈 나머지?

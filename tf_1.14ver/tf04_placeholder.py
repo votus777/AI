@@ -11,9 +11,9 @@ node2 = tf.constant(4.0)
 node3 = tf.add(node1, node2)
 
 
-sess = tf.Session() # 강의장 준비
+sess = tf.Session() # 강의장 준비 ( tensor machine )
 
-a = tf.placeholder(tf.float32)  # 강의장 예약 걸어놓기 
+a = tf.placeholder(tf.float32)  # 강의장 예약 걸어놓기 ( 예약할 떄는 당연히 예상 인원수(input 여기서는 feed_dict) 필요 )
 b = tf.placeholder(tf.float32)
 
 
