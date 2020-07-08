@@ -5,10 +5,12 @@ from keras.datasets import imdb
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import tensorflow as tf
 
+sin = tf.math.sin
 
 # 1. 데이터 
-(x_train, y_train), (x_test, y_test) = imdb.load_data(num_words=1000)
+(x_train, y_train), (x_test, y_test) = imdb.load_data(num_words=5000)
 
 print(x_train.shape, x_test.shape)  # (25000,) (25000,)
 print(y_train.shape, y_test.shape)  # (25000,) (25000,)
@@ -71,8 +73,8 @@ y_dist = np.unique(y_train)
 from keras.preprocessing.sequence import pad_sequences 
 from keras.utils.np_utils import to_categorical 
 
-x_train = pad_sequences(x_train, maxlen=500, padding='pre', value=0)  
-x_test = pad_sequences(x_test, maxlen=500, padding='pre', value=0)   
+x_train = pad_sequences(x_train, maxlen=100, padding='pre', value=0)  
+x_test = pad_sequences(x_test, maxlen=100, padding='pre', value=0)   
 
 
 # print(len(x_train[0]))   # 500
@@ -85,19 +87,19 @@ x_test = pad_sequences(x_test, maxlen=500, padding='pre', value=0)
 # 2. 모델
 
 from keras.models import Sequential
-from keras.layers import Dense, LSTM, Embedding, Flatten
+from keras.layers import Dense, LSTM, Embedding, Flatten, Bidirectional
 
 model = Sequential()
 
-model.add(Embedding(1000, 128, input_length = 500))   
-model.add(LSTM(128))
+model.add(Embedding(120, 120, input_length = 100))   
+model.add(Bidirectional(LSTM(128, activation = 'relu')))
 model.add(Dense(1, activation='sigmoid'))
 
 
 
 model.compile( loss = 'binary_crossentropy', optimizer = 'adam', metrics=['acc'])
 
-history = model.fit(x_train, y_train, batch_size=100, epochs = 10, validation_split= 0.2)
+history = model.fit(x_train, y_train, batch_size=100, epochs =6, validation_split= 0.2)
 
 acc = model.evaluate(x_test,y_test)[1] 
 
