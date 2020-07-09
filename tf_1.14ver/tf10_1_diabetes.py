@@ -24,7 +24,7 @@ optimizer = tf.train.GradientDescentOptimizer(learning_rate = 1e-5)
 train = optimizer.minimize(cost)
 
 predicted = tf.cast(hypothesis > 0.5, dtype =tf.float32)
-accuracy = tf.reduce_mean(tf.cast(tf.equal(predicted, y), dtype =tf.float32))
+# accuracy = tf.reduce_mean(tf.cast(tf.equal(predicted, y), dtype =tf.float32))
 
 
 with tf.Session() as sess :

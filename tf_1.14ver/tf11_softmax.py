@@ -64,7 +64,7 @@ with tf.Session() as sess :
     
     # predict_1, predict_2, predict_3 넣어서 완성하자 
 
-    dict_all = [[1, 3, 4, 3],[1, 11, 7, 9],[11, 33, 4, 13]]
+    dict_all = [[1, 3, 4, 3], [1, 11, 7, 9], [11, 33, 4, 13]]
     
     all = sess.run(hypothesis, feed_dict = { x : dict_all})
     print(all, sess.run(tf.argmax(all,1)))
