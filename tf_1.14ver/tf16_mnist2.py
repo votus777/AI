@@ -21,8 +21,8 @@ x_test = x_test.reshape(-1,x_test.shape[1]*x_test.shape[2]).astype('float32')/25
 x = tf.placeholder(tf.float32, shape=[None,28*28])
 y = tf.placeholder(tf.float32, shape=[None,10])
 
-w1 = tf.Variable(tf.random_normal([28*28,75]),name="weight")
-b1 = tf.Variable(tf.random_normal([75]),name="bias")
+w1 = tf.Variable(tf.random_normal([28*28,100]),name="weight")
+b1 = tf.Variable(tf.random_normal([100]),name="bias")
 layer1 = tf.nn.elu(tf.matmul(x,w1)+b1)
 layer1 = tf.nn.dropout(layer1, keep_prob =0.3)
 
@@ -30,7 +30,7 @@ layer1 = tf.nn.dropout(layer1, keep_prob =0.3)
 # b2 = tf.Variable(tf.random_normal([25]),name="bias")
 # layer2 = tf.nn.elu(tf.matmul(layer1,w2)+b2)
 
-w3 = tf.Variable(tf.random_normal([75,10]),name="weight")
+w3 = tf.Variable(tf.random_normal([100,10]),name="weight")
 b3 = tf.Variable(tf.random_normal([10]),name="bias")
 hypothesis = tf.nn.softmax(tf.matmul(layer1,w3)+b3)
 
@@ -60,9 +60,8 @@ with tf.Session() as sess:
             print(f"step:{step},loss_val:{loss_val}")
        
 
-    print("Accuracy:",sess.run(accuracy,feed_dict={x:x_test,y:y_test}))
+    print("Accuracy:",sess.run(100*accuracy,feed_dict={x:x_test,y:y_test}))
 
  
-
-# step:1900,loss_val:1.525550127029419
-# Accuracy: 0.9276
+# step:1900,loss_val:1.5152500867843628
+# Accuracy: 93.61

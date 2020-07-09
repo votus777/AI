@@ -1,57 +1,48 @@
+# Lab 9 XOR
 import tensorflow as tf
 import numpy as np
 
-tf.set_random_seed(777)
+tf.set_random_seed(777)  # for reproducibility
 
-x_data = np.array([[0,0], [0,1], [1,0], [1,1]], dtype=np.float32)
-y_data = np.array([[0],[1], [1], [0]], dtype=np.float32)
+x_data = np.array([[0, 0], [0, 1], [1, 0], [1, 1]], dtype=np.float32)
+y_data = np.array([[0], [1], [1], [0]], dtype=np.float32)
 
-# x,y,w,b, hypothesis, cost, train 
-# sigmoid
+X = tf.placeholder(tf.float32, [None, 2])
+Y = tf.placeholder(tf.float32, [None, 1])
 
-x = tf.placeholder(tf.float32, shape=[None, 2])    
-y = tf.placeholder(tf.float32, shape=[None, 1])    
+W1 = tf.Variable(tf.random_normal([2, 2]), name='weight1')
+b1 = tf.Variable(tf.random_normal([2]), name='bias1')
+layer1 = tf.sigmoid(tf.matmul(X, W1) + b1)
 
-w1 = tf.Variable(tf.random.normal([2,10]), name = 'weight1' )
-b1= tf.Variable(tf.zeros([10]), name = 'bias')
-layer1 = tf.nn.sigmoid(tf.matmul(x,w1) + b1)  
-# == model.add(Dense(10, input_dim = 2))
+W2 = tf.Variable(tf.random_normal([2, 1]), name='weight2')
+b2 = tf.Variable(tf.random_normal([1]), name='bias2')
+hypothesis = tf.sigmoid(tf.matmul(layer1, W2) + b2)
 
-w2 = tf.Variable(tf.random.normal([10,5]), name = 'weight2' )
-b2= tf.Variable(tf.zeros([5]), name = 'bias')
-layer2 = tf.nn.sigmoid(tf.matmul(layer1,w2) + b2)  
-# == model.add(Dense(5)
+# cost/loss function
+cost = -tf.reduce_mean(Y * tf.log(hypothesis) + (1 - Y) * tf.log(1 - hypothesis))
+train = tf.train.GradientDescentOptimizer(learning_rate=0.1).minimize(cost)
 
+# Accuracy computation
+# True if hypothesis>0.5 else False
+predicted = tf.cast(hypothesis > 0.5, dtype=tf.float32)
+accuracy = tf.reduce_mean(tf.cast(tf.equal(predicted, Y), dtype=tf.float32))
 
-w3 = tf.Variable(tf.random.normal([5,1]), name = 'weight3')
-b3= tf.Variable(tf.zeros([1]), name = 'bias')
-hypothesis = tf.nn.sigmoid(tf.matmul(layer2,w3) + b3)  
-# == model.add(Dense(1, input_dim = 5))
-
-# hypothesis = tf.nn.sigmoid(tf.matmul(x,w3) + b3)  
-
-loss = -tf.reduce_mean( y*tf.log(hypothesis) + (1-y)*tf.log(1-hypothesis))                   
-             
-optimizer = tf.train.GradientDescentOptimizer(learning_rate=2e-4).minimize(loss)
-
-predicted = tf.cast(hypothesis>0.5, dtype= tf.float32)
-
-accuracy = tf.reduce_mean(tf.cast(tf.equal(predicted,y),dtype =tf.float32))
-
-
-with tf.Session() as sess :
-
+# Launch graph
+with tf.Session() as sess:
+    # Initialize TensorFlow variables
     sess.run(tf.global_variables_initializer())
+
+    for step in range(10001):
+        _, cost_val = sess.run([train, cost], feed_dict={X: x_data, Y: y_data})
+        if step % 100 == 0:
+            print(step, cost_val)
+
+    # Accuracy report
+    h, p, a = sess.run(
+        [hypothesis, predicted, accuracy], feed_dict={X: x_data, Y: y_data}
+    )
     
-    for step in range(2001):
-        _,  acc = sess.run([optimizer, accuracy],  
-                               feed_dict = {x : x_data, y: y_data})
-
-        if step % 200 == 0 :
-            print(step, acc)
+    print(f"\nHypothesis:\n{h} \nPredicted:\n{p} \nAccuracy:\n{a}")
 
 
-        h, c, a = sess.run([hypothesis, predicted, accuracy],
-                       feed_dict = {x:x_data, y:y_data})
-    
-    print("\nHypotheis : ", h, "\n Correct (y) : ", c , "\n Accuracy : ", a  )    
+# code from https://github.com/hunkim/DeepLearningZeroToAll/blob/master/lab-09-2-xor-nn.py
