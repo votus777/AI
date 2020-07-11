@@ -55,6 +55,9 @@ import keras.backend as K
 from keras.callbacks import ModelCheckpoint
 from keras.models import load_model
 import pandas as pd
+import tensorflow as tf
+
+sin = tf.math.sin
 
 X_data = []
 Y_data = []
@@ -118,11 +121,19 @@ def my_loss_E2(y_true, y_pred):
     divResult = Lambda(lambda x: x[0]/x[1])([(y_pred-y_true),(y_true+0.000001)])
     return K.mean(K.square(divResult)*weight2)
 
+from keras import backend as K
+
+
+
+
+
 # tr_target = 2
+
+
 
 def set_model(train_target):  # 0:x,y, 1:m, 2:v
    
-    activation = 'elu'
+    activation = 'sin'
     padding = 'valid'
     model = Sequential()
     nf = 24
@@ -314,4 +325,19 @@ for train_target in range(3):
     elif train_target == 2: # v 학습
         submit.iloc[:,4] = pred_data_test[:,3]
 
-submit.to_csv('./data/dacon_data/comp3/submit.csv', index = False) 
+submit.to_csv('./data/dacon_data/comp3/submit2.csv', index = False) 
+
+'''
+loss: 53887173754.88
+정답(original): [   0.  -400.    50.     0.4]
+예측값(original): [ 0.3893014  -0.64780456  0.41267157  0.40015075]
+6.649975635655056
+116762.55543486791
+(2800, 4)
+3.7136117710104197
+25.732878843943286
+-22.659486532211304
+
+0.16 정도 
+
+'''

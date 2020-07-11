@@ -60,8 +60,8 @@ with tf.Session() as sess:
             print(f"step:{step},loss_val:{loss_val}")
        
 
-    print("Accuracy:",sess.run(100*accuracy,feed_dict={x:x_test,y:y_test}))
+    print("Accuracy:",sess.run(accuracy,feed_dict={x:x_test,y:y_test}))
 
  
 # step:1900,loss_val:1.5152500867843628
-# Accuracy: 93.61
+# Accuracy: 0.9361

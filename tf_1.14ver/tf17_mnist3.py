@@ -18,8 +18,8 @@ x_train = x_train.reshape(-1,x_train.shape[1]*x_train.shape[2]).astype('float32'
 x_test = x_test.reshape(-1,x_test.shape[1]*x_test.shape[2]).astype('float32')/255
 
 # 변수 설정 
-learning_rate = 0.005 
-training_epochs = 15 
+learning_rate = 0.001 
+training_epochs = 5000
 batch_size = 100 
 total_batch = int(len(x_train)/ batch_size) # 60000 / 100
 
@@ -35,21 +35,27 @@ b1 = tf.Variable(tf.zeros([256]))
 L1 = tf.nn.selu(tf.matmul(x,w1) + b1) 
 L1 = tf.nn.dropout(L1, rate=  keep_prob)
 
-w2 = tf.get_variable("w2", shape=[256,64], 
+# print(w1) :  shape=(784, 256) 
+# print(b1) :  shape=(256,) 
+# print(L1) :  shape=(?, 256)
+# print(L1) :  shape=(?, 256)
+
+
+w2 = tf.get_variable("w2", shape=[256,256], 
                      initializer=tf.contrib.layers.xavier_initializer())    # 표준 정규 분포를 입력 개수의 표준 편차로 나눔 -> w = np.random.randn(n_input, n_output) / sqrt(n_input)
-b2 = tf.Variable(tf.zeros([64]))
+b2 = tf.Variable(tf.zeros([256]))
 L2 = tf.nn.selu(tf.matmul(L1,w2) + b2) 
 L2 = tf.nn.dropout(L2, rate = keep_prob)
 
 
-w3 = tf.get_variable("W3", shape=[64, 32], 
+w3 = tf.get_variable("W3", shape=[256, 256], 
                      initializer=tf.contrib.layers.xavier_initializer())    # xavier 초기화 할 때는 relu 같이 못쓴다 (0으로 수렴), 대신 relu는 He 초기화 w = np.random.randn(n_input, n_output) / sqrt(n_input/2)
-b3 = tf.Variable(tf.zeros([32]))
+b3 = tf.Variable(tf.zeros([256]))
 L3 = tf.nn.relu(tf.matmul(L2, w3) + b3)
 L3 = tf.nn.dropout(L3, rate = keep_prob)
 
 
-w4 = tf.get_variable("W4", shape=[32, 10], 
+w4 = tf.get_variable("W4", shape=[256, 10], 
                      initializer=tf.contrib.layers.xavier_initializer())
 b4 = tf.Variable(tf.zeros([10]))
 hypothesis = tf.nn.relu(tf.matmul(L3, w4) + b4)
@@ -68,10 +74,16 @@ with  tf.Session() as sess :
         
         for i in range(total_batch) :   # 600
             
-            
-            # batch_xs, batch_ys =  x_train([batch_size])  이 부분 구현하기  
-            batch_xs, batch_ys = x_train[i*batch_size:i*batch_size+batch_size], y_train[i*batch_size:i*batch_size+batch_size]
+            ####################################################
+            # batch_xs, batch_ys =  x_train([batch_size])  이 부분 구현하기
+            # batch_xs, batch_ys = x_train[i*batch_size:i*batch_size+batch_size], y_train[i*batch_size:i*batch_size+batch_size]
          
+            start  = i * batch_size
+            end = start + batch_size
+
+            batch_xs, batch_ys = x_train[start : end], y_train[start : end]
+            
+            
             feed_dict = {x:batch_xs, y: batch_ys, keep_prob : 0.7}   # 여기서 dropout 반대임, 0.7만을 남기겠다 
             c, _ = sess.run([cost, optimizer], feed_dict = feed_dict)   
             avg_cost += c/ total_batch 
@@ -83,4 +95,6 @@ with  tf.Session() as sess :
         prediction = tf.equal(tf.arg_max(hypothesis, 1), tf.argmax(y,1))
         accuracy = tf.reduce_mean(tf.cast(prediction, tf.float32))            
 
-        print("Accuracy:",sess.run(100*accuracy,feed_dict={x:x_train,y:y_train, keep_prob : 1})) # Acc 출력 
+        print("Accuracy:",sess.run(accuracy, feed_dict={x:x_test, y:y_test, keep_prob : 1})) # Acc 출력 
+
+
