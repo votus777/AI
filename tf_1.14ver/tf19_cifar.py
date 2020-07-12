@@ -17,8 +17,6 @@ print(y_train.shape)  # (50000, 1)
 print(x_test.shape)   # (10000, 32, 32, 3)
 print(y_test.shape)   # (10000, 1)
 
-plt.imshow(x_train[0])
-plt.show()
 
 
 y_train = np_utils.to_categorical(y_train)
@@ -26,7 +24,7 @@ y_test = np_utils.to_categorical(y_test)
 
 
 x_train = x_train.astype('float32')/255
-x_test = x_test..astype('float32')/255
+x_test = x_test.astype('float32')/255
 
 # 변수 설정 
 learning_rate = 0.001 
@@ -36,22 +34,23 @@ total_batch = int(len(x_train)/ batch_size) # 50000 / 100
 
 
 x = tf.placeholder(tf.float32, shape=[None,32,32,3])
+x_img = tf.reshape(x, [-1, 32, 32, 3])
+
 y = tf.placeholder(tf.float32, shape=[None,10])
 keep_prob = tf.placeholder(tf.float32)
 
 
 # Layer 설정 
  
-w1 = tf.get_variable("w1", shape=[3, 3, 1, 32])   #  == ConV2D( 32, (3,3), input_shape = (28,28,1)) //  1은 channel     
-L1 = tf.nn.conv2d(x, w1, strides=[1,1,1,1], padding='SAME')   # stride 2로 하고 싶으면 [ 1, 2, 2, 1] 
+w1 = tf.get_variable("w1", shape=[3, 3, 3, 32])   #  == ConV2D( 32, (3,3), input_shape = (28,28,1)) //  1은 channel     
+L1 = tf.nn.conv2d(x_img, w1, strides=[1,1,1,1], padding='SAME')   # stride 2로 하고 싶으면 [ 1, 2, 2, 1] 
 L1 = tf.nn.selu(L1)
 L1 = tf.nn.max_pool(L1, ksize=[1,2,2,1], strides=[1,2,2,1], padding = 'SAME')
 L1 = tf.nn.dropout(L1, rate=  keep_prob)
 
 
-# print(w1)  (3, 3, 1, 32)
-# print(b1)  (32,)
-# print(L1)  (?, 14, 14, 32)  
+print("w1 : ",w1)    # shape=(3, 3, 3, 32)
+print("L1 : ",L1)    # shape=(?, 16, 16, 32)
  
 w2 = tf.get_variable("w2", shape=[3, 3, 32, 64])    # 32 => channel 
 L2 = tf.nn.conv2d(L1, w2, strides=[1,1,1,1], padding='SAME')   
@@ -59,13 +58,15 @@ L2 = tf.nn.selu(L2)
 L2 = tf.nn.max_pool(L2, ksize=[1,2,2,1], strides=[1,2,2,1], padding = 'SAME')
 L2 = tf.nn.dropout(L2, rate=  keep_prob)
 
-# print(L2)  (?, 7, 7, 64)  
 
-L2_flat = tf.reshape(L2, [-1, 7*7*64])
+print("w2 : ",w2)    #  shape=(3, 3, 32, 64)
+print("L2 : ",L2)    #  shape=(?, 8, 8, 64)
 
+L2_flat = tf.reshape(L2, [-1, 8*8*64])
 
+print('L2 flat : ', L2_flat)
 
-w3 = tf.get_variable("W3", shape=[7*7*64, 512], 
+w3 = tf.get_variable("W3", shape=[8*8*64, 512], 
                      initializer=tf.contrib.layers.xavier_initializer())   
 b3 = tf.Variable(tf.zeros([512]))
 L3 = tf.nn.selu(tf.matmul(L2_flat, w3) + b3)
@@ -117,6 +118,6 @@ with  tf.Session() as sess :
         prediction = tf.equal(tf.arg_max(hypothesis, 1), tf.argmax(y,1))
         accuracy = tf.reduce_mean(tf.cast(prediction, tf.float32))            
 
-        print("Accuracy:",sess.run(accuracy, feed_dict={x:x_test, y:y_test, keep_prob : 1})) 
+    print("Accuracy:",sess.run(accuracy, feed_dict={x:x_test, y:y_test, keep_prob : 1})) 
 
 

@@ -112,6 +112,6 @@ with  tf.Session() as sess :
         prediction = tf.equal(tf.arg_max(hypothesis, 1), tf.argmax(y,1))
         accuracy = tf.reduce_mean(tf.cast(prediction, tf.float32))            
 
-        print("Accuracy:",sess.run(accuracy, feed_dict={x:x_test, y:y_test, keep_prob : 1})) 
+    print("Accuracy:",sess.run(accuracy, feed_dict={x:x_test, y:y_test, keep_prob : 1})) 
 
 
