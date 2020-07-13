@@ -1,10 +1,7 @@
 import tensorflow as tf
 import numpy as np
 
-
-
 # 1. 데이터 
-
 
 dataset = np.array([1,2,3,4,5,6,7,8,9,10])
 
@@ -66,15 +63,16 @@ train = tf.compat.v1.train.AdamOptimizer(learning_rate= learning_rate).minimize(
 with tf.Session() as sess :  
     sess.run(tf.global_variables_initializer()) 
     
-    for i in range(100) :
+    for i in range(500) :
         
         # result = sess.run(prediction, feed_dict = {X:x_data})
         
         for i in range(total_batch) :   # 6
          
             start  = i * batch_size
+            end = start + batch_size
 
-            batch_xs, batch_ys = x_data[:, start : start+1], y_data[:,start : start+1]
+            batch_xs, batch_ys = x_data[:, start : end], y_data[:,start : end]
             
             feed_dict = {x:batch_xs, y: batch_ys} 
             
