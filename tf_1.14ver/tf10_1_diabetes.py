@@ -11,7 +11,7 @@ x_data, y_data = diabetes.data, diabetes.target
 x = tf.placeholder(tf.float32, shape=[442,10])
 y = tf.placeholder(tf.float32, shape=[442,])
 
-w = tf.Variable(tf.zeros([10, 1]), name = 'Weight')
+w = tf.Variable(tf.random_normal([10, 1]), name = 'Weight')
 b = tf.Variable(tf.zeros([442]), name = 'bias')
 
 
