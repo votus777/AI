@@ -41,9 +41,7 @@ batch_size = 1
 learning_rate = 0.1
 
 X = tf.compat.v1.placeholder(tf.float32, shape = (None,sequence_length,input_dim))
-# Y = tf.compat.v1.placeholder(tf.float32, shape = (None,input_dim))
 Y = tf.compat.v1.placeholder(tf.float32, shape = (1,6)) 
-
 
 
 # 2. 모델 구성 - hidden layer 없는 lstm 모델 
@@ -55,15 +53,10 @@ hypothesis, _stats = tf.nn.dynamic_rnn(cell, X, dtype = tf.float32)
 # 3. 컴파일
 weights = tf.random_normal([batch_size, sequence_length]) 
 
-# sequence_loss = tf.contrib.seq2seq.sequence_loss(
-#         logits = hypothesis , targets = Y, weights = weights)
-
 cost = -tf.reduce_mean( Y*tf.log(hypothesis) + (1-Y)*tf.log(1-hypothesis))
 
-# cost = tf.reduce_mean(sequence_loss)
-
 train = tf.compat.v1.train.AdamOptimizer(learning_rate= learning_rate).minimize(cost)
-# prediction = tf.argmax(hypothesis, axis = 2)
+
 
 
 # 4. 훈련 
