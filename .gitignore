@@ -55,3 +55,8 @@ data/dog_cat/suit.jpg
 data/dog_cat/yang.jpg
 data/csv/data-tf.csv
 data/dacon_data/comp3/submit2.csv
+data/csv/iris_2.csv
+data/csv/sonar.csv
+data/csv/wine.csv
+test.db
+data/test_flask_iris_2.npy
