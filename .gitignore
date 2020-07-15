@@ -60,3 +60,11 @@ data/csv/sonar.csv
 data/csv/wine.csv
 test.db
 data/test_flask_iris_2.npy
+django/mysite/__pycache__/settings.cpython-37.pyc
+django/mysite/__pycache__/__init__.cpython-37.pyc
+django/mysite/wsgi.py
+django/mysite/urls.py
+django/mysite/settings.py
+django/mysite/asgi.py
+django/mysite/__init__.py
+django/manage.py
