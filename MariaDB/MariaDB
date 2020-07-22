@@ -1,0 +1,48 @@
+
+MariaDB를 사용해보자 
+
+1. MariaDB 10.5.4 ver. msi 다운로드 
+
+2. default 두고 next
+
+3. root password 설정 
+
+4. TCP port : 3306
+
+5.  시작메뉴에서 MySQL Client를 클릭하여 실행
+
+6. 설정했던 root password 입력 ( gksto00 ) 
+
+7. show database; 으로 확인 
+
+__________________________________
+
+root계정 외부 접근 권한 확인 
+
+SELECT Host,User,authentication_string FROM mysql.user;
+
+
+HeidiSQL 신규 세션 만들고 DB root 패스워드 설정 
+test database에 smember sample-table 생성 
+
+
+___________________________________
+
+#test를 위한 db생성
+create database test;
+
+
+#공유 DB를 위해 새 계정 생성 :
+create user 'bit'@'%' identified by 'bit0511';
+
+ID : bit
+password : bit0511
+
+#권한 부여 후 리로드
+grant all privileges on test.* to bit@'%';
+flush privileges;
+
+
+IP address 확인 :  IPv4 주소 : 192.168.0.137    
+(192,168...-> ip 공유기, 공유기 ip는 112.169.196.141 )
+

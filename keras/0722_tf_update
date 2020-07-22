@@ -1,0 +1,10 @@
+케라스 2.4.0 버전이 릴리스되었습니다. 
+이전에 언급된 대로 keras-team/keras 레파지토리는 더이상 멀티 백엔드를 지원하지 않습니다. 
+2.4.0 버전은 기존 구현 코드를 모두 삭제하고 대신 tensorflow.keras로 리다이렉션합니다
+
+이제 
+from tensorflow.keras.layers import dense 쓰면 
+
+Using tensorflow as backend 이거 사라진다
+
+좀 더 빨라질듯

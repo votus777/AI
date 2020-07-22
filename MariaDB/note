@@ -1,0 +1,43 @@
+커서(Cursor)란??
+
+  ▷ 쿼리문에 의해서 반환되는 결과값들을 저장하는 메모리공간
+
+     * Fetch : 커서에서 원하는 결과값을 추출하는 것
+
+
+※ cursor에 저장하고 필요할 때 꺼내쓰는 것이 효율적이다 
+
+※ DB와의 통신은 최소화 하는 것이 좋다 
+    -> 코드에서 대부분의 작접을 진행한 후 DB와 통신
+
+
+※ Query vs Filter 
+
+Query : 이 문서가 이 쿼리 절과 '얼마나' 잘 일치합니까? 라는 질문에 대한 대답, score 계산 
+
+Filter : 이 문서가 이 쿼리 절과 일치합니까? 라는 질문에 대답 
+
+
+데이터 선택 : SELECT 
+데이터 조작 : DML - data manipulation Langauage - INSERT, UPDATE, DELETE 
+데이터 정의 - DDL - data defdinition Langauage - CREATE, ALTER, DROP  (그런데 DROP은 쓰지 말자, 구조까지 날려버린다 )
+데이터 제어 - DCL - data control Language   
+
+
+※ SELECT 
+
+SELECT [ 컬럼 이름 ]  
+FROM [ 테이블 이름 ]
+WHERE [ 조건1 ] AND [ 조건2 ] 
+GROUP BY [ 그룹화할 칼럼 ] 
+HAVING [ 그룹화한 뒤 컬럼] 
+LIMIT [ 제한할 개수 ]
+
+-> [테이블 이름]에서 [조건1]과 [조건2]를 가지는 것들 중 [그룹화할 칼럼]으로 모은 후 
+[그룹화한 뒤 컬럼] 조건을 가지는 [제한할 개수]만큼 선택, 그리고 [칼럼 이름]을 선택한다 
+
+(WHERE : 기본적인 조건절로서 모든 필드를 대상으로 할 수 있음(각 행)
+ HAVING : group by 된 특정한 필드를 대상으로 할 수 있음)
+
+OR 대신에 IN 도 있다 
+
