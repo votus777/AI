@@ -36,7 +36,7 @@ create database test;
 create user 'bit'@'%' identified by 'bit0511';
 
 ID : bit
-password : bit0511
+password : 우리비밀번호 
 
 #권한 부여 후 리로드
 grant all privileges on test.* to bit@'%';

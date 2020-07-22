@@ -7,7 +7,7 @@ import mysql.connector
 
 # mysql connection을 선언한다. 
 # 파라미터는 host는 접속 주소, user는 ID, passwd는 패스워드, database는 접속할 데이터 베이스이다.
-dbconn = mysql.connector.connect(host="127.0.0.1", user="root", passwd="gksto00", database="test");
+dbconn = mysql.connector.connect(host="127.0.0.1", user="root", passwd="내비밀번호", database="test");
 
 
 # 검색을 할 경우 사용되는 함수.
