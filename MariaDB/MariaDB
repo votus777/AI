@@ -33,7 +33,7 @@ create database test;
 
 
 #공유 DB를 위해 새 계정 생성 :
-create user 'bit'@'%' identified by 'bit0511';
+create user 'bit'@'192.168.0.%' identified by '우리비밀번호';
 
 ID : bit
 password : 우리비밀번호 
