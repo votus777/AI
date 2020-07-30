@@ -1,0 +1,82 @@
+NIPA  - Nvidia 딥러닝 교육
+
+데이터 파이프라인 가속화 
+(Data pipe line)
+
+Alexnet이 gpu 가속화를 통해 대회 우승 
+
+
+
+DGX1 Server V100 8장
+DGX2 Server - V100 16장 
+하지만 Data Preprocessing 속도 증가율은 2x가 아닌 1.2x 
+
+그래서
+데이터 처리 속도 < 모델 throuh put 속도 -> cpu bottleneck 현상 
+
+특히 CPU의 성능 향상보다 GPU 성능 향상이 높다보니 H/W, S/W 둘 다 성능 차이가 남
+
+Batch_size를 크게 잡으면 역시 Preprocessing 작업또한 커짐
+
+
+이를 해결하기 위한 DALI 라이브러리 발표 
+Nvidia Data loading Libaray
+
+Data Preprocessing 작업때 CPU를 쓰냐 GPU를 쓰냐 차이
+Decoding, Augmentation 처리 또한 GPU 사용 
+
+tensorflow 처럼 graph 정의 -> build -> run 
+
+performance 개선 
+
+______________________________________________________
+
+<Image Classification Preprocessing>
+
+Read images -> Decode -> Resize -> Augmentation 
+ex) FileReader -> JPEGDecoder -> RandomResizedCrop -> RandomHorisontalFlip  -> Normalize
+(MV_jpeg로 gpu 디코딩 가능)
+
+
+-Prefecthing
+batch를 queue에 넣으면서 동시에 training 수행 
+데이터 공급이 수월할수록 performance 향상 
+
+
+class ResNetPipe(nvidia.dali.Pipeline)
+def __init__(self, batch_size, num_threads, device_id):
+super(ResNetPipe, self).__init__(batch_size, num_threads, device_id)
+self.input = ops.FileReader(file_root = image_dir)
+self.decode = ops.ImageDecoder(device = "mixed", output_type = types.RGB)
+self.resize = ops.Resize(device = "gpu", resize_x = 224, resize_y = 224)
+self.cmn = ops.CropMirrorNormalize(device = "gpu")
+def define_graph(self):
+jpegs, labels = self.input()
+images = self.decode(jpegs)
+images = self.resize(images)
+images = self.cmn(images)
+return (images, labels)
+pipe = ResNetPipeline(batch_size, num_threads, device_id)
+pipe.build()
+images, labels = pipe.run()
+
+
+FileReader 방식
+MXnet, Pytorch 모두 다른 loading 방식이 있다
+Tensorflow - TFRecord 그대로 써도 됨 
+TF2 - tf.function() 데코레이터 
+
+pip install 하면 된다고 하는데 일단 지금은 
+ ModuleNotFoundError: No module named 'preprocessor' 에러 뜬다 
+
+
+cutmix
+
+ Creating a Mask
+dogs, cats= self.decoder([dogs_in, cats_in])
+return (cats > 128) * 255
+
+
+Numpy 의 GPU 버전 : Cupy 
+np 를 cp로 바꾸기만 하면 됨 
+

@@ -1,0 +1,21 @@
+
+cmd창에 
+git clone https://github.com/pjreddie/darknet
+
+생성된 darknet 파일을 찾아서 
+
+Makefile 실행한 후 해당 부분 변경 ( VS code로 열기 )
+
+GPU=1
+CUDNN=1
+OPENCV=1
+OPENMP=0
+DEBUG=0 로 바꿔주기 (CUDNN도?) 
+
+
+
+cmake 설치
+
+그런데 error 뜸, pip 말고 conda 로 설치함 cmake==3.17
+
+

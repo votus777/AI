@@ -1,0 +1,72 @@
+
+Docker 설치 
+
+cmd 창에서 docker search ubuntu 로 버전 검색 
+
+dokcer pull ubuntu:latest 로 최신 이미지 다운
+
+docker images 명령어를 통해 이미지 리스트 출력 확인 
+docker ps -a 로 모든 컨테이너 확인 가능 
+
+
+
+docker run -d -it --name=ubuntu_server ubuntu 
+-d 는 백그라운드 프로세스 실행
+-it은 터미널로 바로 이동하는 옵션 
+--name 은 서버 이름 지정 
+
+ctrl + p + q 로 터미널에서 나올 수 있음
+(ctrl + d 혹은 exit로 나오면 foreground 실행 중인 경구 컨테이너 중지됨) 
+docker attach ubuntu_server 로 해당 터미널로 다시 들어갈 수 있음 
+cd, ls 명령으로 왔다갔다 
+
+
+
+____________________________________________________________________
+
+Docker란?
+
+: 운영체제 급의 가상화를 수행하는 컴퓨터 프로그램, 이렇게 OS급의 가상화는 containerization(컨테이너화) 라고도 한다 
+
+
+도커를 실행하는 명령어는 다음과 같습니다.
+
+docker run [OPTIONS] IMAGE[:TAG|@DIGEST] [COMMAND] [ARG...]
+
+다음은 자주 사용하는 옵션들입니다.
+
+옵션	            설명
+-d	        detached mode 흔히 말하는 백그라운드 모드
+-p	        호스트와 컨테이너의 포트를 연결 (포워딩)
+-v	        호스트와 컨테이너의 디렉토리를 연결 (마운트)
+-e	        컨테이너 내에서 사용할 환경변수 설정
+–name	    컨테이너 이름 설정
+–rm	        프로세스 종료시 컨테이너 자동 제거
+-it	        -i와 -t를 동시에 사용한 것으로 터미널 입력을 위한 옵션
+–link	    컨테이너 연결 [컨테이너명:별칭]
+
+
+
+
+
+
+
+
+
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+https://docs.docker.com/docker-for-windows/
+
+tutorial 따라해 보는 중 
+따라하다보니 ubuntu도 깔고 nginx도, jenkins도 깔았다 
+
+jenkins : http://localhost:32771
+
