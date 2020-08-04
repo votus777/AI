@@ -1,0 +1,7 @@
+
+
+Nvidia GPU Cloud (NGC)
+
+이걸 사용하면 Tensorflow, PyTorch 등의 프레임워크가 사전 최적환된 형태로 올라간
+컨테이너를 가져와 바로 모델 개발에 사용가능 
+
