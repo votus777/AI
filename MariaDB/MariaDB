@@ -43,8 +43,8 @@ grant all privileges on test.* to bit@'%';
 flush privileges;
 
 
-IP address 확인 :  IPv4 주소 : 192.168.0.137    
-(192,168...-> ip 공유기, 공유기 ip는 112.169.196.141 )
+IP address 확인 :  IPv4 주소 : 192.168.0.***    
+(192,168...-> ip 공유기 )
 
 이건 ignore 
 

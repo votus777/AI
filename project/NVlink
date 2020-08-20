@@ -1,2 +1,0 @@
-
-NVlink를 통해 GPU는 로컬 메모리 뿐만 아니라 다른 GPU의 메모리에도 직접 access 가능 

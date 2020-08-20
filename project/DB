@@ -2,9 +2,6 @@
 고성능 컴퓨팅 자원 (원격 컴퓨팅) - 학원 PC 간 DB 연결 
 
 
-
-
-
 DB에 직접 이미지를 넣을 수는 없으니
 DB에 url를 넣어서 사용하는 방식 
 
@@ -13,7 +10,6 @@ VARCHAR data type 사용
 <img src="이미지 URL">
 
 '/images/MyImg.jpg'
-
 
 
 
