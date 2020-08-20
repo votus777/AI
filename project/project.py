@@ -2,7 +2,6 @@
 # 전이학습을 이용한 사용자 분류 
 # ResNet-100
 
-
 from keras.datasets import cifar100, cifar10
 
 
@@ -11,7 +10,8 @@ from keras.models import Sequential, Model, Input
 from keras.layers import Dense, Conv2D, Flatten, BatchNormalization, Activation, MaxPooling2D, Dropout
 from keras.optimizers import Adam 
 
-
+import dalex as dx    
+expl = dx.Explainer(clf, X, y, label="Titanic MLP Pipeline")
 
 (x_train, y_train),(x_test,y_test) = cifar10.load_data()
 
@@ -53,3 +53,7 @@ print('accuracy : ', acc)
 print('val_loss :', val_loss)
 print('val_accuracy : ', val_acc)
 
+import neptunecontrib.api   
+log_global_explanations(expl)    
+log_local_explanations(expl, new_observation)    
+log_explainer('explainer.pkl', expl)

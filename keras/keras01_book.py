@@ -5,8 +5,8 @@ x = np.array([1,2,3])
 y = np.array([1,2,3])
 
 #2. 모델구성
-from keras.models import Sequential #순차적모델
-from keras.layers import Dense #기초적인 일차함수
+from tensorflow.keras.models import Sequential #순차적모델
+from tensorflow.keras.layers import Dense #기초적인 일차함수
 
 model = Sequential() #요놈을 model이라 부르겠다
 model.add(Dense(3, input_dim =1)) #input node는 1개, 1st 히든 레이어 3

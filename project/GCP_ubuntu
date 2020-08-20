@@ -1,0 +1,63 @@
+
+apache를 설치하라고 한다 
+웹서버라는데 
+
+tomcat 과의 차이점은? 
+
+
+
+_______
+
+08/14
+
+아무튼 Google Cloud Platform에 작은 VM 하나를 올렸다
+
+Ubuntu 18.04 
+
+디스크: 30GB
+램 : 0.6GB 
+
+간당간당 하지만 고정 IP 도 있고 무엇보다 무료다 
+
+
+sudo apt-get Nginx를 깔았더니 폰에서도 아이 통한 ip 접속이 가능했다
+
+신기하게 이미 pyhton 3.6.9 가 깔려있었다
+
+
+
+
+https://www.cloudbooklet.com/how-to-install-flask-on-ubuntu-18-04-with-uwsgi-nginx-on-google-cloud/을 따라서
+
+virtualenv 를 install 하고 
+
+myprojectdir에 myprojectenv 가상환경을 만들어 주었다 
+
+sudo nano ~/myprojectdir/myproject.py 를 통해 파일을 만들어주자 
+
+python 창 안에서 flask 파일을 만들어주고 ctrl+x 를 누르고 Y를 눌러 저장, enter키로 python 창을 나온다 
+
+그리고 deactivate로 가상환경 종료 
+
+같은 방법으로 wsgi.py 도 만들어서 flask app.run() 을 넣어준다 역시 저장하고 나온다 
+
+uWSGI의 myproject.ini 파일도 만들어준다. 아직 뭔지는 잘 모르겠다 
+
+왜 error가 나는가 했더니 ini 파일이 2개 있었고 첫번째가 이름이 잘못되어 있었다. rm 파일명 으로 지워준다 
+
+오케이 
+
+nginx.conf를 edit 하라고 해서 열심히 ./nginx.conf 해도 안되고 root 계정으로 접근해도 안되길래 뭔가 했는데 
+
+./는 실행시킨다는 것이고 그냥 edit만 하려면 vi .nginx.conf 쓰면 된다 
+
+몇 번 vi 누르다보니 swp 파일들이 나오는데 ls -a 로 숨겨진 파일들까지 다 보이게 한다음에 rm 으로 삭제한다 
+
+
+그런데 결과가 안나온다?? 처음부터 다시 해봐야 할 듯 
+
+
+
+root 계정 사용자 계정 전환
+su           su - username 
+

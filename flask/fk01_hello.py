@@ -6,7 +6,7 @@
 
 # 동적 IP VS 고정 IP
 
-# ipcondig 
+# ipconfig 
 
 
 

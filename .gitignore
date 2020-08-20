@@ -69,3 +69,5 @@ django/mysite/asgi.py
 django/mysite/__init__.py
 django/manage.py
 MariaDB/MariaDB
+model/sample/iris/model_iris.h5
+model/sample/mnist/model_mnist.h5

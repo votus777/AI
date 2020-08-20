@@ -1,0 +1,25 @@
+
+Django 
+
+Web Application Framework (웹 어플리케이션 프레임워크)
+
+python 기반, 웹 기능들이 추상화되어 있어 편함 
+
+새로운 언어나 문법을 배우는 것이 아니라, django라는 프레임워크의 사용 방법을 익혀햐 함 
+
+
+Framework 
+: Application이 작동하는 동안 그 구조를 분리하여 요지 보수 할 수 있도록 하는 툴 
+
+
+특징
+- 중복의 제거 : html 파일을 템플릿이라는 개념으로 나누고, 필요한 것들을 쓴다(모듈화?)
+- 동적인 웹
+
+
+MVC ( Model - View - Contrller ) 패턴 
+= Django 내에서는 MTV ( Model - Template - View )로 불린다. 
+
+
+ 
+

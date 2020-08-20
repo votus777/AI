@@ -1,0 +1,50 @@
+
+고성능 컴퓨팅 자원 (원격 컴퓨팅) - 학원 PC 간 DB 연결 
+
+
+
+
+
+DB에 직접 이미지를 넣을 수는 없으니
+DB에 url를 넣어서 사용하는 방식 
+
+VARCHAR data type 사용 
+
+<img src="이미지 URL">
+
+'/images/MyImg.jpg'
+
+
+
+
+_________________________________
+# 다운받을 이미지 url
+url = "https://1.jpg"
+
+# request.get 요청 // from urllib import request
+res = requests.get(url)  // import requests from io import BytesIO from PIL import Image
+or
+# request.urlopen()
+res = request.urlopen(url).read()
+
+
+#Img open
+img = Image.open(BytesIO(res.content))
+
+
+_________________________________
+
+
+fetchall() - 모든 데이터를 한꺼버넹 클라이언트로 가져올 때 사용 
+fetchone() - 한번 호출에 하나의 Row만을 가져올 때 
+fecthany(n) - n개 만큼 데이터를 가져올때 
+
+
+parameter placeholder = %s  
+문자, 숫자열 상관없이 모두 %s 쓴다 
+
+
+INSERT 하고 commit 하지 않으며 테이블에 적용되지 않는다 
+
+
+try, with 문으로 리소스 해제 

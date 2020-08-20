@@ -80,3 +80,78 @@ return (cats > 128) * 255
 Numpy 의 GPU 버전 : Cupy 
 np 를 cp로 바꾸기만 하면 됨 
 
+___________________________________________________________
+
+6회차 수업 
+
+<이전 수업들>
+AMP - train속도 증가 
+GPU profiling  - DLproof, Nsight Systems 
+
+
+< Framework for Analyzing Video >
+
+- 카메라가 유선? 무선?
+- 카메라 개수 ?
+- 비디오 코덱 ?
+- batch를 하나하나 한 것인지 multi batch를 할건지
+- 단일 모델을 쓸건지, multi 모델을 쓸 것인지
+- 결과, 메타 데이타 각화 방안 
+- Cloud 연동 
+
+등등 고려할게 많다 
+하지만 비디오 분석은 실시간 처리가 목적이기에 
+퍼포먼스와 low latency가 중요하다 
+
+# 여기서 Nvidia의 solution -> **DeepStream**
+
+GPU 가속화 플러그인 
+Azure 연동을 위한 런타임 제공 
+Docker Container 
+
+Gstreamer 오픈소스를 기반으로 개발 
+( 함수처럼, 각 역할을 하는 plugin을 연결시켜 pipeline을 만듦)
+
+Level 1 : Plugins 
+Level 2 : Bins (Plugin의 집합)
+Level 3 : Pipeline (Bin의 집합)
+
+
+그래서 Deepstream은 이 Plugin들을 GPU 버전으로 사용하게 해줌 
+
+Build Deepstream Pipline with TensorRT 
+configuration 수정 
+
+
+
+< Transfer Learning ToolKit >
+
+코딩이 아니라 configuration을 통해 명령을 내리는 형식 
+단, labeling data format을 kitty data format으로 변환시켜야함 
+
+Prune 작업 수행 -> ?
+
+NGC에서 제공하는 pre-trained model 가져오기 
+
+prune을 통해 경량화 
+
+Nvidia TensorRT 로 변환 
+
+Depoly engine 
+
+
+
+- Scene Adaptation 
+
+- New Classes 
+
+- Pruning : 기여도가 낮은 weight 를 제거 -> reduce model size and increase throughput
+            값이 0인 가중치를 없애는 sparse_matrix
+
+
+Learn more about TLT 
+
+https://developer.nvidia.com/blog/training-custom-pretrained-models-using-tlt/
+https://blogs.nvidia.com/blog/2019/02/07/what-is-transfer-learning/
+https://developer.nvidia.com/blog/transfer-learning-toolkit-pruning-intelligent-video-analytics/
+https://medium.com/dataseries/build-and-deploy-accurate-deep-learning-models-for-intelligent-image-and-video-analytics-8ad755213c06
